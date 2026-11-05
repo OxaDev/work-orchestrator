@@ -1,0 +1,122 @@
+{
+  "app": {
+    "name": "Work Orchestrator",
+    "tagline": "Vos missions, vos journées, votre connaissance des architectures."
+  },
+  "nav": {
+    "home": "Accueil",
+    "agenda": "Agenda",
+    "missions": "Missions",
+    "architecture": "Architecture",
+    "documents": "Documents",
+    "directory": "Annuaire",
+    "settings": "Paramètres",
+    "toggleMenu": "Afficher / masquer la navigation"
+  },
+  "header": {
+    "language": "Langue",
+    "colorScheme": "Basculer thème clair / sombre"
+  },
+  "health": {
+    "title": "État du système",
+    "checking": "Vérification…",
+    "ok": "API et base de données opérationnelles",
+    "version": "Version {{version}}"
+  },
+  "comingSoon": {
+    "title": "Bientôt disponible",
+    "body": "Cette section arrive en phase {{phase}} de la roadmap."
+  },
+  "notFound": {
+    "title": "Page introuvable",
+    "body": "Cette page n'existe pas.",
+    "back": "Retour à l'accueil"
+  },
+  "common": {
+    "save": "Enregistrer",
+    "saved": "Enregistré.",
+    "cancel": "Annuler",
+    "empty": "Rien pour le moment.",
+    "confirm": "Confirmer"
+  },
+  "auth": {
+    "subtitle": "Connectez-vous pour continuer.",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "signIn": "Se connecter",
+    "emailInvalid": "Saisissez une adresse e-mail valide.",
+    "passwordRequired": "Saisissez votre mot de passe.",
+    "forgotHint": "Mot de passe oublié ? Un administrateur peut le réinitialiser, ou lancez `make reset-password` sur le serveur."
+  },
+  "userMenu": {
+    "open": "Ouvrir le menu utilisateur",
+    "logout": "Se déconnecter"
+  },
+  "settings": {
+    "tabs": {
+      "profile": "Profil",
+      "password": "Mot de passe",
+      "users": "Utilisateurs"
+    },
+    "profile": {
+      "displayName": "Nom affiché",
+      "nameRequired": "Saisissez un nom.",
+      "theme": "Thème",
+      "themes": {
+        "auto": "Système",
+        "light": "Clair",
+        "dark": "Sombre"
+      },
+      "employer": "Mon ESN",
+      "employerHelp": "Reprise sur chaque nouvelle mission.",
+      "holidayRegion": "Jours fériés",
+      "holidayRegionHelp": "Région utilisée pour pré-remplir l'agenda.",
+      "regions": {
+        "METRO": "France métropolitaine",
+        "57": "Alsace-Moselle",
+        "971": "Guadeloupe",
+        "972": "Martinique",
+        "973": "Guyane",
+        "974": "La Réunion",
+        "976": "Mayotte"
+      }
+    }
+  },
+  "password": {
+    "current": "Mot de passe actuel",
+    "new": "Nouveau mot de passe",
+    "confirm": "Confirmer le nouveau mot de passe",
+    "submit": "Changer le mot de passe",
+    "changed": "Mot de passe changé. Vos autres sessions ont été déconnectées.",
+    "mismatch": "Les mots de passe ne correspondent pas.",
+    "notCompliant": "Le mot de passe ne respecte pas les règles ci-dessous.",
+    "otherSessionsNotice": "Changer votre mot de passe vous déconnecte partout ailleurs.",
+    "rulesTitle": "Règles du mot de passe",
+    "rules": {
+      "PASSWORD_TOO_SHORT": "Au moins 12 caractères",
+      "PASSWORD_MISSING_UPPERCASE": "Une majuscule",
+      "PASSWORD_MISSING_LOWERCASE": "Une minuscule",
+      "PASSWORD_MISSING_DIGIT": "Un chiffre",
+      "PASSWORD_MISSING_SYMBOL": "Un symbole, n'importe lequel (ex. ! - _ . @ #)"
+    }
+  },
+  "roles": {
+    "ADMIN": "Administrateur",
+    "USER": "Utilisateur"
+  },
+  "users": {
+    "create": "Nouvel utilisateur",
+    "created": "Utilisateur créé.",
+    "role": "Rôle",
+    "status": "Statut",
+    "active": "Actif",
+    "inactive": "Inactif",
+    "lastLogin": "Dernière connexion",
+    "edit": "Modifier",
+    "editOf": "Modifier {{email}}",
+    "initialPassword": "Mot de passe initial",
+    "resetPassword": "Réinitialiser le mot de passe",
+    "resetPasswordOf": "Réinitialiser le mot de passe de {{email}}",
+    "passwordReset": "Mot de passe réinitialisé. Les sessions de l'utilisateur ont été déconnectées."
+  }
+}

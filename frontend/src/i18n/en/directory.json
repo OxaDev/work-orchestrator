@@ -1,0 +1,151 @@
+{
+  "title": "Directory",
+  "sections": {
+    "contacts": "Contacts",
+    "companies": "Companies",
+    "technologies": "Technologies",
+    "sectors": "Sectors",
+    "tags": "Tags",
+    "roles": "Roles",
+    "day-types": "Day types"
+  },
+  "common": {
+    "search": "Search",
+    "showArchived": "Show archived",
+    "archived": "Archived",
+    "website": "Website",
+    "description": "Description",
+    "notes": "Notes",
+    "markdownHint": "Markdown supported.",
+    "notesPreview": "Notes preview",
+    "noNotes": "No notes."
+  },
+  "validation": {
+    "required": "Required.",
+    "email": "Enter a valid e-mail address."
+  },
+  "actions": {
+    "editOf": "Edit {{name}}",
+    "deleteOf": "Delete {{name}}",
+    "archiveOf": "Archive {{name}}",
+    "restoreOf": "Restore {{name}}",
+    "archive": "Archive",
+    "restore": "Restore",
+    "deleteTitle": "Delete?",
+    "deleteMessage": "Delete \"{{name}}\"? This cannot be undone."
+  },
+  "companyTypes": {
+    "CLIENT": "Client",
+    "ESN": "Consulting firm (ESN)",
+    "OTHER": "Other"
+  },
+  "companies": {
+    "name": "Name",
+    "types": "Type",
+    "allTypes": "All types",
+    "primarySector": "Main sector",
+    "secondarySectors": "Other sectors",
+    "parent": "Parent company",
+    "create": "New company",
+    "empty": "No company yet.",
+    "searchPlaceholder": "Search a company",
+    "tabs": {
+      "info": "Information",
+      "org": "Organisation",
+      "contacts": "Contacts",
+      "missions": "Missions"
+    }
+  },
+  "org": {
+    "title": "Organisation",
+    "help": "Directions, departments, teams… any depth. To move a unit, edit it and pick another parent.",
+    "create": "New unit",
+    "edit": "Edit unit",
+    "name": "Name",
+    "level": "Level",
+    "levelHelp": "Free label: Direction, Pôle, Team, Squad…",
+    "parent": "Parent unit",
+    "root": "Top level",
+    "empty": "No organisation described yet.",
+    "addChildOf": "Add a unit under {{name}}"
+  },
+  "contacts": {
+    "name": "Name",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "jobTitle": "Job title",
+    "company": "Company",
+    "allCompanies": "All companies",
+    "orgUnit": "Organisation unit",
+    "emailWork": "Work e-mail",
+    "emailPersonal": "Personal e-mail",
+    "phoneWork": "Work phone",
+    "phoneMobile": "Mobile",
+    "create": "New contact",
+    "empty": "No contact yet.",
+    "searchPlaceholder": "Name, e-mail, job title…",
+    "duplicatesTitle": "Similar contacts already exist",
+    "duplicateReason": {
+      "SAME_NAME": "same name",
+      "SAME_EMAIL": "same e-mail"
+    },
+    "history": "Previous positions",
+    "noHistory": "No previous position recorded.",
+    "startDate": "From",
+    "endDate": "To",
+    "addPosition": "Add a position"
+  },
+  "technologies": {
+    "name": "Name",
+    "category": "Category",
+    "allCategories": "All categories",
+    "aliases": "Aliases",
+    "create": "New technology",
+    "empty": "No technology found.",
+    "searchPlaceholder": "Search (name or alias)"
+  },
+  "categories": {
+    "LANGUAGE": "Language",
+    "FRAMEWORK": "Framework",
+    "LIBRARY": "Library",
+    "DATABASE": "Database",
+    "MESSAGING": "Messaging",
+    "CLOUD": "Cloud",
+    "INFRASTRUCTURE": "Infrastructure",
+    "DEVOPS": "DevOps",
+    "OBSERVABILITY": "Observability",
+    "SECURITY": "Security",
+    "DATA": "Data",
+    "TOOL": "Tool",
+    "METHOD": "Method",
+    "OTHER": "Other"
+  },
+  "sectors": {
+    "help": "Sectors of activity, used to classify companies.",
+    "create": "New sector",
+    "edit": "Edit sector",
+    "nameFr": "Name (French)",
+    "nameEn": "Name (English)",
+    "parent": "Parent sector",
+    "root": "Top level",
+    "empty": "No sector yet.",
+    "addChild": "Add a sub-sector",
+    "addChildOf": "Add a sub-sector to {{name}}",
+    "companyCount_one": "{{count}} company",
+    "companyCount_other": "{{count}} companies"
+  },
+  "tags": {
+    "label": "Tags",
+    "placeholder": "Pick or type then Enter to create",
+    "createHint": "Press Enter to create this tag",
+    "create": "New tag",
+    "edit": "Edit tag",
+    "name": "Name",
+    "color": "Colour",
+    "usage": "Used by",
+    "preview": "Preview",
+    "empty": "No tag yet.",
+    "deleteMessage_one": "Delete \"{{name}}\"? It is removed from {{count}} item.",
+    "deleteMessage_other": "Delete \"{{name}}\"? It is removed from {{count}} items."
+  }
+}

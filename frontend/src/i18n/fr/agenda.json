@@ -1,0 +1,103 @@
+{
+  "empty": "Non saisi",
+  "today": "Aujourd'hui",
+  "yearView": "Année {{year}}",
+  "previousMonth": "Mois précédent",
+  "nextMonth": "Mois suivant",
+  "previousYear": "Année précédente",
+  "nextYear": "Année suivante",
+  "monthGrid": "Calendrier du mois",
+  "selectDay": "Sélectionner le {{day}}",
+  "legend": "Légende",
+  "save": "Enregistrer",
+  "daysCount_one": "{{count}} jour",
+  "daysCount_other": "{{count}} jours",
+  "periods": {
+    "AM": "matin",
+    "PM": "après-midi"
+  },
+  "kinds": {
+    "MISSION": "Mission",
+    "INTERCONTRACT": "Inter-contrat",
+    "TRAINING": "Formation",
+    "LEAVE": "Congés",
+    "PUBLIC_HOLIDAY": "Jour férié",
+    "SICK_LEAVE": "Arrêt maladie",
+    "OFF": "Non travaillé"
+  },
+  "locations": {
+    "CLIENT_ON_SITE": "Sur site chez le client",
+    "REMOTE_HOME": "Télétravail depuis la maison",
+    "REMOTE_ESN_OFFICE": "Télétravail depuis l'ESN",
+    "REMOTE_OTHER": "Télétravail ailleurs",
+    "TRAVEL_MISSION": "Déplacement de mission",
+    "TRAVEL_ESN": "Déplacement ESN"
+  },
+  "assign": {
+    "title": "Saisir",
+    "hint": "Cliquez, glissez ou Maj+clic sur les demi-journées pour les sélectionner.",
+    "count_one": "{{count}} demi-journée sélectionnée",
+    "count_other": "{{count}} demi-journées sélectionnées",
+    "kind": "Nature",
+    "mission": "Mission",
+    "noMission": "Aucune mission ne couvre les dates sélectionnées",
+    "subtype": "Précision",
+    "location": "Lieu de travail",
+    "note": "Note",
+    "apply": "Appliquer",
+    "unselect": "Désélectionner",
+    "clear": "Vider",
+    "openMission": "Ouvrir la mission « {{title}} »"
+  },
+  "recap": {
+    "title": "Ce mois-ci",
+    "yearTitle": "Année {{year}}",
+    "filled": "{{filled}} jour(s) saisi(s) sur {{working}} jours ouvrés",
+    "unfilled_one": "{{count}} demi-journée encore vide",
+    "unfilled_other": "{{count}} demi-journées encore vides"
+  },
+  "lock": {
+    "locked": "Validé",
+    "open": "Non validé",
+    "lockedNotice": "Ce mois est validé : il ne peut plus être modifié tant qu'il n'est pas déverrouillé.",
+    "lockedAt": "Validé le {{date}}",
+    "validate": "Valider le mois",
+    "validateTitle": "Valider le mois",
+    "explain": "Une fois validé, le mois est figé, comme un CRA envoyé.",
+    "incomplete_one": "{{count}} demi-journée est encore vide",
+    "incomplete_other": "{{count}} demi-journées sont encore vides",
+    "note": "Note (facultative)",
+    "confirm": "Valider",
+    "unlock": "Déverrouiller",
+    "unlockTitle": "Déverrouiller le mois",
+    "reason": "Motif",
+    "reasonHelp": "Conservé dans l'historique du mois.",
+    "history": "Historique",
+    "actions": {
+      "LOCK": "validé",
+      "UNLOCK": "déverrouillé"
+    }
+  },
+  "unfilled": {
+    "title_one": "{{count}} demi-journée non saisie",
+    "title_other": "{{count}} demi-journées non saisies",
+    "action": "Compléter l'agenda"
+  },
+  "validation": {
+    "required": "Obligatoire."
+  },
+  "subtypes": {
+    "help": "Précisions d'une nature de journée : congés payés, RTT, enfant malade…",
+    "create": "Nouveau type de journée",
+    "edit": "Modifier le type de journée",
+    "kind": "Nature",
+    "nameFr": "Nom (français)",
+    "nameEn": "Nom (anglais)",
+    "usage": "Utilisé par",
+    "empty": "Aucun type de journée.",
+    "editOf": "Modifier {{name}}",
+    "deleteOf": "Supprimer {{name}}",
+    "deleteTitle": "Supprimer ?",
+    "deleteMessage": "Supprimer le type de journée « {{name}} » ?"
+  }
+}

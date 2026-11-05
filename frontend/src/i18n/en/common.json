@@ -1,0 +1,122 @@
+{
+  "app": {
+    "name": "Work Orchestrator",
+    "tagline": "Your missions, your days, your architecture knowledge."
+  },
+  "nav": {
+    "home": "Home",
+    "agenda": "Agenda",
+    "missions": "Missions",
+    "architecture": "Architecture",
+    "documents": "Documents",
+    "directory": "Directory",
+    "settings": "Settings",
+    "toggleMenu": "Toggle navigation"
+  },
+  "header": {
+    "language": "Language",
+    "colorScheme": "Toggle light / dark theme"
+  },
+  "health": {
+    "title": "System status",
+    "checking": "Checking…",
+    "ok": "API and database operational",
+    "version": "Version {{version}}"
+  },
+  "comingSoon": {
+    "title": "Coming soon",
+    "body": "This section arrives in roadmap phase {{phase}}."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "This page does not exist.",
+    "back": "Back to home"
+  },
+  "common": {
+    "save": "Save",
+    "saved": "Saved.",
+    "cancel": "Cancel",
+    "empty": "Nothing here yet.",
+    "confirm": "Confirm"
+  },
+  "auth": {
+    "subtitle": "Sign in to continue.",
+    "email": "E-mail",
+    "password": "Password",
+    "signIn": "Sign in",
+    "emailInvalid": "Enter a valid e-mail address.",
+    "passwordRequired": "Enter your password.",
+    "forgotHint": "Forgot your password? An administrator can reset it, or run `make reset-password` on the server."
+  },
+  "userMenu": {
+    "open": "Open user menu",
+    "logout": "Sign out"
+  },
+  "settings": {
+    "tabs": {
+      "profile": "Profile",
+      "password": "Password",
+      "users": "Users"
+    },
+    "profile": {
+      "displayName": "Display name",
+      "nameRequired": "Enter a name.",
+      "theme": "Theme",
+      "themes": {
+        "auto": "System",
+        "light": "Light",
+        "dark": "Dark"
+      },
+      "employer": "My consulting firm (ESN)",
+      "employerHelp": "Copied onto each new mission.",
+      "holidayRegion": "Public holidays",
+      "holidayRegionHelp": "Region used to pre-fill the agenda.",
+      "regions": {
+        "METRO": "Metropolitan France",
+        "57": "Alsace-Moselle",
+        "971": "Guadeloupe",
+        "972": "Martinique",
+        "973": "French Guiana",
+        "974": "Réunion",
+        "976": "Mayotte"
+      }
+    }
+  },
+  "password": {
+    "current": "Current password",
+    "new": "New password",
+    "confirm": "Confirm new password",
+    "submit": "Change password",
+    "changed": "Password changed. Your other sessions were signed out.",
+    "mismatch": "Passwords do not match.",
+    "notCompliant": "The password does not meet the rules below.",
+    "otherSessionsNotice": "Changing your password signs you out everywhere else.",
+    "rulesTitle": "Password rules",
+    "rules": {
+      "PASSWORD_TOO_SHORT": "At least 12 characters",
+      "PASSWORD_MISSING_UPPERCASE": "One uppercase letter",
+      "PASSWORD_MISSING_LOWERCASE": "One lowercase letter",
+      "PASSWORD_MISSING_DIGIT": "One digit",
+      "PASSWORD_MISSING_SYMBOL": "One symbol, any (e.g. ! - _ . @ #)"
+    }
+  },
+  "roles": {
+    "ADMIN": "Administrator",
+    "USER": "User"
+  },
+  "users": {
+    "create": "New user",
+    "created": "User created.",
+    "role": "Role",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "lastLogin": "Last sign-in",
+    "edit": "Edit",
+    "editOf": "Edit {{email}}",
+    "initialPassword": "Initial password",
+    "resetPassword": "Reset password",
+    "resetPasswordOf": "Reset the password of {{email}}",
+    "passwordReset": "Password reset. The user's sessions were signed out."
+  }
+}

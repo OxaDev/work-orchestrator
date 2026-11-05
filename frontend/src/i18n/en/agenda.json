@@ -1,0 +1,103 @@
+{
+  "empty": "Not filled",
+  "today": "Today",
+  "yearView": "Year {{year}}",
+  "previousMonth": "Previous month",
+  "nextMonth": "Next month",
+  "previousYear": "Previous year",
+  "nextYear": "Next year",
+  "monthGrid": "Month calendar",
+  "selectDay": "Select {{day}}",
+  "legend": "Legend",
+  "save": "Save",
+  "daysCount_one": "{{count}} day",
+  "daysCount_other": "{{count}} days",
+  "periods": {
+    "AM": "morning",
+    "PM": "afternoon"
+  },
+  "kinds": {
+    "MISSION": "Mission",
+    "INTERCONTRACT": "Between missions",
+    "TRAINING": "Training",
+    "LEAVE": "Leave",
+    "PUBLIC_HOLIDAY": "Public holiday",
+    "SICK_LEAVE": "Sick leave",
+    "OFF": "Off"
+  },
+  "locations": {
+    "CLIENT_ON_SITE": "On site at the client",
+    "REMOTE_HOME": "Remote, from home",
+    "REMOTE_ESN_OFFICE": "Remote, from the ESN office",
+    "REMOTE_OTHER": "Remote, elsewhere",
+    "TRAVEL_MISSION": "Travelling for the mission",
+    "TRAVEL_ESN": "Travelling for the ESN"
+  },
+  "assign": {
+    "title": "Fill in",
+    "hint": "Click, drag or shift-click half-days to select them.",
+    "count_one": "{{count}} half-day selected",
+    "count_other": "{{count}} half-days selected",
+    "kind": "Kind",
+    "mission": "Mission",
+    "noMission": "No mission covers the selected dates",
+    "subtype": "Detail",
+    "location": "Place of work",
+    "note": "Note",
+    "apply": "Apply",
+    "unselect": "Unselect",
+    "clear": "Empty them",
+    "openMission": "Open the mission \"{{title}}\""
+  },
+  "recap": {
+    "title": "This month",
+    "yearTitle": "Year {{year}}",
+    "filled": "{{filled}} day(s) filled out of {{working}} working days",
+    "unfilled_one": "{{count}} half-day still empty",
+    "unfilled_other": "{{count}} half-days still empty"
+  },
+  "lock": {
+    "locked": "Validated",
+    "open": "Not validated",
+    "lockedNotice": "This month is validated: it cannot be changed until it is unlocked.",
+    "lockedAt": "Validated on {{date}}",
+    "validate": "Validate the month",
+    "validateTitle": "Validate the month",
+    "explain": "Once validated, the month's half-days are frozen, like a submitted timesheet.",
+    "incomplete_one": "{{count}} half-day is still empty",
+    "incomplete_other": "{{count}} half-days are still empty",
+    "note": "Note (optional)",
+    "confirm": "Validate",
+    "unlock": "Unlock",
+    "unlockTitle": "Unlock the month",
+    "reason": "Reason",
+    "reasonHelp": "Kept in the month's history.",
+    "history": "History",
+    "actions": {
+      "LOCK": "validated",
+      "UNLOCK": "unlocked"
+    }
+  },
+  "unfilled": {
+    "title_one": "{{count}} half-day not filled in",
+    "title_other": "{{count}} half-days not filled in",
+    "action": "Complete the agenda"
+  },
+  "validation": {
+    "required": "Required."
+  },
+  "subtypes": {
+    "help": "Details of a kind of day: paid leave, RTT, sick child…",
+    "create": "New day type",
+    "edit": "Edit day type",
+    "kind": "Kind",
+    "nameFr": "Name (French)",
+    "nameEn": "Name (English)",
+    "usage": "Used by",
+    "empty": "No day type yet.",
+    "editOf": "Edit {{name}}",
+    "deleteOf": "Delete {{name}}",
+    "deleteTitle": "Delete?",
+    "deleteMessage": "Delete the day type \"{{name}}\"?"
+  }
+}

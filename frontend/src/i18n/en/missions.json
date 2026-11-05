@@ -1,0 +1,106 @@
+{
+  "title": "Missions",
+  "create": "New mission",
+  "search": "Search",
+  "allClients": "All clients",
+  "showArchived": "Show archived",
+  "empty": "No mission yet.",
+  "archived": "Archived",
+  "archive": "Archive",
+  "restore": "Restore",
+  "delete": "Delete",
+  "save": "Save",
+  "preview": "Preview",
+  "noContent": "Nothing yet.",
+  "period": "{{start}} → {{end}}",
+  "since": "Since {{start}}",
+  "via": "via {{employer}}",
+  "deleteTitle": "Delete?",
+  "deleteMessage": "Delete the mission \"{{title}}\"? Archive it instead to keep its history.",
+  "suggestion": "Given its dates, this mission looks {{status}}.",
+  "applySuggestion": "Apply",
+  "status": {
+    "ALL": "All",
+    "PROSPECT": "Prospect",
+    "ACTIVE": "Active",
+    "ON_HOLD": "On hold",
+    "ENDED": "Ended"
+  },
+  "steps": {
+    "client": "Client",
+    "position": "Position",
+    "dates": "Dates",
+    "next": "Next",
+    "back": "Back"
+  },
+  "fields": {
+    "client": "Client",
+    "employer": "Consulting firm (ESN)",
+    "employerHelp": "Pre-filled from your profile.",
+    "jobTitle": "Position",
+    "title": "Internal name",
+    "titleHelp": "Short name used in the agenda. Suggested from client and position if left empty.",
+    "startDate": "Start date",
+    "plannedEndDate": "Planned end date",
+    "actualEndDate": "Actual end date",
+    "status": "Status",
+    "location": "Location",
+    "remotePolicy": "Remote work policy",
+    "color": "Agenda colour",
+    "showFinancial": "Show financial data",
+    "dailyRate": "Daily rate",
+    "objectives": "Objectives",
+    "description": "Description",
+    "review": "End-of-mission review",
+    "markdownHint": "Markdown supported.",
+    "endDateChangeNote": "Reason for the new end date",
+    "endDateChangePlaceholder": "Renewal, amendment…"
+  },
+  "validation": {
+    "required": "Required.",
+    "endBeforeStart": "The end date is before the start date."
+  },
+  "tabs": {
+    "info": "Information",
+    "contacts": "Contacts",
+    "technologies": "Technologies",
+    "history": "History"
+  },
+  "contacts": {
+    "empty": "No contact linked yet.",
+    "name": "Name",
+    "role": "Role",
+    "company": "Company",
+    "noRole": "No role",
+    "roleOf": "Role of {{name}}",
+    "removeOf": "Remove {{name}}",
+    "add": "Add a contact",
+    "addButton": "Add"
+  },
+  "technologies": {
+    "help": "Weight: 1 = touched upon, 5 = at the heart of the mission.",
+    "empty": "No technology yet.",
+    "weight": "Weight",
+    "weightOf": "Weight of {{name}}",
+    "version": "Version",
+    "removeOf": "Remove {{name}}",
+    "add": "Add a technology",
+    "addButton": "Add"
+  },
+  "history": {
+    "empty": "The planned end date has not changed.",
+    "change": "End date: {{from}} → {{to}}"
+  },
+  "roles": {
+    "help": "Roles a contact can play in a mission.",
+    "create": "New role",
+    "edit": "Edit role",
+    "nameFr": "Name (French)",
+    "nameEn": "Name (English)",
+    "usage": "Used by",
+    "empty": "No role yet.",
+    "editOf": "Edit {{name}}",
+    "deleteOf": "Delete {{name}}",
+    "deleteMessage": "Delete the role \"{{name}}\"?"
+  }
+}

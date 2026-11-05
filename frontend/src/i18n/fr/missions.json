@@ -1,0 +1,106 @@
+{
+  "title": "Missions",
+  "create": "Nouvelle mission",
+  "search": "Rechercher",
+  "allClients": "Tous les clients",
+  "showArchived": "Afficher les archivées",
+  "empty": "Aucune mission pour le moment.",
+  "archived": "Archivée",
+  "archive": "Archiver",
+  "restore": "Restaurer",
+  "delete": "Supprimer",
+  "save": "Enregistrer",
+  "preview": "Aperçu",
+  "noContent": "Rien pour le moment.",
+  "period": "{{start}} → {{end}}",
+  "since": "Depuis le {{start}}",
+  "via": "via {{employer}}",
+  "deleteTitle": "Supprimer ?",
+  "deleteMessage": "Supprimer la mission « {{title}} » ? Archivez-la plutôt pour garder son historique.",
+  "suggestion": "D'après ses dates, cette mission semble « {{status}} ».",
+  "applySuggestion": "Appliquer",
+  "status": {
+    "ALL": "Toutes",
+    "PROSPECT": "Prospect",
+    "ACTIVE": "En cours",
+    "ON_HOLD": "En pause",
+    "ENDED": "Terminée"
+  },
+  "steps": {
+    "client": "Client",
+    "position": "Poste",
+    "dates": "Dates",
+    "next": "Suivant",
+    "back": "Retour"
+  },
+  "fields": {
+    "client": "Client",
+    "employer": "ESN",
+    "employerHelp": "Reprise de votre profil.",
+    "jobTitle": "Intitulé de poste",
+    "title": "Nom interne",
+    "titleHelp": "Nom court utilisé dans l'agenda. Proposé à partir du client et du poste s'il est vide.",
+    "startDate": "Date de début",
+    "plannedEndDate": "Date de fin prévue",
+    "actualEndDate": "Date de fin réelle",
+    "status": "Statut",
+    "location": "Lieu",
+    "remotePolicy": "Politique de télétravail",
+    "color": "Couleur dans l'agenda",
+    "showFinancial": "Afficher les données financières",
+    "dailyRate": "TJM",
+    "objectives": "Objectifs",
+    "description": "Description",
+    "review": "Bilan de fin de mission",
+    "markdownHint": "Markdown accepté.",
+    "endDateChangeNote": "Motif de la nouvelle date de fin",
+    "endDateChangePlaceholder": "Renouvellement, avenant…"
+  },
+  "validation": {
+    "required": "Obligatoire.",
+    "endBeforeStart": "La date de fin est antérieure à la date de début."
+  },
+  "tabs": {
+    "info": "Informations",
+    "contacts": "Contacts",
+    "technologies": "Technologies",
+    "history": "Historique"
+  },
+  "contacts": {
+    "empty": "Aucun contact lié pour le moment.",
+    "name": "Nom",
+    "role": "Rôle",
+    "company": "Entreprise",
+    "noRole": "Sans rôle",
+    "roleOf": "Rôle de {{name}}",
+    "removeOf": "Retirer {{name}}",
+    "add": "Ajouter un contact",
+    "addButton": "Ajouter"
+  },
+  "technologies": {
+    "help": "Pondération : 1 = effleurée, 5 = au cœur de la mission.",
+    "empty": "Aucune technologie pour le moment.",
+    "weight": "Pondération",
+    "weightOf": "Pondération de {{name}}",
+    "version": "Version",
+    "removeOf": "Retirer {{name}}",
+    "add": "Ajouter une technologie",
+    "addButton": "Ajouter"
+  },
+  "history": {
+    "empty": "La date de fin prévue n'a pas changé.",
+    "change": "Fin : {{from}} → {{to}}"
+  },
+  "roles": {
+    "help": "Rôles qu'un contact peut tenir dans une mission.",
+    "create": "Nouveau rôle",
+    "edit": "Modifier le rôle",
+    "nameFr": "Nom (français)",
+    "nameEn": "Nom (anglais)",
+    "usage": "Utilisé par",
+    "empty": "Aucun rôle pour le moment.",
+    "editOf": "Modifier {{name}}",
+    "deleteOf": "Supprimer {{name}}",
+    "deleteMessage": "Supprimer le rôle « {{name}} » ?"
+  }
+}

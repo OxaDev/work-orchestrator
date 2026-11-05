@@ -1,0 +1,8 @@
+# Development overlay, used explicitly by `make dev` / `make db-up` (never by `make deploy`):
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d db
+# Backend and frontend run on the host with hot reload (uv / Vite); only the database runs
+# in Docker, published on 127.0.0.1 so host processes and tests can reach it (ADR-0029).
+services:
+  db:
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-55432}:5432"

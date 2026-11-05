@@ -1,0 +1,151 @@
+{
+  "title": "Annuaire",
+  "sections": {
+    "contacts": "Contacts",
+    "companies": "Entreprises",
+    "technologies": "Technologies",
+    "sectors": "Secteurs",
+    "tags": "Tags",
+    "roles": "Rôles",
+    "day-types": "Types de journée"
+  },
+  "common": {
+    "search": "Rechercher",
+    "showArchived": "Afficher les archivés",
+    "archived": "Archivé",
+    "website": "Site web",
+    "description": "Description",
+    "notes": "Notes",
+    "markdownHint": "Markdown accepté.",
+    "notesPreview": "Aperçu des notes",
+    "noNotes": "Aucune note."
+  },
+  "validation": {
+    "required": "Obligatoire.",
+    "email": "Saisissez une adresse e-mail valide."
+  },
+  "actions": {
+    "editOf": "Modifier {{name}}",
+    "deleteOf": "Supprimer {{name}}",
+    "archiveOf": "Archiver {{name}}",
+    "restoreOf": "Restaurer {{name}}",
+    "archive": "Archiver",
+    "restore": "Restaurer",
+    "deleteTitle": "Supprimer ?",
+    "deleteMessage": "Supprimer « {{name}} » ? Cette action est définitive."
+  },
+  "companyTypes": {
+    "CLIENT": "Client",
+    "ESN": "ESN",
+    "OTHER": "Autre"
+  },
+  "companies": {
+    "name": "Nom",
+    "types": "Type",
+    "allTypes": "Tous les types",
+    "primarySector": "Secteur principal",
+    "secondarySectors": "Autres secteurs",
+    "parent": "Société mère",
+    "create": "Nouvelle entreprise",
+    "empty": "Aucune entreprise pour le moment.",
+    "searchPlaceholder": "Rechercher une entreprise",
+    "tabs": {
+      "info": "Informations",
+      "org": "Organisation",
+      "contacts": "Contacts",
+      "missions": "Missions"
+    }
+  },
+  "org": {
+    "title": "Organisation",
+    "help": "Directions, pôles, équipes… sur autant de niveaux que nécessaire. Pour déplacer une unité, modifiez-la et choisissez un autre parent.",
+    "create": "Nouvelle unité",
+    "edit": "Modifier l'unité",
+    "name": "Nom",
+    "level": "Niveau",
+    "levelHelp": "Libellé libre : Direction, Pôle, Équipe, Squad…",
+    "parent": "Unité parente",
+    "root": "Niveau supérieur",
+    "empty": "Aucune organisation décrite.",
+    "addChildOf": "Ajouter une unité sous {{name}}"
+  },
+  "contacts": {
+    "name": "Nom",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "jobTitle": "Poste",
+    "company": "Entreprise",
+    "allCompanies": "Toutes les entreprises",
+    "orgUnit": "Unité organisationnelle",
+    "emailWork": "E-mail professionnel",
+    "emailPersonal": "E-mail personnel",
+    "phoneWork": "Téléphone fixe",
+    "phoneMobile": "Mobile",
+    "create": "Nouveau contact",
+    "empty": "Aucun contact pour le moment.",
+    "searchPlaceholder": "Nom, e-mail, poste…",
+    "duplicatesTitle": "Des contacts similaires existent déjà",
+    "duplicateReason": {
+      "SAME_NAME": "même nom",
+      "SAME_EMAIL": "même e-mail"
+    },
+    "history": "Postes précédents",
+    "noHistory": "Aucun poste précédent enregistré.",
+    "startDate": "Du",
+    "endDate": "Au",
+    "addPosition": "Ajouter un poste"
+  },
+  "technologies": {
+    "name": "Nom",
+    "category": "Catégorie",
+    "allCategories": "Toutes les catégories",
+    "aliases": "Alias",
+    "create": "Nouvelle technologie",
+    "empty": "Aucune technologie trouvée.",
+    "searchPlaceholder": "Rechercher (nom ou alias)"
+  },
+  "categories": {
+    "LANGUAGE": "Langage",
+    "FRAMEWORK": "Framework",
+    "LIBRARY": "Bibliothèque",
+    "DATABASE": "Base de données",
+    "MESSAGING": "Messagerie",
+    "CLOUD": "Cloud",
+    "INFRASTRUCTURE": "Infrastructure",
+    "DEVOPS": "DevOps",
+    "OBSERVABILITY": "Observabilité",
+    "SECURITY": "Sécurité",
+    "DATA": "Data",
+    "TOOL": "Outil",
+    "METHOD": "Méthode",
+    "OTHER": "Autre"
+  },
+  "sectors": {
+    "help": "Secteurs d'activité, pour classer les entreprises.",
+    "create": "Nouveau secteur",
+    "edit": "Modifier le secteur",
+    "nameFr": "Nom (français)",
+    "nameEn": "Nom (anglais)",
+    "parent": "Secteur parent",
+    "root": "Niveau supérieur",
+    "empty": "Aucun secteur pour le moment.",
+    "addChild": "Ajouter un sous-secteur",
+    "addChildOf": "Ajouter un sous-secteur à {{name}}",
+    "companyCount_one": "{{count}} entreprise",
+    "companyCount_other": "{{count}} entreprises"
+  },
+  "tags": {
+    "label": "Tags",
+    "placeholder": "Choisissez ou tapez puis Entrée pour créer",
+    "createHint": "Appuyez sur Entrée pour créer ce tag",
+    "create": "Nouveau tag",
+    "edit": "Modifier le tag",
+    "name": "Nom",
+    "color": "Couleur",
+    "usage": "Utilisé par",
+    "preview": "Aperçu",
+    "empty": "Aucun tag pour le moment.",
+    "deleteMessage_one": "Supprimer « {{name}} » ? Il sera retiré de {{count}} élément.",
+    "deleteMessage_other": "Supprimer « {{name}} » ? Il sera retiré de {{count}} éléments."
+  }
+}
