@@ -79,7 +79,7 @@ describe("session", () => {
   it("signs out from the user menu", async () => {
     const user = userEvent.setup();
     const { router } = renderApp("/");
-    await user.click(await screen.findByRole("button", { name: "Ouvrir le menu utilisateur" }));
+    await user.click(await screen.findByRole("button", { name: /menu utilisateur$/ }));
     await user.click(await screen.findByText("Se déconnecter"));
     await waitFor(() => expect(router.state.location.pathname).toBe("/login"));
     expect(backend.session).toBeNull();

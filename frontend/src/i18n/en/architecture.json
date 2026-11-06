@@ -1,0 +1,214 @@
+{
+  "title": "Architecture",
+  "allClients": "All clients",
+  "archived": "archived",
+  "edit": "Edit",
+  "archive": "Archive",
+  "restore": "Restore",
+  "delete": "Delete",
+  "deleteTitle": "Delete?",
+  "save": "Save",
+  "validation": {
+    "required": "Required."
+  },
+  "fields": {
+    "name": "Name",
+    "kind": "Type",
+    "parent": "Parent domain",
+    "noParent": "None (top level)",
+    "lifecycle": "Lifecycle",
+    "criticality": "Criticality",
+    "owner": "Owner unit",
+    "referent": "Referent contact",
+    "description": "Description (Markdown)",
+    "client": "Client",
+    "missions": "Missions"
+  },
+  "kinds": {
+    "BUSINESS_DOMAIN": "Business domain",
+    "APPLICATION": "Application",
+    "SERVICE": "Service",
+    "DATABASE": "Database",
+    "MESSAGING": "Messaging",
+    "EXTERNAL_SYSTEM": "External system",
+    "INFRASTRUCTURE": "Infrastructure",
+    "OTHER": "Other"
+  },
+  "lifecycles": {
+    "CURRENT": "Current",
+    "TARGET": "Target",
+    "DEPRECATED": "Deprecated"
+  },
+  "criticalities": {
+    "LOW": "Low criticality",
+    "MEDIUM": "Medium criticality",
+    "HIGH": "High criticality",
+    "CRITICAL": "Critical"
+  },
+  "relationTypes": {
+    "CALLS": "Calls",
+    "DEPENDS_ON": "Depends on",
+    "PUBLISHES_TO": "Publishes to",
+    "SUBSCRIBES_TO": "Subscribes to",
+    "READS_FROM": "Reads from",
+    "WRITES_TO": "Writes to",
+    "CUSTOM": "Other"
+  },
+  "syncModes": {
+    "SYNC": "Synchronous",
+    "ASYNC": "Asynchronous"
+  },
+  "linkKinds": {
+    "REPOSITORY": "Repository",
+    "TICKETS": "Tickets",
+    "ENVIRONMENT": "Environment",
+    "DOCUMENTATION": "Documentation",
+    "MONITORING": "Monitoring",
+    "OTHER": "Other"
+  },
+  "tabs": {
+    "overview": "Overview",
+    "children": "Sub-domains ({{count}})",
+    "relations": "Relations ({{count}})",
+    "technologies": "Technologies ({{count}})",
+    "subjects": "Subjects ({{count}})",
+    "documents": "Documents",
+    "architectures": "Architectures",
+    "domains": "Domains",
+    "domainsCount": "Domains ({{count}})",
+    "description": "Description"
+  },
+  "domains": {
+    "empty": "No domain yet.",
+    "tree": "Domains",
+    "create": "New domain",
+    "edit": "Edit the domain",
+    "createChild": "New sub-domain",
+    "noChildren": "No sub-domain.",
+    "noDescription": "No description yet.",
+    "inArchitectures": "In:",
+    "deleteMessage": "Delete the domain \"{{name}}\", its relations and links? A domain with sub-domains cannot be deleted.",
+    "pickClient": "Choose a client to see its domains."
+  },
+  "architectures": {
+    "member": "entry",
+    "create": "New architecture",
+    "edit": "Edit the architecture",
+    "empty": "No architecture yet.",
+    "members": "Entry domains",
+    "tree": "Domains of the architecture",
+    "add": "Add an entry domain",
+    "addPlaceholder": "A domain of this client",
+    "removeOf": "Remove {{name}} from the architecture",
+    "membershipHelp": "An architecture holds entry domains; their sub-domains belong to it as well.",
+    "deleteMessage": "Delete the architecture \"{{name}}\"? Its domains are kept: they belong to the client."
+  },
+  "relations": {
+    "create": "New relation",
+    "edit": "Edit the relation",
+    "source": "From",
+    "target": "To",
+    "type": "Relation",
+    "label": "Label",
+    "protocol": "Protocol",
+    "syncMode": "Mode",
+    "selfError": "A domain cannot be related to itself.",
+    "labelRequired": "Name this relation.",
+    "empty": "No relation.",
+    "editOf": "Edit the relation with {{name}}",
+    "deleteOf": "Delete the relation with {{name}}",
+    "outgoing": "Outgoing",
+    "incoming": "Incoming",
+    "addOutgoing": "Add an outgoing relation",
+    "addIncoming": "Add an incoming relation"
+  },
+  "technologies": {
+    "empty": "No technology.",
+    "removeOf": "Remove {{name}}",
+    "add": "Technology",
+    "version": "Version",
+    "addAction": "Add"
+  },
+  "subjects": {
+    "title": "Linked subjects",
+    "empty": "No subject linked.",
+    "unlinkOf": "Unlink {{title}}",
+    "link": "Link a subject",
+    "tasks": "Latest tasks",
+    "noTask": "No task on these subjects.",
+    "inAgenda": "See in the agenda"
+  },
+  "owner": {
+    "title": "Ownership",
+    "chain": "Owner organisation",
+    "none": "No owner unit.",
+    "referent": "Referent:"
+  },
+  "links": {
+    "title": "External links",
+    "empty": "No link.",
+    "deleteOf": "Delete {{label}}",
+    "kind": "Link type",
+    "label": "Label",
+    "url": "Address",
+    "urlInvalid": "Enter a full address starting with http:// or https://.",
+    "add": "Add"
+  },
+  "mission": {
+    "title": "Architectures of the mission",
+    "empty": "No architecture linked.",
+    "unlinkOf": "Unlink {{name}}",
+    "link": "Link an architecture",
+    "linkPlaceholder": "An architecture of {{client}}"
+  },
+  "graph": {
+    "open": "Graph view",
+    "title": "Graph",
+    "heading": "{{name}} — graph",
+    "label": "Architecture graph",
+    "expand": "Expand {{name}}",
+    "collapse": "Collapse {{name}}",
+    "hidden_one": "+{{count}} hidden",
+    "hidden_other": "+{{count}} hidden",
+    "changes": {
+      "added": "new",
+      "removed": "removed"
+    },
+    "view": "View",
+    "views": {
+      "CURRENT": "Current",
+      "TARGET": "Target",
+      "BOTH": "Both"
+    },
+    "depth": "Depth",
+    "allLevels": "All levels",
+    "kinds": "Types",
+    "allKinds": "All types",
+    "teams": "Teams",
+    "allTeams": "All teams",
+    "search": "Find a domain",
+    "help": "Drag from the right edge of a domain to another to relate them; double-click a domain to open its sheet; move domains to keep your layout.",
+    "resetLayout": "Automatic layout",
+    "legend": {
+      "sync": "synchronous",
+      "async": "asynchronous",
+      "added": "green dashed: new in the target",
+      "removed": "grey: removed in the target"
+    }
+  },
+  "export": {
+    "button": "Export Mermaid",
+    "title": "Mermaid export",
+    "format": "Diagram",
+    "flowchart": "Flowchart",
+    "mindmap": "Mind map",
+    "direction": "Direction",
+    "lr": "Left to right",
+    "tb": "Top to bottom",
+    "code": "Mermaid code",
+    "help": "Paste it in a ```mermaid block (GitHub, GitLab, Azure DevOps…).",
+    "copy": "Copy the code",
+    "copied": "Mermaid code copied.",
+    "failed": "The export failed."
+  }
+}

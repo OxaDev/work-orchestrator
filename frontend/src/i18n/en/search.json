@@ -1,0 +1,31 @@
+{
+  "open": "Search",
+  "placeholder": "Search everything, or type an action…",
+  "searching": "Searching…",
+  "empty": "Nothing found.",
+  "archived": "Archived",
+  "groups": {
+    "actions": "Actions",
+    "results": "Results"
+  },
+  "actions": {
+    "newTask": "New task",
+    "today": "Today",
+    "week": "This week",
+    "standup": "Stand-up",
+    "newDocument": "New document",
+    "newMission": "New mission"
+  },
+  "types": {
+    "document": "Document",
+    "daily_log": "Stand-up",
+    "task": "Task",
+    "subject": "Subject",
+    "domain": "Domain",
+    "architecture": "Architecture",
+    "mission": "Mission",
+    "contact": "Contact",
+    "company": "Company",
+    "technology": "Technology"
+  }
+}

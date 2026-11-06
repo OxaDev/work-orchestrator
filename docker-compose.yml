@@ -47,6 +47,27 @@ services:
       backend:
         condition: service_healthy
 
+  # Optional periodic backups (ADR-0040): `make backup-service` (profile "backup").
+  backup:
+    image: postgres:17-alpine
+    profiles: ["backup"]
+    restart: unless-stopped
+    environment:
+      PGHOST: db
+      PGUSER: ${POSTGRES_USER:?run make env}
+      PGPASSWORD: ${POSTGRES_PASSWORD:?run make env}
+      PGDATABASE: ${POSTGRES_DB:?run make env}
+      BACKUP_RETENTION_DAYS: ${BACKUP_RETENTION_DAYS:-30}
+      BACKUP_INTERVAL_SECONDS: ${BACKUP_INTERVAL_SECONDS:-86400}
+    volumes:
+      - uploads:/data/uploads:ro
+      - ./backups:/backups
+      - ./scripts/backup-loop.sh:/usr/local/bin/backup-loop.sh:ro
+    entrypoint: ["/bin/sh", "/usr/local/bin/backup-loop.sh"]
+    depends_on:
+      db:
+        condition: service_healthy
+
 volumes:
   pgdata:
   uploads:

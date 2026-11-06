@@ -32,6 +32,7 @@ import {
 import { CompanySelect, TagBadges } from "./components";
 import { ContactForm } from "./ContactForm";
 import { toContactPayload } from "./payloads";
+import { EntityDocuments } from "../documents/EntityDocuments";
 import { useNotify } from "./useNotify";
 
 function Employments({ contact }: { contact: ContactDetail }) {
@@ -197,6 +198,8 @@ export function ContactPage() {
         </Stack>
       </Group>
       <Employments contact={data} />
+      <Title order={4}>{t("contacts.documents")}</Title>
+      <EntityDocuments type="contact" id={data.id} />
     </Stack>
   );
 }

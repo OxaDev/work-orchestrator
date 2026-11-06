@@ -1,8 +1,9 @@
-import { Box, SimpleGrid, Stack, Text, UnstyledButton } from "@mantine/core";
+import { Box, SimpleGrid, Stack, Text, UnstyledButton, VisuallyHidden } from "@mantine/core";
+import type { KeyboardEvent } from "react";
 import { useTranslation } from "react-i18next";
 
 import type { HalfDay, Slot } from "./api";
-import { isWeekend, monthWeeks, parse, PERIODS, todayIso } from "./calendar";
+import { arrowTarget, isWeekend, monthWeeks, parse, PERIODS, todayIso } from "./calendar";
 import { HalfDayCell } from "./HalfDayCell";
 import type { MissionInfo } from "./useLabels";
 import { useHalfDayLabels } from "./useLabels";
@@ -19,6 +20,17 @@ interface MonthGridProps {
 }
 
 const WEEKDAYS = [0, 1, 2, 3, 4, 5, 6];
+
+/** Moves the focus between half-days with the arrow keys; Enter / Space select (HalfDayCell). */
+function moveFocus(event: KeyboardEvent<HTMLDivElement>) {
+  const current = (event.target as HTMLElement).dataset.slot;
+  const next = current ? arrowTarget(current, event.key) : null;
+  if (!next) return;
+  const target = event.currentTarget.querySelector<HTMLElement>(`[data-slot="${next}"]`);
+  if (!target) return; // outside the month: stay put
+  event.preventDefault();
+  target.focus();
+}
 
 export function MonthGrid({
   year,
@@ -39,7 +51,7 @@ export function MonthGrid({
   const monthPrefix = `${year}-${String(month).padStart(2, "0")}`;
 
   return (
-    <Box role="grid" aria-label={t("monthGrid")} aria-readonly={locked}>
+    <Box role="grid" aria-label={t("monthGrid")} aria-readonly={locked} onKeyDown={moveFocus}>
       <SimpleGrid cols={7} spacing={4} mb={4} role="row">
         {WEEKDAYS.map((i) => (
           <Text key={i} size="xs" c="dimmed" ta="center" role="columnheader">
@@ -68,7 +80,6 @@ export function MonthGrid({
                 >
                   <UnstyledButton
                     disabled={locked}
-                    aria-label={t("selectDay", { day: labels.day(day) })}
                     onClick={() => selection.toggleDay(slots)}
                     style={{ display: "flex", justifyContent: "space-between", width: "100%" }}
                   >
@@ -76,10 +87,18 @@ export function MonthGrid({
                       {Number(day.slice(8))}
                     </Text>
                     {holiday && (
-                      <Text size="xs" c="red" truncate maw="75%" title={holiday}>
+                      <Text
+                        size="xs"
+                        c="var(--mantine-color-red-light-color)"
+                        truncate
+                        maw="75%"
+                        title={holiday}
+                      >
                         {holiday}
                       </Text>
                     )}
+                    {/* Named by its visible text plus this hint, no aria-label (WCAG 2.5.3). */}
+                    <VisuallyHidden>{t("selectDay", { day: labels.day(day) })}</VisuallyHidden>
                   </UnstyledButton>
                   <Stack gap={2} mt={2}>
                     {slots.map((slot) => {
@@ -96,6 +115,7 @@ export function MonthGrid({
                             halfDay?.kind === "MISSION" ? mission?.title : labels.content(halfDay)
                           }
                           label={labels.slot(slot.date, slot.period, halfDay)}
+                          slot={`${slot.date}|${slot.period}`}
                           selected={selection.isSelected(slot)}
                           disabled={locked}
                           onPointerDown={(event) => selection.pointerDown(slot, event.shiftKey)}

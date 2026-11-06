@@ -1,4 +1,4 @@
-import { Avatar, Group, Menu, Text, UnstyledButton } from "@mantine/core";
+import { Avatar, Group, Menu, Text, UnstyledButton, VisuallyHidden } from "@mantine/core";
 import { IconLogout, IconSettings } from "@tabler/icons-react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router";
@@ -24,14 +24,16 @@ export function UserMenu() {
   return (
     <Menu position="bottom-end" width={220}>
       <Menu.Target>
-        <UnstyledButton aria-label={t("userMenu.open")}>
+        {/* Named by its visible text (WCAG 2.5.3), plus a hidden hint: no aria-label. */}
+        <UnstyledButton>
           <Group gap={8} wrap="nowrap">
-            <Avatar size="sm" radius="xl" color="indigo">
+            <Avatar size="sm" radius="xl" color="indigo" aria-hidden>
               {initials(user.display_name)}
             </Avatar>
             <Text size="sm" visibleFrom="sm">
               {user.display_name}
             </Text>
+            <VisuallyHidden>{t("userMenu.open")}</VisuallyHidden>
           </Group>
         </UnstyledButton>
       </Menu.Target>

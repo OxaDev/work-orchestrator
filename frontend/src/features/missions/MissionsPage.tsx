@@ -5,7 +5,6 @@ import {
   Center,
   Group,
   Loader,
-  Pagination,
   SegmentedControl,
   SimpleGrid,
   Stack,
@@ -20,6 +19,8 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
+import { useCreateParam } from "../../app/useCreateParam";
+import { AppPagination } from "../../components/AppPagination";
 import { CompanySelect } from "../directory/components";
 import { MISSION_STATUSES, type MissionStatus, type MissionSummary, useMissions } from "./api";
 import { StatusBadge } from "./components";
@@ -36,7 +37,6 @@ function MissionCard({ mission }: { mission: MissionSummary }) {
       withBorder
       component={Link}
       to={`/missions/${mission.id}`}
-      aria-label={mission.title}
       style={{ borderLeft: `4px solid var(--mantine-color-${mission.color}-6)` }}
     >
       <Group justify="space-between" align="flex-start" wrap="nowrap">
@@ -74,6 +74,7 @@ export function MissionsPage() {
   const [archived, setArchived] = useState(false);
   const [page, setPage] = useState(1);
   const [creating, setCreating] = useState(false);
+  const [requested, clearRequest] = useCreateParam();
   const missions = useMissions({
     q: debounced || undefined,
     status: status === "ALL" ? undefined : status,
@@ -88,9 +89,14 @@ export function MissionsPage() {
     <Stack>
       <Group justify="space-between">
         <Title order={2}>{t("title")}</Title>
-        <Button leftSection={<IconPlus size={16} />} onClick={() => setCreating(true)}>
-          {t("create")}
-        </Button>
+        <Group gap="xs">
+          <Button component={Link} to="/missions/career" variant="default">
+            {t("career")}
+          </Button>
+          <Button leftSection={<IconPlus size={16} />} onClick={() => setCreating(true)}>
+            {t("create")}
+          </Button>
+        </Group>
       </Group>
       <Group align="flex-end">
         <SegmentedControl
@@ -141,16 +147,31 @@ export function MissionsPage() {
           ))}
         </SimpleGrid>
       ) : (
-        <Text c="dimmed" ta="center" py="xl">
-          {t("empty")}
-        </Text>
+        <Stack align="center" gap="xs" py="xl">
+          <Text c="dimmed" ta="center">
+            {t("empty")}
+          </Text>
+          <Button
+            variant="light"
+            leftSection={<IconPlus size={16} />}
+            onClick={() => setCreating(true)}
+          >
+            {t("create")}
+          </Button>
+        </Stack>
       )}
       {pages > 1 && (
         <Group justify="center">
-          <Pagination total={pages} value={page} onChange={setPage} size="sm" />
+          <AppPagination total={pages} value={page} onChange={setPage} />
         </Group>
       )}
-      <CreateMissionModal opened={creating} onClose={() => setCreating(false)} />
+      <CreateMissionModal
+        opened={creating || requested}
+        onClose={() => {
+          setCreating(false);
+          clearRequest();
+        }}
+      />
     </Stack>
   );
 }

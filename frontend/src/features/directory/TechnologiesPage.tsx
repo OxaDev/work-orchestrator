@@ -16,6 +16,7 @@ import { useDebouncedValue } from "@mantine/hooks";
 import { IconArchive, IconArchiveOff, IconPencil, IconPlus, IconSearch } from "@tabler/icons-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useSearchParams } from "react-router";
 
 import { EntityTable } from "../../components/EntityTable";
 import {
@@ -108,7 +109,9 @@ function TechnologyModal({
 export function TechnologiesPage() {
   const { t } = useTranslation("directory");
   const notify = useNotify();
-  const [search, setSearch] = useState("");
+  // `?q=` pre-fills the search (wikilinks to a technology, ADR-0036).
+  const [params] = useSearchParams();
+  const [search, setSearch] = useState(params.get("q") ?? "");
   const [debounced] = useDebouncedValue(search, 250);
   const [category, setCategory] = useState<TechnologyCategory | null>(null);
   const [archived, setArchived] = useState(false);

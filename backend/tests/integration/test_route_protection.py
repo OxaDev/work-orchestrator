@@ -45,3 +45,14 @@ async def test_route_requires_authentication(
     response = await client.request(method, url, json={})
     assert response.status_code == 401, f"{method} {path} is not protected"
     assert response.json()["code"] == "AUTH_REQUIRED"
+
+
+async def test_cors_is_closed_by_default(client: AsyncClient) -> None:
+    """Same-origin deployment (ADR-0011): no other site may call the API with cookies."""
+    response = await client.options(
+        "/api/v1/auth/me",
+        headers={"Origin": "https://evil.example", "Access-Control-Request-Method": "GET"},
+    )
+    assert "access-control-allow-origin" not in response.headers
+    response = await client.get("/api/v1/health", headers={"Origin": "https://evil.example"})
+    assert "access-control-allow-origin" not in response.headers

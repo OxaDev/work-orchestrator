@@ -1,5 +1,4 @@
-import { expect, test } from "@playwright/test";
-
+import { expect, test } from "./fixtures";
 import { signIn } from "./helpers";
 
 const suffix = Date.now().toString(36);

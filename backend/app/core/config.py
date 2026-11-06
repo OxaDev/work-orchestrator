@@ -42,7 +42,12 @@ class Settings(BaseSettings):
     # Comma-separated list of allowed origins; empty disables CORS (same-origin deployment).
     cors_origins: str = ""
 
-    uploads_dir: Path = Path("/data/uploads")
+    # Uploaded files (ADR-0027). Docker sets /data/uploads; host development uses ./uploads.
+    uploads_dir: Path = Path("uploads")
+    max_upload_bytes: int = 20 * 1024 * 1024
+    # Archive import and Markdown import (ADR-0040).
+    max_import_bytes: int = 200 * 1024 * 1024
+    max_markdown_import_bytes: int = 50 * 1024 * 1024
 
     @field_validator("base_path")
     @classmethod

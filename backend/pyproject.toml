@@ -1,6 +1,6 @@
 [project]
 name = "work-orchestrator-backend"
-version = "0.1.0"
+version = "1.0.0"
 description = "Work Orchestrator API"
 requires-python = ">=3.13,<3.14"
 dependencies = [
@@ -15,6 +15,7 @@ dependencies = [
     "pyjwt>=2.10",
     "email-validator>=2.2",
     "holidays>=0.60",
+    "python-multipart>=0.0.20",
 ]
 
 [dependency-groups]

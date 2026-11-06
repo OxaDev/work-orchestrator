@@ -64,7 +64,11 @@
     "info": "Information",
     "contacts": "Contacts",
     "technologies": "Technologies",
-    "history": "History"
+    "history": "History",
+    "subjects": "Subjects",
+    "documents": "Documents",
+    "architectures": "Architectures",
+    "overview": "Overview"
   },
   "contacts": {
     "empty": "No contact linked yet.",
@@ -102,5 +106,6 @@
     "editOf": "Edit {{name}}",
     "deleteOf": "Delete {{name}}",
     "deleteMessage": "Delete the role \"{{name}}\"?"
-  }
+  },
+  "career": "Career"
 }

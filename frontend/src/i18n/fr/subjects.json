@@ -1,0 +1,67 @@
+{
+  "title": "Sujets",
+  "backToAgenda": "Retour à l'agenda",
+  "missionHint": "Les sujets d'une mission se gèrent depuis la page de la mission (onglet « Sujets »).",
+  "scopeLabel": "Portée",
+  "scopes": {
+    "MISSION": "Mission",
+    "INTERCONTRACT": "Inter-contrat",
+    "TRAINING": "Formation",
+    "PERSONAL": "Personnel"
+  },
+  "status": {
+    "OPEN": "Ouvert",
+    "IN_PROGRESS": "En cours",
+    "DONE": "Terminé",
+    "CANCELLED": "Abandonné"
+  },
+  "add": "Ajouter",
+  "newRoot": "Nouveau sujet",
+  "newRootPlaceholder": "Nouveau sujet, ex. Migration Kafka",
+  "childPlaceholder": "Titre du sous-sujet",
+  "addChildOf": "Ajouter un sous-sujet à {{title}}",
+  "expand": "Déplier {{title}}",
+  "collapse": "Replier {{title}}",
+  "editOf": "Modifier {{title}}",
+  "archiveOf": "Archiver {{title}}",
+  "restoreOf": "Restaurer {{title}}",
+  "deleteOf": "Supprimer {{title}}",
+  "deleteTitle": "Supprimer ?",
+  "deleteMessage": "Supprimer le sujet « {{title}} » ? Un sujet qui a des sous-sujets ou des tâches ne peut pas être supprimé : archivez-le.",
+  "showArchived": "Afficher les archivés",
+  "empty": "Aucun sujet pour l'instant.",
+  "treeLabel": "Sujets",
+  "taskCount_one": "{{count}} tâche",
+  "taskCount_other": "{{count}} tâches",
+  "spent": "{{duration}} réalisées",
+  "openLink": "Ouvrir le lien externe de {{title}}",
+  "form": {
+    "editTitle": "Modifier le sujet",
+    "title": "Titre",
+    "status": "Statut",
+    "category": "Catégorie",
+    "parent": "Sujet parent",
+    "root": "Aucun (premier niveau)",
+    "externalUrl": "Lien externe (ticket, page…)",
+    "description": "Description (Markdown)",
+    "save": "Enregistrer"
+  },
+  "validation": {
+    "required": "Obligatoire.",
+    "url": "Saisissez une adresse complète commençant par http:// ou https://."
+  },
+  "categories": {
+    "help": "Catégories de sujets : veille, avant-vente, certification…",
+    "create": "Nouvelle catégorie",
+    "edit": "Modifier la catégorie",
+    "nameFr": "Nom (français)",
+    "nameEn": "Nom (anglais)",
+    "usage": "Utilisée par",
+    "empty": "Aucune catégorie pour l'instant.",
+    "editOf": "Modifier {{name}}",
+    "deleteOf": "Supprimer {{name}}",
+    "deleteTitle": "Supprimer ?",
+    "deleteMessage": "Supprimer la catégorie « {{name}} » ?"
+  },
+  "inAgendaOf": "Voir {{title}} dans l'agenda"
+}

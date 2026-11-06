@@ -1,5 +1,4 @@
-import { expect, test } from "@playwright/test";
-
+import { expect, test } from "./fixtures";
 import { E2E_EMAIL, signIn } from "./helpers";
 
 test("anonymous deep link goes through login and back", async ({ page }) => {
@@ -11,9 +10,9 @@ test("anonymous deep link goes through login and back", async ({ page }) => {
 });
 
 test("wrong credentials show a generic message", async ({ page }) => {
-  // Unknown e-mail: does not count against the e2e admin's lockout counter.
+  // Unknown e-mail, new on each run: never reaches the 5-failure lockout (P1-6).
   await page.goto("./login");
-  await page.getByLabel("E-mail").fill("nobody@example.com");
+  await page.getByLabel("E-mail").fill(`nobody-${Date.now().toString(36)}@example.com`);
   await page.getByLabel("Mot de passe").fill("Wrong-Password-1");
   await page.getByRole("button", { name: "Se connecter" }).click();
   await expect(page.getByRole("alert")).toContainText("E-mail ou mot de passe incorrect.");
@@ -36,7 +35,7 @@ test("session survives a reload, then sign-out ends it", async ({ page }) => {
   await signIn(page);
   await page.reload();
   await expect(page.getByRole("navigation")).toBeVisible();
-  await page.getByRole("button", { name: "Ouvrir le menu utilisateur" }).click();
+  await page.getByRole("button", { name: /menu utilisateur$/ }).click();
   await expect(page.getByText(E2E_EMAIL)).toBeVisible();
   await page.getByText("Se déconnecter").click();
   await expect(page).toHaveURL(/\/login$/);

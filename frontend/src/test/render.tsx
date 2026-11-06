@@ -1,8 +1,8 @@
 import { render } from "@testing-library/react";
-import { QueryClient } from "@tanstack/react-query";
 import { createMemoryRouter, RouterProvider } from "react-router";
 
 import { AppProviders } from "../app/AppProviders";
+import { createQueryClient } from "../app/queryClient";
 import { routes } from "../app/routes";
 
 import type { UserRead } from "../api/client";
@@ -15,7 +15,7 @@ import { resetBackend } from "./server";
 export function renderApp(path = "/", options: { user?: UserRead | null } = {}) {
   if (options.user !== undefined) resetBackend(options.user);
   const router = createMemoryRouter(routes, { initialEntries: [path] });
-  const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+  const queryClient = createQueryClient({ queries: { retry: false } });
   const result = render(
     <AppProviders queryClient={queryClient} mantineEnv="test">
       <RouterProvider router={router} />

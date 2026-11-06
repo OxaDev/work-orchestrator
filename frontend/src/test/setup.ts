@@ -1,11 +1,17 @@
 import "@testing-library/jest-dom/vitest";
 import "../i18n";
 
-import { cleanup } from "@testing-library/react";
+import { notifications } from "@mantine/notifications";
+
+import { cleanup, configure } from "@testing-library/react";
 import { afterAll, afterEach, beforeAll, beforeEach } from "vitest";
 
 import i18n from "../i18n";
 import { resetBackend, server } from "./server";
+
+// Pages chain several queries before their first render (session, holidays, half-days...):
+// under the load of parallel test files, the default 1 s of findBy* is sometimes too short.
+configure({ asyncUtilTimeout: 3000 });
 
 // jsdom lacks these browser APIs used by Mantine.
 Object.defineProperty(window, "matchMedia", {
@@ -48,6 +54,9 @@ i18n.options.missingKeyHandler = (languages, namespace, key) => {
 beforeAll(() => server.listen({ onUnhandledFrame: "error" }));
 beforeEach(async () => {
   resetBackend();
+  // Mantine's notification store is global: toasts of a previous test would fill the queue.
+  notifications.clean();
+  notifications.cleanQueue();
   window.localStorage.clear();
   await i18n.changeLanguage("fr");
 });

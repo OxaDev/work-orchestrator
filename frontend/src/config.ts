@@ -15,3 +15,8 @@ export function apiBaseUrl(baseUrl: string, origin: string): string {
 
 export const BASE_URL = import.meta.env.BASE_URL;
 export const ROUTER_BASENAME = routerBasename(BASE_URL);
+
+/** Absolute application URL ending with "/", for links pasted outside the app (ADR-0036). */
+export function appUrl(): string {
+  return `${window.location.origin}${BASE_URL}`;
+}

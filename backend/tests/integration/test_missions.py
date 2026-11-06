@@ -1,18 +1,14 @@
 """Missions (P3-1 to P3-5): creation rules, ownership, filters, links, history."""
 
 import uuid
-from collections.abc import AsyncIterator, Awaitable, Callable
+from collections.abc import Awaitable, Callable
 from typing import Any
 
 import pytest
-from httpx import ASGITransport, AsyncClient
-from sqlalchemy.ext.asyncio import AsyncSession
+from httpx import AsyncClient
 
-from app.core.config import Settings
-from app.core.db import get_session
-from app.main import create_app
 from app.modules.auth.models import User
-from tests.conftest import FrozenClock, login
+from tests.conftest import FrozenClock
 
 MakeUser = Callable[..., Awaitable[User]]
 
@@ -277,23 +273,6 @@ async def test_archive_restore_and_delete(user_client: AsyncClient, refs: dict[s
     assert (await user_client.post(f"{base}/restore")).json()["archived_at"] is None
     assert (await user_client.delete(base)).status_code == 204
     assert (await user_client.get(base)).status_code == 404
-
-
-@pytest.fixture
-async def other_client(
-    settings: Settings, db_session: AsyncSession, make_user: MakeUser
-) -> AsyncIterator[AsyncClient]:
-    """A second signed-in user sharing the same database transaction."""
-    await make_user("other@example.com")
-    app = create_app(settings)
-
-    async def _session() -> AsyncIterator[AsyncSession]:
-        yield db_session
-
-    app.dependency_overrides[get_session] = _session
-    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://testserver") as http:
-        await login(http, "other@example.com")
-        yield http
 
 
 async def test_missions_are_private_to_their_owner(

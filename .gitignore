@@ -1,6 +1,7 @@
 # Secrets and local data
 .env
 backups/
+backend/uploads/
 
 # Python
 __pycache__/

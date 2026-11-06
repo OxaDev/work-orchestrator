@@ -1,5 +1,4 @@
-import { expect, test } from "@playwright/test";
-
+import { expect, test } from "./fixtures";
 import { signIn } from "./helpers";
 
 // The e2e stack persists between runs: use unique names.
@@ -9,7 +8,7 @@ test("company, organisation and contact end to end", async ({ page }) => {
   const company = `Banque E2E ${suffix}`;
   await signIn(page, "./directory/companies");
 
-  await page.getByRole("button", { name: "Nouvelle entreprise" }).click();
+  await page.getByRole("button", { name: "Nouvelle entreprise" }).first().click();
   const companyDialog = page.getByRole("dialog");
   await companyDialog.getByLabel("Nom", { exact: true }).fill(company);
   await companyDialog.getByRole("combobox", { name: "Secteur principal" }).click();

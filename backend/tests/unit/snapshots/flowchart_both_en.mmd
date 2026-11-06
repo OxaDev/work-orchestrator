@@ -1,0 +1,23 @@
+%% SI #quot;Horizon#quot; #lt;v2#gt; #35;1
+flowchart TB
+    daae36ccd[/"Kubernetes"/]
+    d63de8062["Legacy batch"]
+    subgraph d88685c90["Paiements"]
+        subgraph d42c4e493["Hub #124; paiements"]
+            d6fc11699(["API"])
+            d96e587d5[("Base Paiements")]
+        end
+        d8350086e[["Topic"]]
+    end
+    d4f225712{{"SWIFT"}}
+    d6fc11699 -->|"writes to (JDBC)"| d96e587d5
+    d6fc11699 -.->|"publishes to (Kafka)"| d8350086e
+    d42c4e493 -->|"envoie les virements #gt;1 M€"| d4f225712
+    d63de8062 -->|"reads from"| d96e587d5
+    %% d42c4e493 → d88685c90: depends on
+    classDef added stroke:#2f9e44,stroke-width:2px,stroke-dasharray:5 3
+    classDef removed fill:#f1f3f5,stroke:#868e96,color:#868e96,stroke-dasharray:3 3
+    class d8350086e added
+    class d63de8062 removed
+    linkStyle 1 stroke:#2f9e44,stroke-dasharray:5 3
+    linkStyle 3 stroke:#868e96,stroke-dasharray:3 3

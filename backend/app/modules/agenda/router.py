@@ -1,4 +1,4 @@
-"""Agenda endpoints (P4). Personal data: always scoped to the current user (ADR-0010)."""
+"""Agenda endpoints (P4, P5). Personal data: always scoped to the current user (ADR-0010)."""
 
 import uuid
 from datetime import date
@@ -6,9 +6,16 @@ from typing import Annotated
 
 from fastapi import APIRouter, Path, Query, Response, status
 
-from app.modules.agenda.models import Period
+from app.modules.agenda import compatibility
+from app.modules.agenda.models import HalfDayKind, Period
 from app.modules.agenda.schemas import (
+    ApplicationPlan,
     BulkResult,
+    CarryOverRequest,
+    CompatibilityRule,
+    DailyLogRead,
+    DailyLogWrite,
+    DuplicateRequest,
     HalfDayAssign,
     HalfDayRead,
     HalfDayValues,
@@ -19,13 +26,22 @@ from app.modules.agenda.schemas import (
     PublicHoliday,
     Slot,
     SlotList,
+    Standup,
     Stats,
     SubtypeCreate,
     SubtypeRead,
     SubtypeUpdate,
     SubtypeWithUsage,
+    TaskCreate,
+    TaskRead,
+    TaskUpdate,
+    TaskWriteResult,
+    TemplateApplication,
     Unfilled,
     UnlockRequest,
+    WeekTemplateCreate,
+    WeekTemplateRead,
+    WeekTemplateUpdate,
 )
 from app.modules.agenda.service import (
     HalfDayService,
@@ -35,6 +51,8 @@ from app.modules.agenda.service import (
     SubtypeService,
     half_day_reads,
 )
+from app.modules.agenda.tasks import DailyLogService, StandupService, TaskService
+from app.modules.agenda.templates import WeekTemplateService
 from app.modules.auth.dependencies import CurrentUser, DbSession
 
 router = APIRouter(prefix="/agenda", tags=["agenda"])
@@ -180,3 +198,168 @@ async def update_subtype(
 async def delete_subtype(subtype_id: uuid.UUID, session: DbSession) -> Response:
     await SubtypeService(session).delete(subtype_id)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+# --- tasks (P5, ADR-0020, ADR-0034) ---------------------------------------------------------
+
+
+@router.get("/compatibility", response_model=list[CompatibilityRule])
+async def compatibility_matrix() -> list[CompatibilityRule]:
+    """Subject scopes each half-day kind accepts (ADR-0020); the UI never duplicates it."""
+    return [
+        CompatibilityRule(
+            kind=kind,
+            scopes=sorted(compatibility.MATRIX[kind]),
+            same_mission=kind == HalfDayKind.MISSION,
+        )
+        for kind in HalfDayKind
+    ]
+
+
+@router.get("/tasks", response_model=list[TaskRead])
+async def list_tasks(
+    user: CurrentUser,
+    session: DbSession,
+    start: From,
+    end: To,
+    subject_id: uuid.UUID | None = None,
+) -> list[TaskRead]:
+    """Tasks between two dates included (at most 400 days), in chronological order."""
+    service = TaskService(session, user)
+    return await service.reads(await service.between(start, end, subject_id))
+
+
+async def _write_result(service: TaskService, task_id: uuid.UUID) -> TaskWriteResult:
+    task = await service.get(task_id)
+    return TaskWriteResult(
+        task=await service.read(task), warnings=await service.warnings(task.half_day_id)
+    )
+
+
+@router.post("/tasks", response_model=TaskWriteResult, status_code=status.HTTP_201_CREATED)
+async def create_task(body: TaskCreate, user: CurrentUser, session: DbSession) -> TaskWriteResult:
+    """Places a task in a half-day; an empty slot gets the subject's natural kind (ADR-0034)."""
+    service = TaskService(session, user)
+    return await _write_result(service, (await service.create(body)).id)
+
+
+@router.patch("/tasks/{task_id}", response_model=TaskWriteResult)
+async def update_task(
+    task_id: uuid.UUID, body: TaskUpdate, user: CurrentUser, session: DbSession
+) -> TaskWriteResult:
+    """Edits a task; `date` / `period` move it (drag and drop)."""
+    service = TaskService(session, user)
+    return await _write_result(service, (await service.update(task_id, body)).id)
+
+
+@router.delete("/tasks/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_task(task_id: uuid.UUID, user: CurrentUser, session: DbSession) -> Response:
+    await TaskService(session, user).delete(task_id)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.post("/tasks/{task_id}/carry-over", response_model=TaskWriteResult)
+async def carry_over_task(
+    task_id: uuid.UUID, body: CarryOverRequest, user: CurrentUser, session: DbSession
+) -> TaskWriteResult:
+    """Copies a planned task to the next compatible half-day; returns the copy (P5-7)."""
+    service = TaskService(session, user)
+    return await _write_result(service, (await service.carry_over(task_id, body)).id)
+
+
+# --- daily log and standup (P5-8, P5-9) ------------------------------------------------------
+
+
+@router.get("/daily-logs/{day}", response_model=DailyLogRead)
+async def read_daily_log(day: date, user: CurrentUser, session: DbSession) -> DailyLogRead:
+    """The day's note; empty sections when nothing was written yet."""
+    return await DailyLogService(session, user).get(day)
+
+
+@router.put("/daily-logs/{day}", response_model=DailyLogRead)
+async def write_daily_log(
+    day: date, body: DailyLogWrite, user: CurrentUser, session: DbSession
+) -> DailyLogRead:
+    return await DailyLogService(session, user).put(day, body)
+
+
+@router.get("/standup", response_model=Standup)
+async def standup(
+    user: CurrentUser, session: DbSession, day: Annotated[date, Query(alias="date")]
+) -> Standup:
+    return await StandupService(session, user).build(day)
+
+
+# --- week templates (P6, ADR-0035) ----------------------------------------------------------
+
+TEMPLATES = "/week-templates"
+
+
+@router.get(TEMPLATES, response_model=list[WeekTemplateRead])
+async def list_week_templates(
+    user: CurrentUser, session: DbSession, mission_id: uuid.UUID | None = None
+) -> list[WeekTemplateRead]:
+    """The user's templates; `mission_id` keeps those proposed for a mission (P6-5)."""
+    service = WeekTemplateService(session, user)
+    return await service.reads(await service.search(mission_id))
+
+
+@router.post(TEMPLATES, response_model=WeekTemplateRead, status_code=status.HTTP_201_CREATED)
+async def create_week_template(
+    body: WeekTemplateCreate, user: CurrentUser, session: DbSession
+) -> WeekTemplateRead:
+    service = WeekTemplateService(session, user)
+    return await service.read(await service.create(body))
+
+
+@router.get(TEMPLATES + "/{template_id}", response_model=WeekTemplateRead)
+async def read_week_template(
+    template_id: uuid.UUID, user: CurrentUser, session: DbSession
+) -> WeekTemplateRead:
+    service = WeekTemplateService(session, user)
+    return await service.read(await service.get(template_id))
+
+
+@router.patch(TEMPLATES + "/{template_id}", response_model=WeekTemplateRead)
+async def update_week_template(
+    template_id: uuid.UUID, body: WeekTemplateUpdate, user: CurrentUser, session: DbSession
+) -> WeekTemplateRead:
+    service = WeekTemplateService(session, user)
+    return await service.read(await service.update(template_id, body))
+
+
+@router.delete(TEMPLATES + "/{template_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_week_template(
+    template_id: uuid.UUID, user: CurrentUser, session: DbSession
+) -> Response:
+    await WeekTemplateService(session, user).delete(template_id)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.post(
+    TEMPLATES + "/{template_id}/duplicate",
+    response_model=WeekTemplateRead,
+    status_code=status.HTTP_201_CREATED,
+)
+async def duplicate_week_template(
+    template_id: uuid.UUID, body: DuplicateRequest, user: CurrentUser, session: DbSession
+) -> WeekTemplateRead:
+    service = WeekTemplateService(session, user)
+    return await service.read(await service.duplicate(template_id, body.name))
+
+
+@router.post(TEMPLATES + "/{template_id}/preview", response_model=ApplicationPlan)
+async def preview_week_template(
+    template_id: uuid.UUID, body: TemplateApplication, user: CurrentUser, session: DbSession
+) -> ApplicationPlan:
+    """What applying the template would do to each half-day; writes nothing (P6-3)."""
+    service = WeekTemplateService(session, user)
+    return await service.plan(await service.get(template_id), body)
+
+
+@router.post(TEMPLATES + "/{template_id}/apply", response_model=ApplicationPlan)
+async def apply_week_template(
+    template_id: uuid.UUID, body: TemplateApplication, user: CurrentUser, session: DbSession
+) -> ApplicationPlan:
+    """Applies the plan atomically: SKIP keeps filled half-days (RG-10), OVERWRITE replaces them."""
+    return await WeekTemplateService(session, user).apply(template_id, body)

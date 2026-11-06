@@ -14,6 +14,8 @@ import { IconMoon, IconSun } from "@tabler/icons-react";
 import { useTranslation } from "react-i18next";
 import { Link, Outlet, useLocation } from "react-router";
 
+import { QuickTaskEntry } from "../../features/agenda/QuickTaskEntry";
+import { SearchSpotlight } from "../../features/search/SearchSpotlight";
 import { UserMenu } from "../../features/auth/UserMenu";
 import { useCurrentUser, useUpdateProfile } from "../../features/auth/useAuth";
 import { isLocale, setLocale, SUPPORTED_LOCALES } from "../../i18n";
@@ -84,6 +86,8 @@ export function AppLayout() {
             <Title order={4}>{t("app.name")}</Title>
           </Group>
           <Group gap="sm">
+            <SearchSpotlight />
+            <QuickTaskEntry />
             <LanguageSwitch />
             <ColorSchemeToggle />
             <UserMenu />
@@ -91,7 +95,7 @@ export function AppLayout() {
         </Group>
       </AppShell.Header>
 
-      <AppShell.Navbar p="xs" component="nav">
+      <AppShell.Navbar p="xs" component="nav" aria-label={t("nav.main")}>
         {NAV_ITEMS.map((item) => (
           <NavLink
             key={item.path}

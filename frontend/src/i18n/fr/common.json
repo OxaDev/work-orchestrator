@@ -11,7 +11,8 @@
     "documents": "Documents",
     "directory": "Annuaire",
     "settings": "Paramètres",
-    "toggleMenu": "Afficher / masquer la navigation"
+    "toggleMenu": "Afficher / masquer la navigation",
+    "main": "Menu principal"
   },
   "header": {
     "language": "Langue",
@@ -49,14 +50,15 @@
     "forgotHint": "Mot de passe oublié ? Un administrateur peut le réinitialiser, ou lancez `make reset-password` sur le serveur."
   },
   "userMenu": {
-    "open": "Ouvrir le menu utilisateur",
+    "open": "menu utilisateur",
     "logout": "Se déconnecter"
   },
   "settings": {
     "tabs": {
       "profile": "Profil",
       "password": "Mot de passe",
-      "users": "Utilisateurs"
+      "users": "Utilisateurs",
+      "data": "Données"
     },
     "profile": {
       "displayName": "Nom affiché",
@@ -118,5 +120,26 @@
     "resetPassword": "Réinitialiser le mot de passe",
     "resetPasswordOf": "Réinitialiser le mot de passe de {{email}}",
     "passwordReset": "Mot de passe réinitialisé. Les sessions de l'utilisateur ont été déconnectées."
+  },
+  "markdown": {
+    "diagram": "Diagramme",
+    "mermaidError": "Ce diagramme Mermaid ne peut pas être dessiné"
+  },
+  "pagination": {
+    "previous": "Page précédente",
+    "next": "Page suivante",
+    "first": "Première page",
+    "last": "Dernière page",
+    "page": "Page {{page}}"
+  },
+  "queryError": {
+    "title": "Chargement impossible",
+    "retry": "Réessayer"
+  },
+  "routeError": {
+    "title": "Cette page n'a pas pu s'afficher",
+    "body": "Une erreur est survenue pendant son affichage. Rechargez la page ; si cela se reproduit, revenez à l'accueil.",
+    "reload": "Recharger",
+    "home": "Accueil"
   }
 }

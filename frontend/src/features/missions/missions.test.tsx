@@ -31,7 +31,7 @@ describe("missions list", () => {
   it("shows cards and filters by status", async () => {
     const user = userEvent.setup();
     renderApp("/missions");
-    const card = await screen.findByRole("link", { name: "Horizon — Paiements" });
+    const card = await screen.findByRole("link", { name: /^Horizon — Paiements/ });
     expect(within(card).getByText("Tech lead · Banque Horizon")).toBeInTheDocument();
     expect(within(card).getByText("Prospect")).toBeInTheDocument();
     await user.click(screen.getByText("Terminée"));
@@ -123,18 +123,21 @@ describe("mission page", () => {
 
   it("shows the header and applies the suggested status", async () => {
     const user = userEvent.setup();
-    renderApp(url());
+    // The page opens on the overview (P10-3); these checks concern the form.
+    renderApp(`${url()}?tab=info`);
     expect(await screen.findByRole("heading", { name: "Horizon — Paiements" })).toBeInTheDocument();
     expect(screen.getByText("via Néo Consulting", { exact: false })).toBeInTheDocument();
     expect(screen.getByText(/semble « En cours »/)).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Appliquer" }));
     await waitFor(() => expect(missions.lastBody).toEqual({ status: "ACTIVE" }));
-    await waitFor(() => expect(screen.queryByText(/semble/)).not.toBeInTheDocument());
+    // "semble « …" only: the "Vue d'ensemble" tab also contains "semble".
+    await waitFor(() => expect(screen.queryByText(/semble «/)).not.toBeInTheDocument());
   });
 
   it("edits the mission and records the reason of a new end date", async () => {
     const user = userEvent.setup();
-    renderApp(url());
+    // The page opens on the overview (P10-3); these checks concern the form.
+    renderApp(`${url()}?tab=info`);
     expect(await screen.findByText("Kafka", { selector: "strong" })).toBeInTheDocument();
     const end = screen.getByLabelText("Date de fin prévue");
     await user.clear(end);

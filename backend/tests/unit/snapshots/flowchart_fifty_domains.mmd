@@ -1,0 +1,127 @@
+%% SI à 50 domaines
+flowchart LR
+    subgraph d29e4ecc0["Domaine 1"]
+        subgraph da297951e["Application 1"]
+            d05959447(["Composant 1.1"])
+            d70215b76[("Composant 1.2")]
+            dce514911[["Composant 1.3"]]
+            d71c257cd{{"Composant 1.4"}}
+            d8b1161c3(["Composant 1.5"])
+            d94c7f341[("Composant 1.6")]
+            d9a8e1b91[["Composant 1.7"]]
+            d6298bc56{{"Composant 1.8"}}
+        end
+    end
+    subgraph d8bbb4db4["Domaine 2"]
+        subgraph d7673aa58["Application 2"]
+            d8f12a712(["Composant 2.1"])
+            dcb9c5c05[("Composant 2.2")]
+            d515360b5[["Composant 2.3"]]
+            dce4deee4{{"Composant 2.4"}}
+            d2ebfdb2b(["Composant 2.5"])
+            d97642779[("Composant 2.6")]
+            d44116781[["Composant 2.7"]]
+            d25e86ef5{{"Composant 2.8"}}
+        end
+    end
+    subgraph dfe7da067["Domaine 3"]
+        subgraph d322030df["Application 3"]
+            d6f7446b1(["Composant 3.1"])
+            d3934e967[("Composant 3.2")]
+            d57a96103[["Composant 3.3"]]
+            de0926d16{{"Composant 3.4"}}
+            d6e07eccf(["Composant 3.5"])
+            d048a2d72[("Composant 3.6")]
+            dee06a12f[["Composant 3.7"]]
+            d99ac6d13{{"Composant 3.8"}}
+        end
+    end
+    subgraph d445b8da0["Domaine 4"]
+        subgraph d5dea161e["Application 4"]
+            de2dac651(["Composant 4.1"])
+            df06b1a56[("Composant 4.2")]
+            de0e49069[["Composant 4.3"]]
+            d6eb00fc2{{"Composant 4.4"}}
+            d0affde61(["Composant 4.5"])
+            d823330b1[("Composant 4.6")]
+            d40d30ee1[["Composant 4.7"]]
+            d391aff65{{"Composant 4.8"}}
+        end
+    end
+    subgraph d105e3eb4["Domaine 5"]
+        subgraph d96a56cf2["Application 5"]
+            de58538a8(["Composant 5.1"])
+            de68d5174[("Composant 5.2")]
+            dcf803113[["Composant 5.3"]]
+            db42e2a54{{"Composant 5.4"}}
+            d46d18be4(["Composant 5.5"])
+            d04dd0756[("Composant 5.6")]
+            d1f37b0d6[["Composant 5.7"]]
+            d3ed04f51{{"Composant 5.8"}}
+        end
+    end
+    %% da297951e → d05959447: appelle (REST)
+    %% da297951e → d70215b76: appelle (REST)
+    %% da297951e → dce514911: appelle (REST)
+    %% da297951e → d71c257cd: appelle (REST)
+    %% da297951e → d8b1161c3: appelle (REST)
+    %% da297951e → d94c7f341: appelle (REST)
+    %% da297951e → d9a8e1b91: appelle (REST)
+    %% da297951e → d6298bc56: appelle (REST)
+    d05959447 -.->|"publie vers"| dcb9c5c05
+    da297951e -->|"dépend de"| d322030df
+    dce514911 -.->|"s'abonne à"| d71c257cd
+    d8b1161c3 -->|"lit (SQL)"| d70215b76
+    d94c7f341 -->|"écrit dans"| d70215b76
+    %% d7673aa58 → d8f12a712: appelle (REST)
+    %% d7673aa58 → dcb9c5c05: appelle (REST)
+    %% d7673aa58 → d515360b5: appelle (REST)
+    %% d7673aa58 → dce4deee4: appelle (REST)
+    %% d7673aa58 → d2ebfdb2b: appelle (REST)
+    %% d7673aa58 → d97642779: appelle (REST)
+    %% d7673aa58 → d44116781: appelle (REST)
+    %% d7673aa58 → d25e86ef5: appelle (REST)
+    d8f12a712 -.->|"publie vers"| d3934e967
+    d7673aa58 -->|"dépend de"| d5dea161e
+    d515360b5 -.->|"s'abonne à"| dce4deee4
+    d2ebfdb2b -->|"lit (SQL)"| dcb9c5c05
+    d97642779 -->|"écrit dans"| dcb9c5c05
+    %% d322030df → d6f7446b1: appelle (REST)
+    %% d322030df → d3934e967: appelle (REST)
+    %% d322030df → d57a96103: appelle (REST)
+    %% d322030df → de0926d16: appelle (REST)
+    %% d322030df → d6e07eccf: appelle (REST)
+    %% d322030df → d048a2d72: appelle (REST)
+    %% d322030df → dee06a12f: appelle (REST)
+    %% d322030df → d99ac6d13: appelle (REST)
+    d6f7446b1 -.->|"publie vers"| df06b1a56
+    d322030df -->|"dépend de"| d96a56cf2
+    d57a96103 -.->|"s'abonne à"| de0926d16
+    d6e07eccf -->|"lit (SQL)"| d3934e967
+    d048a2d72 -->|"écrit dans"| d3934e967
+    %% d5dea161e → de2dac651: appelle (REST)
+    %% d5dea161e → df06b1a56: appelle (REST)
+    %% d5dea161e → de0e49069: appelle (REST)
+    %% d5dea161e → d6eb00fc2: appelle (REST)
+    %% d5dea161e → d0affde61: appelle (REST)
+    %% d5dea161e → d823330b1: appelle (REST)
+    %% d5dea161e → d40d30ee1: appelle (REST)
+    %% d5dea161e → d391aff65: appelle (REST)
+    de2dac651 -.->|"publie vers"| de68d5174
+    d5dea161e -->|"dépend de"| da297951e
+    de0e49069 -.->|"s'abonne à"| d6eb00fc2
+    d0affde61 -->|"lit (SQL)"| df06b1a56
+    d823330b1 -->|"écrit dans"| df06b1a56
+    %% d96a56cf2 → de58538a8: appelle (REST)
+    %% d96a56cf2 → de68d5174: appelle (REST)
+    %% d96a56cf2 → dcf803113: appelle (REST)
+    %% d96a56cf2 → db42e2a54: appelle (REST)
+    %% d96a56cf2 → d46d18be4: appelle (REST)
+    %% d96a56cf2 → d04dd0756: appelle (REST)
+    %% d96a56cf2 → d1f37b0d6: appelle (REST)
+    %% d96a56cf2 → d3ed04f51: appelle (REST)
+    de58538a8 -.->|"publie vers"| d70215b76
+    d96a56cf2 -->|"dépend de"| d7673aa58
+    dcf803113 -.->|"s'abonne à"| db42e2a54
+    d46d18be4 -->|"lit (SQL)"| de68d5174
+    d04dd0756 -->|"écrit dans"| de68d5174

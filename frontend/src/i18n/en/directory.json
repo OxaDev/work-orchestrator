@@ -7,7 +7,8 @@
     "sectors": "Sectors",
     "tags": "Tags",
     "roles": "Roles",
-    "day-types": "Day types"
+    "day-types": "Day types",
+    "subject-categories": "Subject categories"
   },
   "common": {
     "search": "Search",
@@ -53,7 +54,8 @@
       "info": "Information",
       "org": "Organisation",
       "contacts": "Contacts",
-      "missions": "Missions"
+      "missions": "Missions",
+      "documents": "Documents"
     }
   },
   "org": {
@@ -93,7 +95,8 @@
     "noHistory": "No previous position recorded.",
     "startDate": "From",
     "endDate": "To",
-    "addPosition": "Add a position"
+    "addPosition": "Add a position",
+    "documents": "Documents"
   },
   "technologies": {
     "name": "Name",

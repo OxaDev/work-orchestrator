@@ -1,0 +1,127 @@
+{
+  "title": "Documents",
+  "create": "Nouveau document",
+  "createAction": "Créer",
+  "createChild": "Nouvelle sous-page de {{title}}",
+  "search": "Rechercher un document",
+  "showArchived": "Afficher les archivés",
+  "tree": "Documents",
+  "nothingFound": "Aucun document ne correspond.",
+  "emptyList": "Aucun document pour l'instant.",
+  "hasDraft": "brouillon non enregistré",
+  "save": "Enregistrer",
+  "empty": "Rien d'écrit pour l'instant.",
+  "editor": "Contenu Markdown",
+  "preview": "Aperçu",
+  "insertFile": "Insérer un fichier",
+  "archive": "Archiver",
+  "restore": "Restaurer",
+  "delete": "Supprimer",
+  "deleteTitle": "Supprimer ?",
+  "deleteMessage": "Supprimer « {{title}} » et son historique ? Une page qui a des sous-pages ne peut pas être supprimée : archivez-la.",
+  "archivedNotice": "Ce document est archivé.",
+  "fields": {
+    "title": "Titre",
+    "parent": "Page parente",
+    "root": "Aucune (premier niveau)",
+    "template": "Modèle",
+    "blank": "Page vierge"
+  },
+  "validation": {
+    "required": "Obligatoire."
+  },
+  "status": {
+    "saving": "Enregistrement…",
+    "drafting": "Sauvegarde du brouillon…",
+    "saved": "Toutes les modifications sont enregistrées",
+    "drafted": "Brouillon conservé à {{time}} (non enregistré)",
+    "unsaved": "Modifications non enregistrées"
+  },
+  "draft": {
+    "title": "Brouillon non enregistré",
+    "found": "Un brouillon de {{time}} n'a pas été enregistré.",
+    "resume": "Reprendre le brouillon",
+    "discard": "L'abandonner"
+  },
+  "mode": {
+    "label": "Affichage",
+    "edit": "Éditeur",
+    "split": "Côte à côte",
+    "preview": "Aperçu"
+  },
+  "export": {
+    "button": "Exporter",
+    "title": "Copier en Markdown",
+    "links": "Liens internes",
+    "linksText": "Texte seul",
+    "linksAbsolute": "Liens vers l'application",
+    "mermaidSvg": "Diagrammes en images SVG",
+    "mermaidSvgHelp": "Pour les outils qui n'affichent pas Mermaid (Confluence…).",
+    "result": "Markdown à coller",
+    "failed": "L'export a échoué : {{error}}",
+    "download": "Télécharger le .md",
+    "copy": "Copier",
+    "copied": "Markdown copié.",
+    "copyFailed": "La copie a échoué : sélectionnez le texte et copiez-le à la main."
+  },
+  "types": {
+    "document": "Document",
+    "mission": "Mission",
+    "domain": "Domaine",
+    "architecture": "Architecture",
+    "contact": "Contact",
+    "company": "Entreprise",
+    "subject": "Sujet",
+    "technology": "Technologie"
+  },
+  "entities": {
+    "tab": "Rattaché à ({{count}})",
+    "help": "Le document apparaît sur la page de ces éléments.",
+    "detach": "Détacher de {{label}}",
+    "add": "Rattacher à",
+    "search": "Rechercher une mission, une entreprise…",
+    "nothing": "Aucun résultat"
+  },
+  "links": {
+    "tab": "Liens ({{count}})",
+    "empty": "Aucun [[lien]] dans ce document.",
+    "broken": "introuvable ou inaccessible"
+  },
+  "backlinks": {
+    "tab": "Rétroliens",
+    "empty": "Aucun document ne pointe ici.",
+    "title": "Documents qui pointent ici"
+  },
+  "versions": {
+    "tab": "Versions ({{count}})",
+    "label": "Version {{number}} — {{date}}",
+    "current": "actuelle",
+    "title": "Version {{number}}",
+    "restore": "Restaurer cette version"
+  },
+  "templates": {
+    "title": "Modèles de documents",
+    "help": "Points de départ des nouveaux documents : compte rendu, ADR, fiche domaine…",
+    "create": "Nouveau modèle",
+    "edit": "Modifier le modèle",
+    "nameFr": "Nom (français)",
+    "nameEn": "Nom (anglais)",
+    "content": "Contenu Markdown",
+    "empty": "Aucun modèle pour l'instant.",
+    "editOf": "Modifier {{name}}",
+    "deleteOf": "Supprimer {{name}}",
+    "deleteMessage": "Supprimer le modèle « {{name}} » ? Les documents créés à partir de lui sont conservés."
+  },
+  "attached": {
+    "title": "Documents rattachés",
+    "create": "Nouveau document",
+    "empty": "Aucun document rattaché."
+  },
+  "graph": {
+    "title": "Graphe de connaissance",
+    "help": "Vos documents et ce qu'ils citent. Cliquez sur un élément pour l'ouvrir.",
+    "empty": "Aucun document pour l'instant.",
+    "legendLink": "lien dans le texte",
+    "legendAttachment": "rattaché à"
+  }
+}

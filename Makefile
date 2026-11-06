@@ -181,6 +181,19 @@ reset-password: ## Reset a password in the deployed stack: make reset-password e
 	@test -n "$(email)" || (echo 'Usage: make reset-password email=you@example.com' && exit 1)
 	$(COMPOSE) exec backend python -m app.cli reset-password --email "$(email)"
 
+.PHONY: backup
+backup: ## Back up database and uploads into backups/<timestamp>, 30-day retention (ADR-0040)
+	COMPOSE="$(COMPOSE)" $(if $(BACKUP_DIR),BACKUP_DIR="$(BACKUP_DIR)") scripts/backup.sh
+
+.PHONY: restore
+restore: ## Restore a backup (replaces all data): make restore BACKUP=backups/<YYYYMMDD-HHMMSS>
+	@test -n "$(BACKUP)" || (echo 'Usage: make restore BACKUP=backups/<YYYYMMDD-HHMMSS>' && exit 1)
+	COMPOSE="$(COMPOSE)" $(if $(YES),YES="$(YES)") scripts/restore.sh "$(BACKUP)"
+
+.PHONY: backup-service
+backup-service: ## Start the optional daily backup service (Compose profile "backup")
+	$(COMPOSE) --profile backup up -d backup
+
 .PHONY: logs
 logs: ## Follow the Docker stack logs
 	$(COMPOSE) logs -f --tail=100

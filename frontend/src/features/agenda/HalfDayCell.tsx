@@ -15,6 +15,8 @@ interface HalfDayCellProps {
   onPointerDown: (event: PointerEvent<HTMLButtonElement>) => void;
   onPointerEnter: () => void;
   onKeyboardSelect: (shift: boolean) => void;
+  /** `date|period`, for arrow-key moves inside the grid (P12-3). */
+  slot?: string;
 }
 
 /** One half-day (P4-7): coloured (and patterned) by kind, selectable by mouse or keyboard. */
@@ -28,10 +30,12 @@ export function HalfDayCell({
   onPointerDown,
   onPointerEnter,
   onKeyboardSelect,
+  slot,
 }: HalfDayCellProps) {
   const solid = halfDay?.kind === "MISSION" || halfDay?.kind === "INTERCONTRACT";
   return (
     <UnstyledButton
+      data-slot={slot}
       aria-label={label}
       title={label}
       aria-pressed={selected}

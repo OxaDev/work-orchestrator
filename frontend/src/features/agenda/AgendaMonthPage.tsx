@@ -6,6 +6,8 @@ import { Link, Navigate, useParams } from "react-router";
 
 import { NotFoundPage } from "../placeholder/NotFoundPage";
 import { useHalfDays, useHolidayGeneration, useMonthStatus, usePublicHolidays } from "./api";
+import { AgendaViews } from "./AgendaViews";
+import { ApplyTemplateButton } from "./ApplyTemplateButton";
 import { AssignPanel } from "./AssignPanel";
 import { iso, monthRange, parseYearMonth, todayIso } from "./calendar";
 import { MonthGrid } from "./MonthGrid";
@@ -73,12 +75,21 @@ function MonthView({ year, month }: { year: number; month: number }) {
           </ActionIcon>
         </Group>
         <Group gap="xs">
+          {!locked && <ApplyTemplateButton start={from} end={to} />}
           <Button component={Link} to="/agenda" variant="default" size="xs">
             {t("today")}
           </Button>
           <Anchor component={Link} to={`/agenda/${year}`} size="sm">
             {t("yearView", { year })}
           </Anchor>
+          <AgendaViews
+            date={
+              todayIso().startsWith(iso(year, month, 1).slice(0, 7))
+                ? todayIso()
+                : iso(year, month, 1)
+            }
+            current="month"
+          />
         </Group>
       </Group>
       {locked && (

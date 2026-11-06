@@ -7,7 +7,8 @@
     "sectors": "Secteurs",
     "tags": "Tags",
     "roles": "Rôles",
-    "day-types": "Types de journée"
+    "day-types": "Types de journée",
+    "subject-categories": "Catégories de sujets"
   },
   "common": {
     "search": "Rechercher",
@@ -53,7 +54,8 @@
       "info": "Informations",
       "org": "Organisation",
       "contacts": "Contacts",
-      "missions": "Missions"
+      "missions": "Missions",
+      "documents": "Documents"
     }
   },
   "org": {
@@ -93,7 +95,8 @@
     "noHistory": "Aucun poste précédent enregistré.",
     "startDate": "Du",
     "endDate": "Au",
-    "addPosition": "Ajouter un poste"
+    "addPosition": "Ajouter un poste",
+    "documents": "Documents"
   },
   "technologies": {
     "name": "Nom",

@@ -7,7 +7,7 @@ import uuid
 from datetime import date
 from enum import StrEnum
 
-from sqlalchemy import Column, Date, ForeignKey, String, Table, Text
+from sqlalchemy import Column, Date, ForeignKey, Index, String, Table, Text
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -25,6 +25,7 @@ company_secondary_sectors = Table(
     Base.metadata,
     Column("company_id", ForeignKey("companies.id", ondelete="CASCADE"), primary_key=True),
     Column("sector_id", ForeignKey("sectors.id", ondelete="RESTRICT"), primary_key=True),
+    Index("ix_company_secondary_sectors_sector_id", "sector_id"),
 )
 
 

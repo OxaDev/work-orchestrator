@@ -3,9 +3,11 @@
 import uuid
 from typing import Annotated
 
-from fastapi import APIRouter, Query, Response, status
+from fastapi import APIRouter, File, Query, Response, UploadFile, status
+from pydantic import BaseModel
 
-from app.modules.auth.dependencies import DbSession
+from app.modules.auth.dependencies import AppSettings, DbSession
+from app.modules.directory.contacts_csv import ContactImporter, export_contacts
 from app.modules.directory.models import CompanyType
 from app.modules.directory.schemas import (
     CompanyCreate,
@@ -31,6 +33,7 @@ from app.modules.directory.service import (
     SectorService,
 )
 from app.shared.schemas import IncludeArchived, Limit, Offset, Page, Search
+from app.shared.zips import spool
 
 sectors_router = APIRouter(prefix="/sectors", tags=["sectors"])
 companies_router = APIRouter(prefix="/companies", tags=["companies"])
@@ -195,6 +198,48 @@ async def list_contacts(
         offset=offset,
     )
     return Page(items=await service.to_read(items), total=total)
+
+
+class CsvRowError(BaseModel):
+    line: int
+    code: str
+    field: str | None
+
+
+class CsvImportReportRead(BaseModel):
+    created: int
+    skipped: int
+    companies_created: int
+    errors: list[CsvRowError]
+
+
+@contacts_router.get(
+    "/export.csv", response_class=Response, responses={200: {"content": {"text/csv": {}}}}
+)
+async def export_contacts_csv(session: DbSession) -> Response:
+    """Active contacts, `;`-separated, UTF-8 with BOM (P11-7)."""
+    return Response(
+        await export_contacts(session),
+        media_type="text/csv; charset=utf-8",
+        headers={"Content-Disposition": 'attachment; filename="contacts.csv"'},
+    )
+
+
+@contacts_router.post("/import", response_model=CsvImportReportRead)
+async def import_contacts_csv(
+    session: DbSession,
+    settings: AppSettings,
+    file: Annotated[UploadFile, File()],
+    dry_run: Annotated[bool, Query()] = False,
+) -> CsvImportReportRead:
+    """Creates contacts from a CSV; `dry_run` only reports what would happen (P11-7)."""
+    upload = await spool(file, settings.max_upload_bytes)
+    try:
+        content = upload.read()
+    finally:
+        upload.close()
+    report = await ContactImporter(session).run(content, dry_run)
+    return CsvImportReportRead.model_validate(report, from_attributes=True)
 
 
 @contacts_router.get("/duplicates", response_model=list[DuplicateCandidate])

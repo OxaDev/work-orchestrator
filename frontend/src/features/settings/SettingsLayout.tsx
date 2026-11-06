@@ -7,6 +7,7 @@ import { useCurrentUser } from "../auth/useAuth";
 const TABS = [
   { value: "/settings", labelKey: "settings.tabs.profile", adminOnly: false },
   { value: "/settings/password", labelKey: "settings.tabs.password", adminOnly: false },
+  { value: "/settings/data", labelKey: "settings.tabs.data", adminOnly: false },
   { value: "/settings/users", labelKey: "settings.tabs.users", adminOnly: true },
 ];
 

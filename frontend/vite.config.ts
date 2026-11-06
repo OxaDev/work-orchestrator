@@ -19,6 +19,10 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 5173,
       strictPort: true,
+      fs: {
+        // The backend's Mermaid snapshots are parsed by a frontend test (ADR-0038).
+        allow: [".", "../backend/tests/unit/snapshots"],
+      },
       proxy: {
         // Mirror the production nginx: strip the base path, forward /api to the backend.
         [`${base}api`]: {

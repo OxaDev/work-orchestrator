@@ -20,11 +20,17 @@ import { useForm } from "@mantine/form";
 import { IconArchive, IconArchiveOff, IconBulb, IconTrash } from "@tabler/icons-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router";
 
 import { ConfirmDialog } from "../../components/ConfirmDialog";
 import { useErrorMessage } from "../../i18n/useErrorMessage";
+import { ApplyTemplateButton } from "../agenda/ApplyTemplateButton";
+import { monthRange, todayIso } from "../agenda/calendar";
 import { useNotify } from "../directory/useNotify";
+import { MissionArchitectures } from "../architecture/MissionArchitectures";
+import { MissionOverview } from "../dashboard/MissionOverview";
+import { EntityDocuments } from "../documents/EntityDocuments";
+import { SubjectsPanel } from "../subjects/SubjectsPanel";
 import {
   type MissionDetail,
   useArchiveMission,
@@ -263,6 +269,30 @@ function EndDateHistory({ mission }: { mission: MissionDetail }) {
   );
 }
 
+/** The current month clipped to the mission, or the mission's first month (P6-5). */
+function missionMonth(mission: MissionDetail): { start: string; end: string } {
+  const today = todayIso();
+  const end = mission.actual_end_date ?? mission.planned_end_date;
+  const inside = mission.start_date <= today && (!end || today <= end);
+  const anchor = inside ? today : mission.start_date;
+  const month = monthRange(Number(anchor.slice(0, 4)), Number(anchor.slice(5, 7)));
+  return {
+    start: month.from < mission.start_date ? mission.start_date : month.from,
+    end: end && end < month.to ? end : month.to,
+  };
+}
+
+const TABS = [
+  "overview",
+  "info",
+  "contacts",
+  "technologies",
+  "subjects",
+  "architectures",
+  "documents",
+  "history",
+] as const;
+
 export function MissionPage() {
   const { t, i18n } = useTranslation("missions");
   const errorMessage = useErrorMessage();
@@ -274,6 +304,8 @@ export function MissionPage() {
   const archive = useArchiveMission(missionId);
   const remove = useDeleteMission(missionId);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tab = searchParams.get("tab");
 
   if (mission.isPending) return <Loader size="sm" />;
   if (mission.isError) return <Alert color="red">{errorMessage(mission.error)}</Alert>;
@@ -313,6 +345,9 @@ export function MissionPage() {
           </Text>
         </div>
         <Group gap="xs">
+          {!data.archived_at && (
+            <ApplyTemplateButton missionId={data.id} onlyLinked {...missionMonth(data)} />
+          )}
           <Button
             variant="default"
             leftSection={
@@ -352,8 +387,13 @@ export function MissionPage() {
           </Group>
         </Alert>
       )}
-      <Tabs defaultValue="info" keepMounted={false}>
+      <Tabs
+        value={TABS.includes(tab as (typeof TABS)[number]) ? tab : "overview"}
+        onChange={(value) => setSearchParams(value ? { tab: value } : {}, { replace: true })}
+        keepMounted={false}
+      >
         <Tabs.List>
+          <Tabs.Tab value="overview">{t("tabs.overview")}</Tabs.Tab>
           <Tabs.Tab value="info">{t("tabs.info")}</Tabs.Tab>
           <Tabs.Tab value="contacts">
             {t("tabs.contacts")} ({data.contacts.length})
@@ -361,8 +401,14 @@ export function MissionPage() {
           <Tabs.Tab value="technologies">
             {t("tabs.technologies")} ({data.technologies.length})
           </Tabs.Tab>
+          <Tabs.Tab value="subjects">{t("tabs.subjects")}</Tabs.Tab>
+          <Tabs.Tab value="architectures">{t("tabs.architectures")}</Tabs.Tab>
+          <Tabs.Tab value="documents">{t("tabs.documents")}</Tabs.Tab>
           <Tabs.Tab value="history">{t("tabs.history")}</Tabs.Tab>
         </Tabs.List>
+        <Tabs.Panel value="overview" pt="md">
+          <MissionOverview missionId={data.id} />
+        </Tabs.Panel>
         <Tabs.Panel value="info" pt="md">
           <MissionForm
             key={`${data.id}-${data.status}`}
@@ -378,6 +424,15 @@ export function MissionPage() {
         </Tabs.Panel>
         <Tabs.Panel value="technologies" pt="md">
           <MissionTechnologies mission={data} />
+        </Tabs.Panel>
+        <Tabs.Panel value="subjects" pt="md">
+          <SubjectsPanel scope="MISSION" missionId={data.id} />
+        </Tabs.Panel>
+        <Tabs.Panel value="architectures" pt="md">
+          <MissionArchitectures mission={data} />
+        </Tabs.Panel>
+        <Tabs.Panel value="documents" pt="md">
+          <EntityDocuments type="mission" id={data.id} />
         </Tabs.Panel>
         <Tabs.Panel value="history" pt="md">
           <EndDateHistory mission={data} />

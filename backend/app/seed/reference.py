@@ -11,7 +11,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.modules.agenda.models import HalfDayKind, HalfDaySubtype
 from app.modules.directory.models import Sector
+from app.modules.documents.models import DocumentTemplate
 from app.modules.missions.models import ContactRole
+from app.modules.subjects.models import SubjectCategory
 from app.modules.technologies.models import Technology
 from app.modules.technologies.models import TechnologyCategory as C
 from app.shared.text import normalize_text
@@ -189,12 +191,132 @@ HALF_DAY_SUBTYPES: list[tuple[HalfDayKind, str, str]] = [
 ]
 
 
+# Initial subject categories (Q-G6): (name_fr, name_en)
+SUBJECT_CATEGORIES: list[tuple[str, str]] = [
+    ("Veille", "Technology watch"),
+    ("Formation", "Training"),
+    ("Avant-vente", "Pre-sales"),
+    ("Projet interne", "Internal project"),
+    ("Rédaction d'articles", "Article writing"),
+    ("Préparation de certification", "Certification preparation"),
+]
+
+
+# Initial document templates (Q-I7, ADR-0024): (name_fr, name_en, content_md). Editable.
+DOCUMENT_TEMPLATES: list[tuple[str, str, str]] = [
+    (
+        "Fiche domaine",
+        "Domain sheet",
+        """# Domaine : <nom>
+
+## Rôle
+Ce que fait le domaine, pour qui.
+
+## Responsables
+- Équipe :
+- Référent :
+
+## Interfaces
+| Avec | Sens | Protocole | Synchrone ? |
+|------|------|-----------|-------------|
+|      |      |           |             |
+
+## Données
+Principales entités gérées.
+
+## Technologies
+
+## Points d'attention
+""",
+    ),
+    (
+        "Compte rendu de réunion",
+        "Meeting notes",
+        """# Réunion : <sujet> — <date>
+
+**Participants** :
+
+## Ordre du jour
+1.
+
+## Décisions
+-
+
+## Actions
+| Action | Qui | Échéance |
+|--------|-----|----------|
+|        |     |          |
+""",
+    ),
+    (
+        "Onboarding mission",
+        "Mission onboarding",
+        """# Onboarding : <mission>
+
+## Contexte
+Client, équipe, objectifs.
+
+## Accès à demander
+- [ ] Poste / VPN
+- [ ] Dépôts de code
+- [ ] Outil de tickets
+- [ ] Messagerie
+
+## Interlocuteurs clés
+
+## Architecture en bref
+```mermaid
+flowchart LR
+  A[Front] --> B[API] --> C[(Base)]
+```
+
+## Premiers sujets
+""",
+    ),
+    (
+        "Rapport d'étonnement",
+        "First impressions report",
+        """# Rapport d'étonnement — <mission>
+
+## Ce qui fonctionne bien
+
+## Ce qui m'étonne
+
+## Risques perçus
+
+## Propositions
+""",
+    ),
+    (
+        "ADR",
+        "Architecture decision record",
+        """# ADR : <titre>
+
+- **Statut** : Proposé
+- **Date** :
+
+## Contexte
+
+## Options envisagées
+1.
+2.
+
+## Décision
+
+## Conséquences
+""",
+    ),
+]
+
+
 @dataclass(frozen=True)
 class SeedReport:
     sectors_added: int
     technologies_added: int
     roles_added: int = 0
     subtypes_added: int = 0
+    categories_added: int = 0
+    templates_added: int = 0
 
 
 async def seed_reference(session: AsyncSession) -> SeedReport:
@@ -257,5 +379,35 @@ async def seed_reference(session: AsyncSession) -> SeedReport:
                 )
             )
             subtypes_added += 1
+    known_categories = set((await session.scalars(select(SubjectCategory.normalized_name))).all())
+    categories_added = 0
+    for name_fr, name_en in SUBJECT_CATEGORIES:
+        if normalize_text(name_fr) not in known_categories:
+            session.add(
+                SubjectCategory(
+                    name_fr=name_fr, name_en=name_en, normalized_name=normalize_text(name_fr)
+                )
+            )
+            categories_added += 1
+    known_templates = set((await session.scalars(select(DocumentTemplate.normalized_name))).all())
+    templates_added = 0
+    for name_fr, name_en, content in DOCUMENT_TEMPLATES:
+        if normalize_text(name_fr) not in known_templates:
+            session.add(
+                DocumentTemplate(
+                    name_fr=name_fr,
+                    name_en=name_en,
+                    normalized_name=normalize_text(name_fr),
+                    content_md=content,
+                )
+            )
+            templates_added += 1
     await session.commit()
-    return SeedReport(sectors_added, technologies_added, roles_added, subtypes_added)
+    return SeedReport(
+        sectors_added,
+        technologies_added,
+        roles_added,
+        subtypes_added,
+        categories_added,
+        templates_added,
+    )

@@ -22,6 +22,7 @@ import { type Company, useArchiveCompany, useCompany, useContacts, useUpdateComp
 import { CompanyForm } from "./CompanyForm";
 import { toCompanyPayload } from "./payloads";
 import { TagBadges } from "./components";
+import { EntityDocuments } from "../documents/EntityDocuments";
 import { CompanyMissions } from "../missions/CompanyMissions";
 import { OrgChartEditor } from "./OrgChartEditor";
 import { useNotify } from "./useNotify";
@@ -159,6 +160,7 @@ export function CompanyPage() {
             {t("companies.tabs.contacts")} ({data.contact_count})
           </Tabs.Tab>
           <Tabs.Tab value="missions">{t("companies.tabs.missions")}</Tabs.Tab>
+          <Tabs.Tab value="documents">{t("companies.tabs.documents")}</Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="info" pt="md">
           <CompanyInfo company={data} />
@@ -171,6 +173,9 @@ export function CompanyPage() {
         </Tabs.Panel>
         <Tabs.Panel value="missions" pt="md">
           <CompanyMissions companyId={data.id} />
+        </Tabs.Panel>
+        <Tabs.Panel value="documents" pt="md">
+          <EntityDocuments type="company" id={data.id} />
         </Tabs.Panel>
       </Tabs>
     </Stack>

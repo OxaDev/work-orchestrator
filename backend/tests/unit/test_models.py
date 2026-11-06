@@ -7,13 +7,18 @@ from sqlalchemy.sql.schema import CallableColumnDefault
 
 from app.shared.models import ArchivableMixin, Base, TimestampMixin, UUIDPrimaryKeyMixin
 
-
-class _Sample(UUIDPrimaryKeyMixin, TimestampMixin, ArchivableMixin, Base):
-    __tablename__ = "_sample_for_tests"
-    name: Mapped[str] = mapped_column()
+TABLE: Table
 
 
-TABLE = cast(Table, _Sample.__table__)
+def setup_module() -> None:
+    # Declared here, not at import: collection would leak it into every test's metadata.
+    global TABLE
+
+    class _Sample(UUIDPrimaryKeyMixin, TimestampMixin, ArchivableMixin, Base):
+        __tablename__ = "_sample_for_tests"
+        name: Mapped[str] = mapped_column()
+
+    TABLE = cast(Table, _Sample.__table__)
 
 
 def test_mixins_add_expected_columns() -> None:

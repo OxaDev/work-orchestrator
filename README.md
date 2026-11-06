@@ -2,6 +2,8 @@
 
 Personal tool for a consultant developer: a half-day agenda of missions, subjects and tasks, plus Markdown documentation of client technical architectures as a graph, exportable to Mermaid.
 
+- User guide: [docs/GUIDE.md](docs/GUIDE.md) (French) — daily use and keyboard shortcuts
+- Changes: [CHANGELOG.md](CHANGELOG.md)
 - Scope and domain model: [docs/00-CADRAGE.md](docs/00-CADRAGE.md) (French)
 - Roadmap: [docs/02-ROADMAP.md](docs/02-ROADMAP.md)
 - Architecture decisions: [docs/adr/](docs/adr/README.md)
@@ -25,6 +27,7 @@ make init        # .env with generated secrets, dependencies, git hooks, dev dat
 make dev         # backend http://127.0.0.1:8000, frontend http://127.0.0.1:5173/work-orchestrator/
 make test        # backend (pytest + PostgreSQL) and frontend (Vitest) with coverage thresholds
 make deploy      # production-like Docker stack on http://127.0.0.1:18080/work-orchestrator/
+make backup      # database + uploads into backups/<timestamp>/ (restore: make restore BACKUP=...)
 ```
 
 `make help` lists every target.
@@ -34,8 +37,8 @@ make deploy      # production-like Docker stack on http://127.0.0.1:18080/work-o
 ```
 backend/    FastAPI app (app/core, app/modules/<module>, app/shared), Alembic, tests
 frontend/   React SPA (src/app, src/features/<feature>, src/api, src/i18n), Vitest, Playwright (e2e/)
-docs/       scoping, roadmap, ADRs, operations
-scripts/    env.py (make env), adr.py (make adr-new / adr-check)
+docs/       scoping, roadmap, ADRs, operations, user guide
+scripts/    env.py (make env), adr.py (make adr-new / adr-check), backup.sh / restore.sh
 ```
 
 ## Conventions

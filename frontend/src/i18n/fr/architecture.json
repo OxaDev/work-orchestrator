@@ -1,0 +1,214 @@
+{
+  "title": "Architecture",
+  "allClients": "Tous les clients",
+  "archived": "archivé",
+  "edit": "Modifier",
+  "archive": "Archiver",
+  "restore": "Restaurer",
+  "delete": "Supprimer",
+  "deleteTitle": "Supprimer ?",
+  "save": "Enregistrer",
+  "validation": {
+    "required": "Obligatoire."
+  },
+  "fields": {
+    "name": "Nom",
+    "kind": "Type",
+    "parent": "Domaine parent",
+    "noParent": "Aucun (premier niveau)",
+    "lifecycle": "Cycle de vie",
+    "criticality": "Criticité",
+    "owner": "Unité responsable",
+    "referent": "Contact référent",
+    "description": "Description (Markdown)",
+    "client": "Client",
+    "missions": "Missions"
+  },
+  "kinds": {
+    "BUSINESS_DOMAIN": "Domaine métier",
+    "APPLICATION": "Application",
+    "SERVICE": "Service",
+    "DATABASE": "Base de données",
+    "MESSAGING": "Messagerie",
+    "EXTERNAL_SYSTEM": "Système externe",
+    "INFRASTRUCTURE": "Infrastructure",
+    "OTHER": "Autre"
+  },
+  "lifecycles": {
+    "CURRENT": "Actuel",
+    "TARGET": "Cible",
+    "DEPRECATED": "Obsolète"
+  },
+  "criticalities": {
+    "LOW": "Criticité faible",
+    "MEDIUM": "Criticité moyenne",
+    "HIGH": "Criticité haute",
+    "CRITICAL": "Critique"
+  },
+  "relationTypes": {
+    "CALLS": "Appelle",
+    "DEPENDS_ON": "Dépend de",
+    "PUBLISHES_TO": "Publie vers",
+    "SUBSCRIBES_TO": "S'abonne à",
+    "READS_FROM": "Lit",
+    "WRITES_TO": "Écrit dans",
+    "CUSTOM": "Autre"
+  },
+  "syncModes": {
+    "SYNC": "Synchrone",
+    "ASYNC": "Asynchrone"
+  },
+  "linkKinds": {
+    "REPOSITORY": "Dépôt",
+    "TICKETS": "Tickets",
+    "ENVIRONMENT": "Environnement",
+    "DOCUMENTATION": "Documentation",
+    "MONITORING": "Supervision",
+    "OTHER": "Autre"
+  },
+  "tabs": {
+    "overview": "Vue d'ensemble",
+    "children": "Sous-domaines ({{count}})",
+    "relations": "Relations ({{count}})",
+    "technologies": "Technologies ({{count}})",
+    "subjects": "Sujets ({{count}})",
+    "documents": "Documents",
+    "architectures": "Architectures",
+    "domains": "Domaines",
+    "domainsCount": "Domaines ({{count}})",
+    "description": "Description"
+  },
+  "domains": {
+    "empty": "Aucun domaine pour l'instant.",
+    "tree": "Domaines",
+    "create": "Nouveau domaine",
+    "edit": "Modifier le domaine",
+    "createChild": "Nouveau sous-domaine",
+    "noChildren": "Aucun sous-domaine.",
+    "noDescription": "Pas encore de description.",
+    "inArchitectures": "Dans :",
+    "deleteMessage": "Supprimer le domaine « {{name}} », ses relations et ses liens ? Un domaine qui a des sous-domaines ne peut pas être supprimé.",
+    "pickClient": "Choisissez un client pour voir ses domaines."
+  },
+  "architectures": {
+    "member": "entrée",
+    "create": "Nouvelle architecture",
+    "edit": "Modifier l'architecture",
+    "empty": "Aucune architecture pour l'instant.",
+    "members": "Domaines d'entrée",
+    "tree": "Domaines de l'architecture",
+    "add": "Ajouter un domaine d'entrée",
+    "addPlaceholder": "Un domaine de ce client",
+    "removeOf": "Retirer {{name}} de l'architecture",
+    "membershipHelp": "Une architecture contient des domaines d'entrée ; leurs sous-domaines en font aussi partie.",
+    "deleteMessage": "Supprimer l'architecture « {{name}} » ? Ses domaines sont conservés : ils appartiennent au client."
+  },
+  "relations": {
+    "create": "Nouvelle relation",
+    "edit": "Modifier la relation",
+    "source": "De",
+    "target": "Vers",
+    "type": "Relation",
+    "label": "Libellé",
+    "protocol": "Protocole",
+    "syncMode": "Mode",
+    "selfError": "Un domaine ne peut pas être relié à lui-même.",
+    "labelRequired": "Nommez cette relation.",
+    "empty": "Aucune relation.",
+    "editOf": "Modifier la relation avec {{name}}",
+    "deleteOf": "Supprimer la relation avec {{name}}",
+    "outgoing": "Sortantes",
+    "incoming": "Entrantes",
+    "addOutgoing": "Ajouter une relation sortante",
+    "addIncoming": "Ajouter une relation entrante"
+  },
+  "technologies": {
+    "empty": "Aucune technologie.",
+    "removeOf": "Retirer {{name}}",
+    "add": "Technologie",
+    "version": "Version",
+    "addAction": "Ajouter"
+  },
+  "subjects": {
+    "title": "Sujets liés",
+    "empty": "Aucun sujet lié.",
+    "unlinkOf": "Délier {{title}}",
+    "link": "Lier un sujet",
+    "tasks": "Dernières tâches",
+    "noTask": "Aucune tâche sur ces sujets.",
+    "inAgenda": "Voir dans l'agenda"
+  },
+  "owner": {
+    "title": "Responsabilité",
+    "chain": "Organisation responsable",
+    "none": "Aucune unité responsable.",
+    "referent": "Référent :"
+  },
+  "links": {
+    "title": "Liens externes",
+    "empty": "Aucun lien.",
+    "deleteOf": "Supprimer {{label}}",
+    "kind": "Type de lien",
+    "label": "Libellé",
+    "url": "Adresse",
+    "urlInvalid": "Saisissez une adresse complète commençant par http:// ou https://.",
+    "add": "Ajouter"
+  },
+  "mission": {
+    "title": "Architectures de la mission",
+    "empty": "Aucune architecture liée.",
+    "unlinkOf": "Délier {{name}}",
+    "link": "Lier une architecture",
+    "linkPlaceholder": "Une architecture de {{client}}"
+  },
+  "graph": {
+    "open": "Vue graphe",
+    "title": "Graphe",
+    "heading": "{{name}} — graphe",
+    "label": "Graphe de l'architecture",
+    "expand": "Déplier {{name}}",
+    "collapse": "Replier {{name}}",
+    "hidden_one": "+{{count}} masqué",
+    "hidden_other": "+{{count}} masqués",
+    "changes": {
+      "added": "nouveau",
+      "removed": "retiré"
+    },
+    "view": "Vue",
+    "views": {
+      "CURRENT": "Actuel",
+      "TARGET": "Cible",
+      "BOTH": "Les deux"
+    },
+    "depth": "Profondeur",
+    "allLevels": "Tous niveaux",
+    "kinds": "Types",
+    "allKinds": "Tous les types",
+    "teams": "Équipes",
+    "allTeams": "Toutes les équipes",
+    "search": "Trouver un domaine",
+    "help": "Glissez depuis le bord droit d'un domaine vers un autre pour les relier ; double-cliquez sur un domaine pour ouvrir sa fiche ; déplacez les domaines pour garder votre disposition.",
+    "resetLayout": "Disposition automatique",
+    "legend": {
+      "sync": "synchrone",
+      "async": "asynchrone",
+      "added": "vert pointillé : nouveau dans la cible",
+      "removed": "gris : retiré dans la cible"
+    }
+  },
+  "export": {
+    "button": "Exporter en Mermaid",
+    "title": "Export Mermaid",
+    "format": "Diagramme",
+    "flowchart": "Flowchart",
+    "mindmap": "Carte mentale",
+    "direction": "Direction",
+    "lr": "De gauche à droite",
+    "tb": "De haut en bas",
+    "code": "Code Mermaid",
+    "help": "Collez-le dans un bloc ```mermaid (GitHub, GitLab, Azure DevOps…).",
+    "copy": "Copier le code",
+    "copied": "Code Mermaid copié.",
+    "failed": "L'export a échoué."
+  }
+}

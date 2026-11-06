@@ -110,7 +110,9 @@ async def _seed_reference(_: argparse.Namespace) -> None:
     print(
         f"Reference data: {report.sectors_added} sector(s), "
         f"{report.technologies_added} technology(ies), {report.roles_added} contact role(s), "
-        f"{report.subtypes_added} half-day subtype(s) added."
+        f"{report.subtypes_added} half-day subtype(s), "
+        f"{report.categories_added} subject category(ies), "
+        f"{report.templates_added} document template(s) added."
     )
 
 
@@ -140,6 +142,14 @@ async def _seed_demo(_: argparse.Namespace) -> None:
             f"Demo missions loaded for {owner.email}."
             if missions
             else "Demo missions already present; nothing to do."
+        )
+        from app.seed.demo import seed_demo_architecture
+
+        architecture = await seed_demo_architecture(session, owner)
+        print(
+            "Demo architecture loaded."
+            if architecture
+            else "Demo architecture already present; nothing to do."
         )
 
 

@@ -10,6 +10,7 @@ const SECTIONS = [
   "tags",
   "roles",
   "day-types",
+  "subject-categories",
 ] as const;
 
 export function DirectoryLayout() {

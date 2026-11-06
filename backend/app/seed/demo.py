@@ -226,3 +226,156 @@ async def seed_demo_missions(session: AsyncSession, owner: "User") -> bool:
                 current.id, technology.id, MissionTechnologyUpsert(weight=weight, version=version)
             )
     return True
+
+
+# --- demo architecture (P8-11, ADR-0037) -------------------------------------------------------
+
+DEMO_ARCHITECTURE = "SI Banque Horizon"
+
+# (name, kind, parent name, owner org unit, technologies)
+DEMO_DOMAINS: list[tuple[str, str, str | None, str | None, list[str]]] = [
+    ("Paiements", "BUSINESS_DOMAIN", None, "Pôle Paiements", []),
+    ("Hub de paiements", "APPLICATION", "Paiements", "Équipe Virements", ["Java", "Spring Boot"]),
+    ("API Paiements", "SERVICE", "Hub de paiements", "Équipe Virements", ["Spring Boot"]),
+    ("Base Paiements", "DATABASE", "Hub de paiements", "Équipe Virements", ["PostgreSQL"]),
+    ("Moteur de fraude", "SERVICE", "Hub de paiements", "Pôle Data", ["Python"]),
+    ("Virements SEPA", "APPLICATION", "Paiements", "Équipe Virements", ["Java"]),
+    ("Passerelle SWIFT", "EXTERNAL_SYSTEM", "Virements SEPA", None, []),
+    ("Cartes", "BUSINESS_DOMAIN", None, "Équipe Cartes", []),
+    ("Gestion des cartes", "APPLICATION", "Cartes", "Équipe Cartes", ["Java"]),
+    ("API Cartes", "SERVICE", "Gestion des cartes", "Équipe Cartes", ["Spring Boot"]),
+    ("Base Cartes", "DATABASE", "Gestion des cartes", "Équipe Cartes", ["Oracle Database"]),
+    ("Autorisations", "APPLICATION", "Cartes", "Équipe Cartes", ["Java"]),
+    ("Réseau CB", "EXTERNAL_SYSTEM", "Autorisations", None, []),
+    ("Clients", "BUSINESS_DOMAIN", None, "DSI", []),
+    ("Référentiel clients", "APPLICATION", "Clients", "Pôle Data", ["Java"]),
+    ("API Clients", "SERVICE", "Référentiel clients", "Pôle Data", ["Spring Boot"]),
+    ("Base Clients", "DATABASE", "Référentiel clients", "Pôle Data", ["PostgreSQL"]),
+    ("Banque en ligne", "APPLICATION", "Clients", "DSI", ["React"]),
+    ("BFF Web", "SERVICE", "Banque en ligne", "DSI", ["Node.js"]),
+    ("Socle", "INFRASTRUCTURE", None, "DSI", ["Kubernetes"]),
+    ("Bus d'événements", "MESSAGING", "Socle", "DSI", ["Apache Kafka"]),
+    ("Topic paiements", "MESSAGING", "Bus d'événements", "Pôle Paiements", ["Apache Kafka"]),
+    ("Identité", "SERVICE", "Socle", "DSI", []),
+    ("Keycloak", "SERVICE", "Identité", "DSI", ["Keycloak"]),
+    ("Entrepôt de données", "DATABASE", "Socle", "Pôle Data", ["Snowflake"]),
+]
+
+# (source, target, type, protocol, sync mode)
+DEMO_RELATIONS: list[tuple[str, str, str, str | None, str | None]] = [
+    ("BFF Web", "API Clients", "CALLS", "REST", "SYNC"),
+    ("BFF Web", "API Paiements", "CALLS", "REST", "SYNC"),
+    ("BFF Web", "API Cartes", "CALLS", "REST", "SYNC"),
+    ("BFF Web", "Keycloak", "DEPENDS_ON", "OIDC", "SYNC"),
+    ("API Paiements", "Base Paiements", "WRITES_TO", "JDBC", "SYNC"),
+    ("API Paiements", "Base Paiements", "READS_FROM", "JDBC", "SYNC"),
+    ("API Paiements", "Moteur de fraude", "CALLS", "gRPC", "SYNC"),
+    ("API Paiements", "Topic paiements", "PUBLISHES_TO", "Kafka", "ASYNC"),
+    ("API Paiements", "API Clients", "CALLS", "REST", "SYNC"),
+    ("API Paiements", "Keycloak", "DEPENDS_ON", "OIDC", "SYNC"),
+    ("Moteur de fraude", "Topic paiements", "SUBSCRIBES_TO", "Kafka", "ASYNC"),
+    ("Moteur de fraude", "Entrepôt de données", "READS_FROM", "SQL", "SYNC"),
+    ("Virements SEPA", "Topic paiements", "SUBSCRIBES_TO", "Kafka", "ASYNC"),
+    ("Virements SEPA", "Passerelle SWIFT", "CALLS", "SFTP", "ASYNC"),
+    ("Virements SEPA", "Base Paiements", "READS_FROM", "JDBC", "SYNC"),
+    ("Virements SEPA", "API Clients", "CALLS", "REST", "SYNC"),
+    ("API Cartes", "Base Cartes", "WRITES_TO", "JDBC", "SYNC"),
+    ("API Cartes", "Base Cartes", "READS_FROM", "JDBC", "SYNC"),
+    ("API Cartes", "API Clients", "CALLS", "REST", "SYNC"),
+    ("API Cartes", "Keycloak", "DEPENDS_ON", "OIDC", "SYNC"),
+    ("Autorisations", "Réseau CB", "CALLS", "ISO 8583", "SYNC"),
+    ("Autorisations", "Base Cartes", "READS_FROM", "JDBC", "SYNC"),
+    ("Autorisations", "Moteur de fraude", "CALLS", "gRPC", "SYNC"),
+    ("Autorisations", "Topic paiements", "PUBLISHES_TO", "Kafka", "ASYNC"),
+    ("API Clients", "Base Clients", "WRITES_TO", "JDBC", "SYNC"),
+    ("API Clients", "Base Clients", "READS_FROM", "JDBC", "SYNC"),
+    ("API Clients", "Keycloak", "DEPENDS_ON", "OIDC", "SYNC"),
+    ("Entrepôt de données", "Topic paiements", "SUBSCRIBES_TO", "Kafka", "ASYNC"),
+    ("Entrepôt de données", "Base Clients", "READS_FROM", "CDC", "ASYNC"),
+    ("Banque en ligne", "Hub de paiements", "DEPENDS_ON", None, None),
+]
+
+
+async def seed_demo_architecture(session: AsyncSession, owner: "User") -> bool:
+    """The demo client's information system: 25 domains on 3 levels, 30 relations (P8-11)."""
+    from app.modules.architecture.models import (
+        Architecture,
+        ArchitectureDomain,
+        Domain,
+        DomainKind,
+        DomainRelation,
+        DomainTechnology,
+        MissionArchitecture,
+        RelationType,
+        SyncMode,
+    )
+    from app.modules.directory.models import OrgUnit
+    from app.modules.missions.models import Mission
+    from app.modules.technologies.models import Technology
+
+    bank_id = await session.scalar(
+        select(Company.id).where(Company.normalized_name == normalize_text(MARKER_COMPANY))
+    )
+    if bank_id is None:
+        return False
+    if await session.scalar(
+        select(Architecture.id).where(
+            Architecture.owner_id == owner.id,
+            Architecture.normalized_name == normalize_text(DEMO_ARCHITECTURE),
+        )
+    ):
+        return False
+    units = {
+        u.name: u.id
+        for u in await session.scalars(select(OrgUnit).where(OrgUnit.company_id == bank_id))
+    }
+    technologies = {t.name: t.id for t in await session.scalars(select(Technology))}
+    architecture = Architecture(
+        owner_id=owner.id,
+        company_id=bank_id,
+        name=DEMO_ARCHITECTURE,
+        normalized_name=normalize_text(DEMO_ARCHITECTURE),
+        description="Système d'information **fictif** de la banque de démonstration.",
+    )
+    session.add(architecture)
+    domains: dict[str, Domain] = {}
+    for name, kind, parent, unit, techs in DEMO_DOMAINS:
+        domain = Domain(
+            owner_id=owner.id,
+            company_id=bank_id,
+            parent_id=domains[parent].id if parent else None,
+            name=name,
+            normalized_name=normalize_text(name),
+            kind=DomainKind(kind),
+            description="",
+            owner_org_unit_id=units.get(unit) if unit else None,
+        )
+        session.add(domain)
+        await session.flush()
+        domains[name] = domain
+        session.add_all(
+            DomainTechnology(domain_id=domain.id, technology_id=technologies[t])
+            for t in techs
+            if t in technologies
+        )
+        if parent is None:
+            session.add(ArchitectureDomain(architecture_id=architecture.id, domain_id=domain.id))
+    session.add_all(
+        DomainRelation(
+            owner_id=owner.id,
+            source_id=domains[source].id,
+            target_id=domains[target].id,
+            type=RelationType(kind),
+            protocol=protocol,
+            sync_mode=SyncMode(mode) if mode else None,
+            description="",
+        )
+        for source, target, kind, protocol, mode in DEMO_RELATIONS
+    )
+    mission_id = await session.scalar(
+        select(Mission.id).where(Mission.owner_id == owner.id, Mission.title == DEMO_MISSION_TITLE)
+    )
+    if mission_id is not None:
+        session.add(MissionArchitecture(mission_id=mission_id, architecture_id=architecture.id))
+    await session.commit()
+    return True

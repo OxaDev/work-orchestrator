@@ -113,6 +113,7 @@ export function useCompanies(query: CompanyQuery = {}) {
 export function useCompany(id: string | undefined) {
   return useQuery({
     queryKey: [...keys.companies, id],
+    meta: { inlineError: true },
     queryFn: () =>
       unwrap(api.GET("/api/v1/companies/{company_id}", { params: { path: { company_id: id! } } })),
     enabled: Boolean(id),
@@ -210,6 +211,7 @@ export function useContacts(query: ContactQuery = {}) {
 export function useContact(id: string | undefined) {
   return useQuery({
     queryKey: [...keys.contacts, id],
+    meta: { inlineError: true },
     queryFn: () =>
       unwrap(api.GET("/api/v1/contacts/{contact_id}", { params: { path: { contact_id: id! } } })),
     enabled: Boolean(id),

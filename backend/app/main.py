@@ -12,16 +12,29 @@ from app.core.db import dispose_engine
 from app.core.errors import register_exception_handlers
 from app.core.logging import configure_logging
 from app.modules.agenda.router import router as agenda_router
+from app.modules.architecture.router import (
+    architectures_router,
+    domains_router,
+    external_links_router,
+    relations_router,
+)
+from app.modules.archive.router import router as archive_router
 from app.modules.auth.dependencies import get_current_user
 from app.modules.auth.router import auth_router, me_router, public_router, users_router
+from app.modules.dashboard.router import router as dashboard_router
 from app.modules.directory.router import (
     companies_router,
     contacts_router,
     org_units_router,
     sectors_router,
 )
+from app.modules.documents.router import attachments_router, links_router, templates_router
+from app.modules.documents.router import router as documents_router
 from app.modules.missions.router import roles_router
 from app.modules.missions.router import router as missions_router
+from app.modules.search.router import router as search_router
+from app.modules.subjects.router import categories_router as subject_categories_router
+from app.modules.subjects.router import router as subjects_router
 from app.modules.system.router import router as system_router
 from app.modules.tags.router import router as tags_router
 from app.modules.technologies.router import router as technologies_router
@@ -58,6 +71,19 @@ def build_api_router() -> APIRouter:
         missions_router,
         roles_router,
         agenda_router,
+        subjects_router,
+        subject_categories_router,
+        documents_router,
+        templates_router,
+        attachments_router,
+        links_router,
+        architectures_router,
+        domains_router,
+        relations_router,
+        external_links_router,
+        dashboard_router,
+        search_router,
+        archive_router,
     ):
         protected.include_router(router)
     api.include_router(protected)

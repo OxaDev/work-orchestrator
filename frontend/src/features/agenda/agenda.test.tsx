@@ -92,6 +92,26 @@ describe("month view", () => {
     );
   });
 
+  it("moves between half-days with the arrow keys and selects with Enter (P12-3)", async () => {
+    const user = userEvent.setup();
+    renderApp("/agenda/2026/11");
+    (await cell(/lundi 2 novembre, matin/)).focus();
+    await user.keyboard("{ArrowRight}");
+    expect(document.activeElement).toHaveAccessibleName(/mardi 3 novembre, matin/);
+    await user.keyboard("{ArrowDown}");
+    expect(document.activeElement).toHaveAccessibleName(/mardi 3 novembre, après-midi/);
+    await user.keyboard("{ArrowDown}");
+    expect(document.activeElement).toHaveAccessibleName(/mardi 10 novembre, matin/);
+    await user.keyboard("{ArrowUp}{ArrowLeft}");
+    expect(document.activeElement).toHaveAccessibleName(/lundi 2 novembre, après-midi/);
+    // Before the 1st: the focus stays inside the month.
+    (await cell(/dimanche 1 novembre, matin/)).focus();
+    await user.keyboard("{ArrowLeft}");
+    expect(document.activeElement).toHaveAccessibleName(/dimanche 1 novembre, matin/);
+    await user.keyboard("{Enter}");
+    expect(document.activeElement).toHaveAttribute("aria-pressed", "true");
+  });
+
   it("pre-fills public holidays once and shows them", async () => {
     renderApp("/agenda/2026/11");
     expect(await cell(/mercredi 11 novembre, matin : Jour férié/)).toBeInTheDocument();
@@ -141,9 +161,13 @@ describe("month view", () => {
     ]);
     expect(screen.getByText("2 demi-journées sélectionnées")).toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: "Sélectionner le vendredi 6 novembre" }));
+    await user.click(
+      screen.getByRole("button", { name: "6 : sélectionner le vendredi 6 novembre" }),
+    );
     expect(screen.getByText("4 demi-journées sélectionnées")).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "Sélectionner le vendredi 6 novembre" }));
+    await user.click(
+      screen.getByRole("button", { name: "6 : sélectionner le vendredi 6 novembre" }),
+    );
     expect(screen.getByText("2 demi-journées sélectionnées")).toBeInTheDocument();
 
     (await cell(/lundi 9 novembre, matin/)).focus();

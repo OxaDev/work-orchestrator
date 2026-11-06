@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.clock import utcnow
 from app.core.errors import AppError, ErrorCode
-from app.modules.agenda import rules
+from app.modules.agenda import compatibility, rules
 from app.modules.agenda.models import (
     HalfDay,
     HalfDayKind,
@@ -20,6 +20,8 @@ from app.modules.agenda.models import (
     MonthLock,
     MonthLockEvent,
     Period,
+    Task,
+    WeekTemplateSlot,
     WorkLocation,
 )
 from app.modules.agenda.schemas import (
@@ -41,6 +43,7 @@ from app.modules.agenda.schemas import (
 from app.modules.auth.models import User
 from app.modules.directory.schemas import Summary
 from app.modules.missions.models import Mission
+from app.modules.subjects.models import Subject
 from app.shared.ownership import get_owned, owned
 from app.shared.schemas import entity_referenced, name_already_used, not_found
 from app.shared.text import clean, normalize_text
@@ -197,24 +200,41 @@ class HalfDayService:
         )
         return {_slot_key(row.date, row.period): row for row in rows}
 
-    async def assign(self, slots: list[Slot], values: HalfDayValues) -> list[HalfDay]:
-        """Creates or replaces the given half-days with the same values, all or nothing."""
-        keys = {_slot_key(s.date, s.period) for s in slots}
-        dates = {d for d, _ in keys}
-        await self.locks.ensure_unlocked(dates)
-        mission = (
-            await get_owned(self.session, Mission, values.mission_id, self.user.id, "mission")
-            if values.mission_id
-            else None
-        )
-        subtype = (
-            await SubtypeService(self.session).get(values.subtype_id) if values.subtype_id else None
-        )
-        rules.validate_values(values.kind, mission, subtype, values.location, dates)
+    async def write(self, entries: list[tuple[Slot, HalfDayValues]]) -> list[HalfDay]:
+        """Shared bulk write path (ADR-0033, ADR-0035): creates or replaces half-days, each with
+        its own values, after the lock guard, RG-02, subtype and task checks. Does not commit.
+        """
+        wanted = {_slot_key(slot.date, slot.period): values for slot, values in entries}
+        await self.locks.ensure_unlocked({d for d, _ in wanted})
+        groups: dict[str, list[tuple[date, Period]]] = defaultdict(list)
+        group_values: dict[str, HalfDayValues] = {}
+        for key, values in wanted.items():
+            signature = values.model_dump_json()
+            groups[signature].append(key)
+            group_values[signature] = values
+        existing = await self._existing(set(wanted))
+        for signature, keys in groups.items():
+            values = group_values[signature]
+            mission = (
+                await get_owned(self.session, Mission, values.mission_id, self.user.id, "mission")
+                if values.mission_id
+                else None
+            )
+            subtype = (
+                await SubtypeService(self.session).get(values.subtype_id)
+                if values.subtype_id
+                else None
+            )
+            rules.validate_values(
+                values.kind, mission, subtype, values.location, {d for d, _ in keys}
+            )
+            await self._ensure_tasks_compatible(
+                [existing[key] for key in keys if key in existing], values
+            )
 
-        existing = await self._existing(keys)
         result: list[HalfDay] = []
-        for day, period in sorted(keys):
+        for day, period in sorted(wanted):
+            values = wanted[(day, period)]
             row = existing.get((day, period))
             if row is None:
                 row = HalfDay(owner_id=self.user.id, date=day, period=period)
@@ -225,12 +245,57 @@ class HalfDayService:
             row.location = values.location
             row.note = clean(values.note)
             result.append(row)
+        return result
+
+    async def assign(self, slots: list[Slot], values: HalfDayValues) -> list[HalfDay]:
+        """Creates or replaces the given half-days with the same values, all or nothing."""
+        result = await self.write([(slot, values) for slot in slots])
         await self.session.commit()
         return result
+
+    async def _ensure_tasks_compatible(self, rows: list[HalfDay], values: HalfDayValues) -> None:
+        """ADR-0020: a half-day cannot change to a nature its tasks are not allowed in."""
+        if not rows:
+            return
+        by_id = {row.id: row for row in rows}
+        conflicts = [
+            {
+                "id": str(task.id),
+                "title": task.title,
+                "date": by_id[task.half_day_id].date.isoformat(),
+                "period": by_id[task.half_day_id].period.value,
+            }
+            for task, subject in await self.session.execute(
+                select(Task, Subject)
+                .join(Subject, Subject.id == Task.subject_id)
+                .where(Task.half_day_id.in_(by_id))
+                .order_by(Task.created_at)
+            )
+            if not compatibility.is_compatible(
+                values.kind, values.mission_id, subject.scope, subject.mission_id
+            )
+        ]
+        if conflicts:
+            raise AppError(
+                ErrorCode.HALF_DAY_HAS_INCOMPATIBLE_TASKS,
+                status_code=status.HTTP_409_CONFLICT,
+                params={"count": len(conflicts), "tasks": conflicts[:20]},
+            )
 
     async def clear(self, slots: list[Slot]) -> int:
         keys = {_slot_key(s.date, s.period) for s in slots}
         await self.locks.ensure_unlocked({d for d, _ in keys})
+        task_count = await self.session.scalar(
+            owned(select(func.count(Task.id)), Task, self.user.id)
+            .join(HalfDay, HalfDay.id == Task.half_day_id)
+            .where(tuple_(HalfDay.date, HalfDay.period).in_([(d, p.value) for d, p in keys]))
+        )
+        if task_count:
+            raise AppError(
+                ErrorCode.HALF_DAY_HAS_TASKS,
+                status_code=status.HTTP_409_CONFLICT,
+                params={"count": task_count},
+            )
         result = await self.session.execute(
             delete(HalfDay).where(
                 HalfDay.owner_id == self.user.id,
@@ -423,6 +488,10 @@ class SubtypeService:
             select(HalfDay.id).where(HalfDay.subtype_id == subtype.id).limit(1)
         ):
             raise entity_referenced("halfDaySubtype", "halfDay")
+        if await self.session.scalar(
+            select(WeekTemplateSlot.id).where(WeekTemplateSlot.subtype_id == subtype.id).limit(1)
+        ):
+            raise entity_referenced("halfDaySubtype", "weekTemplate")
         await self.session.delete(subtype)
         await self.session.commit()
 

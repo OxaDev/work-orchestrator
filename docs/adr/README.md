@@ -79,5 +79,13 @@ stateDiagram-v2
 | [0031](0031-shared-referentials.md) | Shared referentials: model, tags, deletion and reference data | Accepted | 2026-11-05 | data, domain |
 | [0032](0032-missions-implementation.md) | Missions: ownership enforcement, status, history and links | Accepted | 2026-11-05 | domain, data |
 | [0033](0033-agenda-macro-implementation.md) | Agenda macro: slot API, public holidays, completeness and rendering | Accepted | 2026-11-05 | domain, backend, frontend |
+| [0034](0034-agenda-micro-subjects-tasks-daily-log-and-standup.md) | Agenda micro: subjects, tasks, daily log and standup | Accepted | 2026-11-06 | domain, backend, frontend |
+| [0035](0035-week-templates-model-application-plan-and-write-path.md) | Week templates: model, application plan and write path | Accepted | 2026-11-06 | domain, backend, frontend |
+| [0036](0036-documents-editor-rendering-links-files-and-templates.md) | Documents: editor, rendering, links, files and templates | Accepted | 2026-11-06 | documents, backend, frontend, security |
+| [0037](0037-architectures-and-domains-membership-graph-api-rules-and-deletion.md) | Architectures and domains: membership, graph API, rules and deletion | Accepted | 2026-11-06 | domain, backend, frontend |
+| [0038](0038-graph-view-mermaid-export-and-knowledge-graph.md) | Graph view, Mermaid export and knowledge graph | Accepted | 2026-11-06 | architecture-app, backend, frontend |
+| [0039](0039-mission-dashboard-technology-weight-suggestion-and-cross-links.md) | Mission dashboard, technology weight suggestion and cross-links | Accepted | 2026-11-06 | domain, backend, frontend |
+| [0040](0040-search-archive-export-and-import-backups.md) | Search, archive export and import, backups | Accepted | 2026-11-06 | search, data, deployment |
+| [0041](0041-hardening-security-headers-isolation-performance-budgets-accessibility-error-states.md) | Hardening: security headers, isolation, performance budgets, accessibility, error states | Accepted | 2026-11-06 | security, frontend, backend, process |
 
-Next free number: **0034**.
+Next free number: **0042**.

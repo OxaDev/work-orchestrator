@@ -91,3 +91,23 @@ export function parseYearMonth(
   }
   return { year: y, month: m };
 }
+
+/**
+ * Where an arrow key goes from `date|period`, following the drawing: left/right change the
+ * day, up/down walk morning, afternoon, then the same weekday of the next week (P12-3).
+ */
+export function arrowTarget(slot: string, key: string): string | null {
+  const [date = "", period = "AM"] = slot.split("|");
+  switch (key) {
+    case "ArrowLeft":
+      return `${addDays(date, -1)}|${period}`;
+    case "ArrowRight":
+      return `${addDays(date, 1)}|${period}`;
+    case "ArrowUp":
+      return period === "PM" ? `${date}|AM` : `${addDays(date, -7)}|PM`;
+    case "ArrowDown":
+      return period === "AM" ? `${date}|PM` : `${addDays(date, 7)}|AM`;
+    default:
+      return null;
+  }
+}

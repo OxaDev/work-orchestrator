@@ -16,6 +16,7 @@ ARG BASE_PATH=/work-orchestrator
 # Read by the nginx template at container start and by the healthcheck.
 ENV BASE_PATH=${BASE_PATH}
 COPY nginx/security-headers.conf /etc/nginx/snippets/security-headers.conf
+COPY nginx/api-proxy.conf /etc/nginx/snippets/api-proxy.conf
 COPY nginx/default.conf.template /etc/nginx/templates/default.conf.template
 # Files live under the prefix on disk, so URL paths map 1:1 to files.
 COPY --from=build /app/dist /usr/share/nginx/html${BASE_PATH}

@@ -1,5 +1,4 @@
-import { expect, test } from "@playwright/test";
-
+import { expect, test } from "./fixtures";
 import { signIn } from "./helpers";
 
 const suffix = Date.now().toString(36);
@@ -18,7 +17,7 @@ test("create a mission with the wizard, then staff and weight it", async ({ page
   });
 
   await page.goto("./missions");
-  await page.getByRole("button", { name: "Nouvelle mission" }).click();
+  await page.getByRole("button", { name: "Nouvelle mission" }).first().click();
   const dialog = page.getByRole("dialog");
   await dialog.getByRole("combobox", { name: "Client" }).click();
   await page.getByRole("option", { name: `Client ${suffix}` }).click();
@@ -41,13 +40,16 @@ test("create a mission with the wizard, then staff and weight it", async ({ page
   await expect(page.getByRole("table").getByText("Apache Kafka")).toBeVisible();
 
   await page.getByRole("tab", { name: /^Contacts/ }).click();
-  await page.getByRole("combobox", { name: "Ajouter un contact" }).fill("hopper");
+  // Search on this run's unique name: earlier runs left many Grace Hoppers behind.
+  await page.getByRole("combobox", { name: "Ajouter un contact" }).fill(`hopper ${suffix}`);
   await page.getByRole("option", { name: new RegExp(`Grace Hopper ${suffix}`) }).click();
   await page.getByRole("combobox", { name: "Rôle" }).click();
   await page.getByRole("option", { name: "Architecte" }).click();
   await page.getByRole("button", { name: "Ajouter" }).click();
   await expect(page.getByRole("link", { name: `Grace Hopper ${suffix}` })).toBeVisible();
 
+  // Search by title: the e2e database keeps every run's missions, beyond the first page.
   await page.goto("./missions");
+  await page.getByRole("textbox", { name: "Rechercher" }).fill(title);
   await expect(page.getByRole("link", { name: title })).toBeVisible();
 });

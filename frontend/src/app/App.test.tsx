@@ -1,10 +1,12 @@
-import { screen, within } from "@testing-library/react";
+import { MantineProvider } from "@mantine/core";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { http, HttpResponse } from "msw";
 import { describe, expect, it } from "vitest";
 
 import { renderApp } from "../test/render";
 import { server } from "../test/server";
+import { ComingSoonPage } from "../features/placeholder/ComingSoonPage";
 import { isActive } from "./navigation";
 
 describe("application shell", () => {
@@ -42,17 +44,24 @@ describe("application shell", () => {
     expect(document.documentElement).toHaveAttribute("data-mantine-color-scheme", "light");
   });
 
-  it("navigates to a section announced for a later phase", async () => {
+  it("navigates between sections", async () => {
     const user = userEvent.setup();
     const { router } = renderApp("/");
-    await user.click(within(await screen.findByRole("navigation")).getByText("Documents"));
-    expect(router.state.location.pathname).toBe("/documents");
-    expect(await screen.findByText(/phase P7/)).toBeInTheDocument();
+    await user.click(within(await screen.findByRole("navigation")).getByText("Architecture"));
+    expect(router.state.location.pathname).toBe("/architecture");
+    expect(
+      await screen.findByRole("heading", { name: "Architecture", level: 2 }),
+    ).toBeInTheDocument();
   });
 
-  it("keeps deep links inside a section", async () => {
-    renderApp("/documents/some/page");
-    expect(await screen.findByText(/phase P7/)).toBeInTheDocument();
+  it("announces sections of later phases", () => {
+    // No section is pending today; the placeholder stays ready for the next ones.
+    render(
+      <MantineProvider env="test">
+        <ComingSoonPage titleKey="nav.documents" phase="P13" />
+      </MantineProvider>,
+    );
+    expect(screen.getByText(/phase P13/)).toBeInTheDocument();
   });
 
   it("shows a not-found page for unknown routes", async () => {
@@ -65,7 +74,7 @@ describe("home page health card", () => {
   it("shows the API as operational", async () => {
     renderApp("/");
     expect(await screen.findByText("API et base de données opérationnelles")).toBeInTheDocument();
-    expect(screen.getByText("Version 0.1.0")).toBeInTheDocument();
+    expect(screen.getByText("Version 1.0.0")).toBeInTheDocument();
   });
 
   it("translates backend error codes", async () => {

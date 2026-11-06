@@ -125,16 +125,25 @@ erDiagram
 Unicité : (`owner_id`, `date`, `period`).
 
 **Task**
-`half_day_id`, `subject_id`, `title`, `starts_at` (heure), `duration_minutes`, `status` (PLANNED, DONE, CANCELLED, CARRIED_OVER), `description` (Markdown), `external_ref` (ticket Jira…).
+`half_day_id`, `subject_id`, `kind` (TASK, MEETING — participants : contacts), `title`, `starts_at` (heure, facultative), `duration_minutes` (1 à 720), `status` (PLANNED, DONE, CANCELLED, CARRIED_OVER), `description` (Markdown), `external_ref` (ticket Jira…), `carried_from_id` (ADR-0034).
 
 **Subject**
-`parent_id`, `mission_id` (nullable : null signifie sujet d'inter-contrat ou personnel), `scope` (MISSION, INTERCONTRACT, TRAINING, PERSONAL), `title`, `status`, `description`.
+`parent_id`, `mission_id` (nullable : null signifie sujet d'inter-contrat ou personnel), `scope` (MISSION, INTERCONTRACT, TRAINING, PERSONAL), `category_id` (liste modifiable), `title`, `status` (OPEN, IN_PROGRESS, DONE, CANCELLED), `external_url`, `description`, `archived_at` (ADR-0034).
+
+**WeekTemplate**
+`owner_id`, `name` (unique par utilisateur), `description`, `mission_id` (mission par défaut, facultative) ; créneaux `WeekTemplateSlot` : `weekday` (0 = lundi), `period`, `kind`, `subtype_id`, `mission_id`, `location` (ADR-0035).
+
+**DailyLog**
+`owner_id`, `date` (unique par utilisateur), `done`, `planned`, `blockers` (Markdown, jamais verrouillé).
 
 **Domain**
-`parent_id` (sous-domaine), `name`, `kind` (BUSINESS, APPLICATION, INFRASTRUCTURE, DATA… **[H-20]**), `description` (Markdown), `owner_org_unit_id`, `owner_contact_id`, `criticality`.
+`company_id` (client), `parent_id` (sous-domaine), `name` (unique entre frères), `kind` (BUSINESS_DOMAIN, APPLICATION, SERVICE, DATABASE, MESSAGING, EXTERNAL_SYSTEM, INFRASTRUCTURE, OTHER — ADR-0023), `description` (Markdown), `criticality` (LOW, MEDIUM, HIGH, CRITICAL), `lifecycle` (CURRENT, TARGET, DEPRECATED), `owner_org_unit_id`, `referent_contact_id` (ADR-0037).
+
+**Architecture**
+`company_id` (client), `name`, `description` (Markdown), `lifecycle` ; liée à des missions du même client ; contient des domaines d'entrée et, implicitement, leurs sous-domaines (ADR-0037).
 
 **DomainRelation**
-`source_id`, `target_id`, `type` (CALLS, DEPENDS_ON, PUBLISHES_TO, SUBSCRIBES_TO, READS_FROM, WRITES_TO, CUSTOM), `label`, `protocol` (REST, gRPC, Kafka…).
+`source_id`, `target_id` (même client), `type` (CALLS, DEPENDS_ON, PUBLISHES_TO, SUBSCRIBES_TO, READS_FROM, WRITES_TO, CUSTOM — libellé obligatoire), `label`, `protocol` (REST, gRPC, Kafka…), `sync_mode` (SYNC, ASYNC), `lifecycle`.
 
 ### 5.4 Règles métier
 

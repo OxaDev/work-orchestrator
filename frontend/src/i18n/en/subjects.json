@@ -1,0 +1,67 @@
+{
+  "title": "Subjects",
+  "backToAgenda": "Back to the agenda",
+  "missionHint": "Mission subjects are managed from each mission page (\"Subjects\" tab).",
+  "scopeLabel": "Scope",
+  "scopes": {
+    "MISSION": "Mission",
+    "INTERCONTRACT": "Between missions",
+    "TRAINING": "Training",
+    "PERSONAL": "Personal"
+  },
+  "status": {
+    "OPEN": "Open",
+    "IN_PROGRESS": "In progress",
+    "DONE": "Done",
+    "CANCELLED": "Cancelled"
+  },
+  "add": "Add",
+  "newRoot": "New subject",
+  "newRootPlaceholder": "New subject, e.g. Kafka migration",
+  "childPlaceholder": "Sub-subject title",
+  "addChildOf": "Add a sub-subject to {{title}}",
+  "expand": "Expand {{title}}",
+  "collapse": "Collapse {{title}}",
+  "editOf": "Edit {{title}}",
+  "archiveOf": "Archive {{title}}",
+  "restoreOf": "Restore {{title}}",
+  "deleteOf": "Delete {{title}}",
+  "deleteTitle": "Delete?",
+  "deleteMessage": "Delete the subject \"{{title}}\"? Subjects with sub-subjects or tasks cannot be deleted: archive them instead.",
+  "showArchived": "Show archived",
+  "empty": "No subject yet.",
+  "treeLabel": "Subjects",
+  "taskCount_one": "{{count}} task",
+  "taskCount_other": "{{count}} tasks",
+  "spent": "{{duration}} done",
+  "openLink": "Open the external link of {{title}}",
+  "form": {
+    "editTitle": "Edit the subject",
+    "title": "Title",
+    "status": "Status",
+    "category": "Category",
+    "parent": "Parent subject",
+    "root": "None (top level)",
+    "externalUrl": "External link (ticket, page…)",
+    "description": "Description (Markdown)",
+    "save": "Save"
+  },
+  "validation": {
+    "required": "Required.",
+    "url": "Enter a full address starting with http:// or https://."
+  },
+  "categories": {
+    "help": "Categories of subjects: technology watch, pre-sales, certification…",
+    "create": "New category",
+    "edit": "Edit category",
+    "nameFr": "Name (French)",
+    "nameEn": "Name (English)",
+    "usage": "Used by",
+    "empty": "No category yet.",
+    "editOf": "Edit {{name}}",
+    "deleteOf": "Delete {{name}}",
+    "deleteTitle": "Delete?",
+    "deleteMessage": "Delete the category \"{{name}}\"?"
+  },
+  "inAgendaOf": "See {{title}} in the agenda"
+}

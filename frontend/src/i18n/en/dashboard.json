@@ -1,0 +1,62 @@
+{
+  "days_one": "{{value}} day",
+  "days_other": "{{value}} days",
+  "kpi": {
+    "done": "Days done",
+    "planned": "Days planned",
+    "remaining": "Working days left",
+    "noEnd": "No end date",
+    "tasks": "Time on tasks"
+  },
+  "time": {
+    "bySubject": "Time by subject",
+    "noTask": "No task done yet.",
+    "others_one": "{{count}} other subject",
+    "others_other": "{{count}} other subjects",
+    "tooltip_one": "{{duration}}, {{count}} task done, {{share}} % of the time",
+    "tooltip_other": "{{duration}}, {{count}} tasks done, {{share}} % of the time"
+  },
+  "technologies": {
+    "title": "Technologies",
+    "empty": "No technology yet.",
+    "name": "Technology",
+    "weight": "Weight",
+    "suggestion": "Suggestion",
+    "weightOf": "Weight of {{name}}",
+    "minutes": "{{duration}} on the linked subjects",
+    "suggested": "suggested {{weight}}",
+    "apply": "Apply",
+    "applyOf": "Apply the suggested weight to {{name}}"
+  },
+  "tasks": {
+    "recent": "Latest tasks",
+    "planned": "Planned",
+    "none": "None."
+  },
+  "contacts": {
+    "title": "Contacts by role",
+    "empty": "No contact.",
+    "noRole": "No role"
+  },
+  "architectures": {
+    "title": "Architectures",
+    "empty": "No architecture linked.",
+    "graph": "graph"
+  },
+  "documents": {
+    "title": "Documents",
+    "empty": "No document."
+  },
+  "career": {
+    "title": "Career",
+    "back": "Missions",
+    "empty": "No mission yet.",
+    "ongoing": "ongoing"
+  },
+  "home": {
+    "activeMissions": "Current missions",
+    "until": "until {{date}}",
+    "today": "Today's agenda",
+    "recentDocuments": "Recently edited documents"
+  }
+}

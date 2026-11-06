@@ -107,7 +107,7 @@ class MissionContact(UUIDPrimaryKeyMixin, Base):
         ForeignKey("contacts.id", ondelete="RESTRICT"), index=True
     )
     role_id: Mapped[uuid.UUID | None] = mapped_column(
-        ForeignKey("contact_roles.id", ondelete="RESTRICT")
+        ForeignKey("contact_roles.id", ondelete="RESTRICT"), index=True
     )
     note: Mapped[str | None] = mapped_column(String(500))
 

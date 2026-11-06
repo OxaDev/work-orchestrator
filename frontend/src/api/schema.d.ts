@@ -379,6 +379,46 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/v1/contacts/export.csv": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Export Contacts Csv
+     * @description Active contacts, `;`-separated, UTF-8 with BOM (P11-7).
+     */
+    get: operations["export_contacts_csv_api_v1_contacts_export_csv_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/contacts/import": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Import Contacts Csv
+     * @description Creates contacts from a CSV; `dry_run` only reports what would happen (P11-7).
+     */
+    post: operations["import_contacts_csv_api_v1_contacts_import_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/v1/contacts/duplicates": {
     parameters: {
       query?: never;
@@ -996,16 +1036,1441 @@ export interface paths {
     patch: operations["update_subtype_api_v1_agenda_subtypes__subtype_id__patch"];
     trace?: never;
   };
+  "/api/v1/agenda/compatibility": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Compatibility Matrix
+     * @description Subject scopes each half-day kind accepts (ADR-0020); the UI never duplicates it.
+     */
+    get: operations["compatibility_matrix_api_v1_agenda_compatibility_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/agenda/tasks": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * List Tasks
+     * @description Tasks between two dates included (at most 400 days), in chronological order.
+     */
+    get: operations["list_tasks_api_v1_agenda_tasks_get"];
+    put?: never;
+    /**
+     * Create Task
+     * @description Places a task in a half-day; an empty slot gets the subject's natural kind (ADR-0034).
+     */
+    post: operations["create_task_api_v1_agenda_tasks_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/agenda/tasks/{task_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /** Delete Task */
+    delete: operations["delete_task_api_v1_agenda_tasks__task_id__delete"];
+    options?: never;
+    head?: never;
+    /**
+     * Update Task
+     * @description Edits a task; `date` / `period` move it (drag and drop).
+     */
+    patch: operations["update_task_api_v1_agenda_tasks__task_id__patch"];
+    trace?: never;
+  };
+  "/api/v1/agenda/tasks/{task_id}/carry-over": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Carry Over Task
+     * @description Copies a planned task to the next compatible half-day; returns the copy (P5-7).
+     */
+    post: operations["carry_over_task_api_v1_agenda_tasks__task_id__carry_over_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/agenda/daily-logs/{day}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Read Daily Log
+     * @description The day's note; empty sections when nothing was written yet.
+     */
+    get: operations["read_daily_log_api_v1_agenda_daily_logs__day__get"];
+    /** Write Daily Log */
+    put: operations["write_daily_log_api_v1_agenda_daily_logs__day__put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/agenda/standup": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Standup */
+    get: operations["standup_api_v1_agenda_standup_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/agenda/week-templates": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * List Week Templates
+     * @description The user's templates; `mission_id` keeps those proposed for a mission (P6-5).
+     */
+    get: operations["list_week_templates_api_v1_agenda_week_templates_get"];
+    put?: never;
+    /** Create Week Template */
+    post: operations["create_week_template_api_v1_agenda_week_templates_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/agenda/week-templates/{template_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Read Week Template */
+    get: operations["read_week_template_api_v1_agenda_week_templates__template_id__get"];
+    put?: never;
+    post?: never;
+    /** Delete Week Template */
+    delete: operations["delete_week_template_api_v1_agenda_week_templates__template_id__delete"];
+    options?: never;
+    head?: never;
+    /** Update Week Template */
+    patch: operations["update_week_template_api_v1_agenda_week_templates__template_id__patch"];
+    trace?: never;
+  };
+  "/api/v1/agenda/week-templates/{template_id}/duplicate": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Duplicate Week Template */
+    post: operations["duplicate_week_template_api_v1_agenda_week_templates__template_id__duplicate_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/agenda/week-templates/{template_id}/preview": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Preview Week Template
+     * @description What applying the template would do to each half-day; writes nothing (P6-3).
+     */
+    post: operations["preview_week_template_api_v1_agenda_week_templates__template_id__preview_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/agenda/week-templates/{template_id}/apply": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Apply Week Template
+     * @description Applies the plan atomically: SKIP keeps filled half-days (RG-10), OVERWRITE replaces them.
+     */
+    post: operations["apply_week_template_api_v1_agenda_week_templates__template_id__apply_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/subjects": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * List Subjects
+     * @description Flat list (parent_id links); the client builds the tree (ADR-0022).
+     */
+    get: operations["list_subjects_api_v1_subjects_get"];
+    put?: never;
+    /** Create Subject */
+    post: operations["create_subject_api_v1_subjects_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/subjects/{subject_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Read Subject */
+    get: operations["read_subject_api_v1_subjects__subject_id__get"];
+    put?: never;
+    post?: never;
+    /** Delete Subject */
+    delete: operations["delete_subject_api_v1_subjects__subject_id__delete"];
+    options?: never;
+    head?: never;
+    /**
+     * Update Subject
+     * @description Edits a subject; `parent_id` moves it (RG-07, RG-08).
+     */
+    patch: operations["update_subject_api_v1_subjects__subject_id__patch"];
+    trace?: never;
+  };
+  "/api/v1/subjects/{subject_id}/archive": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Archive Subject */
+    post: operations["archive_subject_api_v1_subjects__subject_id__archive_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/subjects/{subject_id}/restore": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Restore Subject */
+    post: operations["restore_subject_api_v1_subjects__subject_id__restore_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/subject-categories": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List Categories */
+    get: operations["list_categories_api_v1_subject_categories_get"];
+    put?: never;
+    /** Create Category */
+    post: operations["create_category_api_v1_subject_categories_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/subject-categories/{category_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /** Delete Category */
+    delete: operations["delete_category_api_v1_subject_categories__category_id__delete"];
+    options?: never;
+    head?: never;
+    /** Update Category */
+    patch: operations["update_category_api_v1_subject_categories__category_id__patch"];
+    trace?: never;
+  };
+  "/api/v1/documents": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * List Documents
+     * @description Flat list (parent_id links, the client builds the tree); optionally those attached to an
+     *     entity.
+     */
+    get: operations["list_documents_api_v1_documents_get"];
+    put?: never;
+    /** Create Document */
+    post: operations["create_document_api_v1_documents_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/documents/{document_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Read Document */
+    get: operations["read_document_api_v1_documents__document_id__get"];
+    /**
+     * Save Document
+     * @description Explicit save: new version if anything changed, draft cleared, wikilinks re-extracted.
+     */
+    put: operations["save_document_api_v1_documents__document_id__put"];
+    post?: never;
+    /** Delete Document */
+    delete: operations["delete_document_api_v1_documents__document_id__delete"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/documents/{document_id}/draft": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /**
+     * Save Draft
+     * @description Autosave: keeps the draft, creates no version (ADR-0024).
+     */
+    put: operations["save_draft_api_v1_documents__document_id__draft_put"];
+    post?: never;
+    /** Discard Draft */
+    delete: operations["discard_draft_api_v1_documents__document_id__draft_delete"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/documents/import-markdown": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Import Markdown
+     * @description A zipped folder of Markdown notes (Obsidian vault): up to 50 MB and 2,000 files.
+     */
+    post: operations["import_markdown_api_v1_documents_import_markdown_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/documents/{document_id}/move": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Move Document */
+    post: operations["move_document_api_v1_documents__document_id__move_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/documents/{document_id}/archive": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Archive Document */
+    post: operations["archive_document_api_v1_documents__document_id__archive_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/documents/{document_id}/restore": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Restore Document */
+    post: operations["restore_document_api_v1_documents__document_id__restore_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/documents/{document_id}/versions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * List Versions
+     * @description Newest first; every save makes a version, so the history is paged (P12-2).
+     */
+    get: operations["list_versions_api_v1_documents__document_id__versions_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/documents/{document_id}/versions/{number}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Read Version */
+    get: operations["read_version_api_v1_documents__document_id__versions__number__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/documents/{document_id}/versions/{number}/restore": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Restore Version
+     * @description Restoring creates a new version holding the old content.
+     */
+    post: operations["restore_version_api_v1_documents__document_id__versions__number__restore_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/documents/{document_id}/entities/{entity_type}/{entity_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /** Attach Document */
+    put: operations["attach_document_api_v1_documents__document_id__entities__entity_type___entity_id__put"];
+    post?: never;
+    /** Detach Document */
+    delete: operations["detach_document_api_v1_documents__document_id__entities__entity_type___entity_id__delete"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/document-templates": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List Templates */
+    get: operations["list_templates_api_v1_document_templates_get"];
+    put?: never;
+    /** Create Template */
+    post: operations["create_template_api_v1_document_templates_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/document-templates/{template_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /** Delete Template */
+    delete: operations["delete_template_api_v1_document_templates__template_id__delete"];
+    options?: never;
+    head?: never;
+    /** Update Template */
+    patch: operations["update_template_api_v1_document_templates__template_id__patch"];
+    trace?: never;
+  };
+  "/api/v1/attachments": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Upload Attachment
+     * @description Images and files up to 20 MB, allowed types only (ADR-0027).
+     */
+    post: operations["upload_attachment_api_v1_attachments_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/attachments/{attachment_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Download Attachment */
+    get: operations["download_attachment_api_v1_attachments__attachment_id__get"];
+    put?: never;
+    post?: never;
+    /** Delete Attachment */
+    delete: operations["delete_attachment_api_v1_attachments__attachment_id__delete"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/links/search": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Search Links
+     * @description Entities whose name contains `q`, for the `[[` completion (P7-9).
+     */
+    get: operations["search_links_api_v1_links_search_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/links/graph": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Knowledge Graph
+     * @description Documents and the entities they link to or are attached to (P9-12).
+     */
+    get: operations["knowledge_graph_api_v1_links_graph_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/backlinks": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Backlinks
+     * @description The user's documents whose wikilinks point to an entity.
+     */
+    get: operations["backlinks_api_v1_backlinks_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/architectures": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List Architectures */
+    get: operations["list_architectures_api_v1_architectures_get"];
+    put?: never;
+    /** Create Architecture */
+    post: operations["create_architecture_api_v1_architectures_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/architectures/{architecture_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Read Architecture */
+    get: operations["read_architecture_api_v1_architectures__architecture_id__get"];
+    put?: never;
+    post?: never;
+    /** Delete Architecture */
+    delete: operations["delete_architecture_api_v1_architectures__architecture_id__delete"];
+    options?: never;
+    head?: never;
+    /** Update Architecture */
+    patch: operations["update_architecture_api_v1_architectures__architecture_id__patch"];
+    trace?: never;
+  };
+  "/api/v1/architectures/{architecture_id}/archive": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Archive Architecture */
+    post: operations["archive_architecture_api_v1_architectures__architecture_id__archive_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/architectures/{architecture_id}/restore": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Restore Architecture */
+    post: operations["restore_architecture_api_v1_architectures__architecture_id__restore_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/architectures/{architecture_id}/domains/{domain_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /**
+     * Add Member
+     * @description Adds a domain, and implicitly its sub-domains, to the architecture (ADR-0037).
+     */
+    put: operations["add_member_api_v1_architectures__architecture_id__domains__domain_id__put"];
+    post?: never;
+    /** Remove Member */
+    delete: operations["remove_member_api_v1_architectures__architecture_id__domains__domain_id__delete"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/architectures/{architecture_id}/missions/{mission_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /**
+     * Link Mission
+     * @description Links a mission of the same client (Q-H1).
+     */
+    put: operations["link_mission_api_v1_architectures__architecture_id__missions__mission_id__put"];
+    post?: never;
+    /** Unlink Mission */
+    delete: operations["unlink_mission_api_v1_architectures__architecture_id__missions__mission_id__delete"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/architectures/{architecture_id}/graph": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Architecture Graph
+     * @description Nodes (members and sub-domains) and edges (relations between them), for P9.
+     */
+    get: operations["architecture_graph_api_v1_architectures__architecture_id__graph_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/architectures/{architecture_id}/mermaid": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Export Mermaid
+     * @description Mermaid code of the architecture, filtered like the graph view.
+     */
+    get: operations["export_mermaid_api_v1_architectures__architecture_id__mermaid_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/architectures/{architecture_id}/layout": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Read Layout
+     * @description Positions moved by hand in the graph view; the others come from the automatic layout.
+     */
+    get: operations["read_layout_api_v1_architectures__architecture_id__layout_get"];
+    /** Save Layout */
+    put: operations["save_layout_api_v1_architectures__architecture_id__layout_put"];
+    post?: never;
+    /** Reset Layout */
+    delete: operations["reset_layout_api_v1_architectures__architecture_id__layout_delete"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/domains": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * List Domains
+     * @description Flat list with parent_id links; the client builds the tree (ADR-0022).
+     */
+    get: operations["list_domains_api_v1_domains_get"];
+    put?: never;
+    /** Create Domain */
+    post: operations["create_domain_api_v1_domains_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/domains/{domain_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Read Domain */
+    get: operations["read_domain_api_v1_domains__domain_id__get"];
+    put?: never;
+    post?: never;
+    /** Delete Domain */
+    delete: operations["delete_domain_api_v1_domains__domain_id__delete"];
+    options?: never;
+    head?: never;
+    /**
+     * Update Domain
+     * @description Edits a domain; `parent_id` moves it with its subtree (RG-08).
+     */
+    patch: operations["update_domain_api_v1_domains__domain_id__patch"];
+    trace?: never;
+  };
+  "/api/v1/domains/{domain_id}/archive": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Archive Domain */
+    post: operations["archive_domain_api_v1_domains__domain_id__archive_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/domains/{domain_id}/restore": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Restore Domain */
+    post: operations["restore_domain_api_v1_domains__domain_id__restore_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/domains/{domain_id}/ancestors": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Domain Ancestors
+     * @description From the top-level domain down to the parent.
+     */
+    get: operations["domain_ancestors_api_v1_domains__domain_id__ancestors_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/domains/{domain_id}/descendants": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Domain Descendants */
+    get: operations["domain_descendants_api_v1_domains__domain_id__descendants_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/domains/{domain_id}/technologies/{technology_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /** Set Domain Technology */
+    put: operations["set_domain_technology_api_v1_domains__domain_id__technologies__technology_id__put"];
+    post?: never;
+    /** Remove Domain Technology */
+    delete: operations["remove_domain_technology_api_v1_domains__domain_id__technologies__technology_id__delete"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/domains/{domain_id}/subjects/{subject_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /**
+     * Link Subject
+     * @description Links an agenda subject to the domain (Q-G5).
+     */
+    put: operations["link_subject_api_v1_domains__domain_id__subjects__subject_id__put"];
+    post?: never;
+    /** Unlink Subject */
+    delete: operations["unlink_subject_api_v1_domains__domain_id__subjects__subject_id__delete"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/domains/{domain_id}/tasks": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Domain Tasks
+     * @description Latest tasks on the subjects linked to the domain.
+     */
+    get: operations["domain_tasks_api_v1_domains__domain_id__tasks_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/domain-relations": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Create Relation
+     * @description RG-09: never from a domain to itself; both ends in the same company.
+     */
+    post: operations["create_relation_api_v1_domain_relations_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/domain-relations/{relation_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /** Delete Relation */
+    delete: operations["delete_relation_api_v1_domain_relations__relation_id__delete"];
+    options?: never;
+    head?: never;
+    /** Update Relation */
+    patch: operations["update_relation_api_v1_domain_relations__relation_id__patch"];
+    trace?: never;
+  };
+  "/api/v1/external-links": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List External Links */
+    get: operations["list_external_links_api_v1_external_links_get"];
+    put?: never;
+    /** Create External Link */
+    post: operations["create_external_link_api_v1_external_links_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/external-links/{link_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /** Delete External Link */
+    delete: operations["delete_external_link_api_v1_external_links__link_id__delete"];
+    options?: never;
+    head?: never;
+    /** Update External Link */
+    patch: operations["update_external_link_api_v1_external_links__link_id__patch"];
+    trace?: never;
+  };
+  "/api/v1/missions/{mission_id}/overview": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Mission Overview
+     * @description Time spent, tasks, weighted technologies with suggestions, contacts, architectures,
+     *     documents of a mission, in one request.
+     */
+    get: operations["mission_overview_api_v1_missions__mission_id__overview_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/career": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Career
+     * @description Every mission on a timeline, with its days and main technologies (P10-5).
+     */
+    get: operations["career_api_v1_career_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/search": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Search
+     * @description Full text over documents, logs, tasks, subjects, domains, architectures, missions,
+     *     contacts, companies and technologies, best matches first.
+     */
+    get: operations["search_api_v1_search_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/export": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Export Archive
+     * @description Everything the user owns, the shared referentials and the files, as one zip.
+     */
+    get: operations["export_archive_api_v1_export_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/import": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Import Archive
+     * @description Restores an export into an account holding no personal data (zip up to 200 MB).
+     */
+    post: operations["import_archive_api_v1_import_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
+    /** AgendaWarning */
+    AgendaWarning: {
+      code: components["schemas"]["WarningCode"];
+      /** Params */
+      params: {
+        [key: string]: unknown;
+      };
+    };
+    /** ApplicationPlan */
+    ApplicationPlan: {
+      /**
+       * Start
+       * Format: date
+       */
+      start: string;
+      /**
+       * End
+       * Format: date
+       */
+      end: string;
+      strategy: components["schemas"]["ApplyStrategy"];
+      /** Items */
+      items: components["schemas"]["PlannedHalfDay"][];
+      /** Counts */
+      counts: {
+        [key: string]: number;
+      };
+      /**
+       * Applied
+       * @default 0
+       */
+      applied: number;
+    };
+    /**
+     * ApplyStrategy
+     * @enum {string}
+     */
+    ApplyStrategy: "SKIP" | "OVERWRITE";
+    /** ArchitectureCreate */
+    ArchitectureCreate: {
+      /**
+       * Company Id
+       * Format: uuid
+       */
+      company_id: string;
+      /** Name */
+      name: string;
+      /**
+       * Description
+       * @default
+       */
+      description: string;
+      /** @default CURRENT */
+      lifecycle: components["schemas"]["Lifecycle"];
+      /** Mission Id */
+      mission_id?: string | null;
+    };
+    /** ArchitectureDetail */
+    ArchitectureDetail: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      company: components["schemas"]["Summary"];
+      /** Name */
+      name: string;
+      lifecycle: components["schemas"]["Lifecycle"];
+      /** Archived At */
+      archived_at: string | null;
+      /** Member Count */
+      member_count: number;
+      /** Missions */
+      missions: components["schemas"]["Summary"][];
+      /** Description */
+      description: string;
+      /** Members */
+      members: components["schemas"]["DomainSummary"][];
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string;
+    };
+    /** ArchitectureSummary */
+    ArchitectureSummary: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      company: components["schemas"]["Summary"];
+      /** Name */
+      name: string;
+      lifecycle: components["schemas"]["Lifecycle"];
+      /** Archived At */
+      archived_at: string | null;
+      /** Member Count */
+      member_count: number;
+      /** Missions */
+      missions: components["schemas"]["Summary"][];
+    };
+    /** ArchitectureUpdate */
+    ArchitectureUpdate: {
+      /** Name */
+      name?: string | null;
+      /** Description */
+      description?: string | null;
+      lifecycle?: components["schemas"]["Lifecycle"] | null;
+    };
+    /** AttachmentRead */
+    AttachmentRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Document Id */
+      document_id: string | null;
+      /** Filename */
+      filename: string;
+      /** Mime Type */
+      mime_type: string;
+      /** Size */
+      size: number;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+    };
+    /** Backlink */
+    Backlink: {
+      document: components["schemas"]["DocumentSummary"];
+      /** Label */
+      label: string;
+    };
+    /** Body_import_archive_api_v1_import_post */
+    Body_import_archive_api_v1_import_post: {
+      /** File */
+      file: string;
+    };
+    /** Body_import_contacts_csv_api_v1_contacts_import_post */
+    Body_import_contacts_csv_api_v1_contacts_import_post: {
+      /** File */
+      file: string;
+    };
+    /** Body_import_markdown_api_v1_documents_import_markdown_post */
+    Body_import_markdown_api_v1_documents_import_markdown_post: {
+      /** File */
+      file: string;
+      /** Parent Id */
+      parent_id?: string | null;
+    };
+    /** Body_upload_attachment_api_v1_attachments_post */
+    Body_upload_attachment_api_v1_attachments_post: {
+      /** File */
+      file: string;
+      /** Document Id */
+      document_id?: string | null;
+    };
     /** BulkResult */
     BulkResult: {
       /** Items */
       items: components["schemas"]["HalfDayRead"][];
       /** Count */
       count: number;
+    };
+    /** Career */
+    Career: {
+      /** Missions */
+      missions: components["schemas"]["CareerEntry"][];
+    };
+    /** CareerEntry */
+    CareerEntry: {
+      mission: components["schemas"]["MissionSummary"];
+      /** Days */
+      days: number;
+      /** Technologies */
+      technologies: components["schemas"]["TechnologyShare"][];
+    };
+    /**
+     * CarryOverRequest
+     * @description Explicit `target`, or the next compatible half-day on or after `not_before`.
+     */
+    CarryOverRequest: {
+      target?: components["schemas"]["Slot"] | null;
+      /** Not Before */
+      not_before?: string | null;
+    };
+    /** CategoryCreate */
+    CategoryCreate: {
+      /** Name Fr */
+      name_fr: string;
+      /** Name En */
+      name_en: string;
+    };
+    /** CategoryRead */
+    CategoryRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Name Fr */
+      name_fr: string;
+      /** Name En */
+      name_en: string;
+    };
+    /** CategoryUpdate */
+    CategoryUpdate: {
+      /** Name Fr */
+      name_fr?: string | null;
+      /** Name En */
+      name_en?: string | null;
+    };
+    /** CategoryWithUsage */
+    CategoryWithUsage: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Name Fr */
+      name_fr: string;
+      /** Name En */
+      name_en: string;
+      /** Usage */
+      usage: number;
     };
     /** CompanyCreate */
     CompanyCreate: {
@@ -1091,6 +2556,14 @@ export interface components {
       /** Tag Ids */
       tag_ids?: string[] | null;
     };
+    /** CompatibilityRule */
+    CompatibilityRule: {
+      kind: components["schemas"]["HalfDayKind"];
+      /** Scopes */
+      scopes: components["schemas"]["SubjectScope"][];
+      /** Same Mission */
+      same_mission: boolean;
+    };
     /** ContactCreate */
     ContactCreate: {
       /** Job Title */
@@ -1163,6 +2636,12 @@ export interface components {
       /** Employments */
       employments: components["schemas"]["EmploymentRead"][];
     };
+    /** ContactInRole */
+    ContactInRole: {
+      contact: components["schemas"]["Summary"];
+      /** Job Title */
+      job_title: string | null;
+    };
     /** ContactRead */
     ContactRead: {
       /**
@@ -1227,6 +2706,318 @@ export interface components {
       /** Tag Ids */
       tag_ids?: string[] | null;
     };
+    /**
+     * Criticality
+     * @enum {string}
+     */
+    Criticality: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+    /** CsvImportReportRead */
+    CsvImportReportRead: {
+      /** Created */
+      created: number;
+      /** Skipped */
+      skipped: number;
+      /** Companies Created */
+      companies_created: number;
+      /** Errors */
+      errors: components["schemas"]["CsvRowError"][];
+    };
+    /** CsvRowError */
+    CsvRowError: {
+      /** Line */
+      line: number;
+      /** Code */
+      code: string;
+      /** Field */
+      field: string | null;
+    };
+    /** DailyLogRead */
+    DailyLogRead: {
+      /**
+       * Date
+       * Format: date
+       */
+      date: string;
+      /** Done */
+      done: string;
+      /** Planned */
+      planned: string;
+      /** Blockers */
+      blockers: string;
+      /** Updated At */
+      updated_at: string | null;
+    };
+    /** DailyLogWrite */
+    DailyLogWrite: {
+      /**
+       * Done
+       * @default
+       */
+      done: string;
+      /**
+       * Planned
+       * @default
+       */
+      planned: string;
+      /**
+       * Blockers
+       * @default
+       */
+      blockers: string;
+    };
+    /**
+     * Direction
+     * @enum {string}
+     */
+    Direction: "LR" | "TB";
+    /** DocumentCreate */
+    DocumentCreate: {
+      /** Title */
+      title: string;
+      /** Parent Id */
+      parent_id?: string | null;
+      /**
+       * Content Md
+       * @default
+       */
+      content_md: string;
+      /** Template Id */
+      template_id?: string | null;
+      attach_to?: components["schemas"]["EntityTarget"] | null;
+    };
+    /** DocumentDetail */
+    DocumentDetail: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Parent Id */
+      parent_id: string | null;
+      /** Title */
+      title: string;
+      /** Slug */
+      slug: string;
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string;
+      /** Archived At */
+      archived_at: string | null;
+      /** Has Draft */
+      has_draft: boolean;
+      /** Content Md */
+      content_md: string;
+      /** Draft Md */
+      draft_md: string | null;
+      /** Draft Saved At */
+      draft_saved_at: string | null;
+      /** Version Count */
+      version_count: number;
+      /** Entities */
+      entities: components["schemas"]["EntityRef"][];
+      /** Links */
+      links: components["schemas"]["EntityRef"][];
+    };
+    /** DocumentMove */
+    DocumentMove: {
+      /** Parent Id */
+      parent_id: string | null;
+    };
+    /**
+     * DocumentSave
+     * @description Explicit save: creates a version when title or content changed (ADR-0024).
+     */
+    DocumentSave: {
+      /** Title */
+      title: string;
+      /**
+       * Content Md
+       * @default
+       */
+      content_md: string;
+    };
+    /** DocumentSummary */
+    DocumentSummary: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Parent Id */
+      parent_id: string | null;
+      /** Title */
+      title: string;
+      /** Slug */
+      slug: string;
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string;
+      /** Archived At */
+      archived_at: string | null;
+      /** Has Draft */
+      has_draft: boolean;
+    };
+    /** DomainCreate */
+    DomainCreate: {
+      /**
+       * Company Id
+       * Format: uuid
+       */
+      company_id: string;
+      /** Parent Id */
+      parent_id?: string | null;
+      /** Name */
+      name: string;
+      kind: components["schemas"]["DomainKind"];
+      /**
+       * Description
+       * @default
+       */
+      description: string;
+      criticality?: components["schemas"]["Criticality"] | null;
+      /** @default CURRENT */
+      lifecycle: components["schemas"]["Lifecycle"];
+      /** Owner Org Unit Id */
+      owner_org_unit_id?: string | null;
+      /** Referent Contact Id */
+      referent_contact_id?: string | null;
+      /** Architecture Id */
+      architecture_id?: string | null;
+    };
+    /** DomainDetail */
+    DomainDetail: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Company Id
+       * Format: uuid
+       */
+      company_id: string;
+      /** Parent Id */
+      parent_id: string | null;
+      /** Name */
+      name: string;
+      kind: components["schemas"]["DomainKind"];
+      lifecycle: components["schemas"]["Lifecycle"];
+      criticality: components["schemas"]["Criticality"] | null;
+      /** Archived At */
+      archived_at: string | null;
+      company: components["schemas"]["Summary"];
+      /** Description */
+      description: string;
+      owner_org_unit: components["schemas"]["OrgUnitRef"] | null;
+      /** Owner Chain */
+      owner_chain: components["schemas"]["OrgUnitRef"][];
+      referent_contact: components["schemas"]["Summary"] | null;
+      /** Ancestors */
+      ancestors: components["schemas"]["DomainSummary"][];
+      /** Children */
+      children: components["schemas"]["DomainSummary"][];
+      /** Outgoing */
+      outgoing: components["schemas"]["RelationRead"][];
+      /** Incoming */
+      incoming: components["schemas"]["RelationRead"][];
+      /** Technologies */
+      technologies: components["schemas"]["DomainTechnologyRead"][];
+      /** Subjects */
+      subjects: components["schemas"]["LinkedSubject"][];
+      /** Architectures */
+      architectures: components["schemas"]["Summary"][];
+      /** External Links */
+      external_links: components["schemas"]["ExternalLinkRead"][];
+    };
+    /**
+     * DomainKind
+     * @enum {string}
+     */
+    DomainKind:
+      | "BUSINESS_DOMAIN"
+      | "APPLICATION"
+      | "SERVICE"
+      | "DATABASE"
+      | "MESSAGING"
+      | "EXTERNAL_SYSTEM"
+      | "INFRASTRUCTURE"
+      | "OTHER";
+    /** DomainRef */
+    DomainRef: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Name */
+      name: string;
+      kind: components["schemas"]["DomainKind"];
+    };
+    /** DomainSummary */
+    DomainSummary: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Company Id
+       * Format: uuid
+       */
+      company_id: string;
+      /** Parent Id */
+      parent_id: string | null;
+      /** Name */
+      name: string;
+      kind: components["schemas"]["DomainKind"];
+      lifecycle: components["schemas"]["Lifecycle"];
+      criticality: components["schemas"]["Criticality"] | null;
+      /** Archived At */
+      archived_at: string | null;
+    };
+    /** DomainTechnologyRead */
+    DomainTechnologyRead: {
+      technology: components["schemas"]["Summary"];
+      category: components["schemas"]["TechnologyCategory"];
+      /** Version */
+      version: string | null;
+    };
+    /** DomainTechnologyUpsert */
+    DomainTechnologyUpsert: {
+      /** Version */
+      version?: string | null;
+    };
+    /**
+     * DomainUpdate
+     * @description Omitted fields are unchanged; `parent_id: null` moves the domain to the top.
+     */
+    DomainUpdate: {
+      /** Name */
+      name?: string | null;
+      /** Parent Id */
+      parent_id?: string | null;
+      kind?: components["schemas"]["DomainKind"] | null;
+      /** Description */
+      description?: string | null;
+      criticality?: components["schemas"]["Criticality"] | null;
+      lifecycle?: components["schemas"]["Lifecycle"] | null;
+      /** Owner Org Unit Id */
+      owner_org_unit_id?: string | null;
+      /** Referent Contact Id */
+      referent_contact_id?: string | null;
+    };
+    /** DraftSave */
+    DraftSave: {
+      /**
+       * Content Md
+       * @default
+       */
+      content_md: string;
+    };
     /** DuplicateCandidate */
     DuplicateCandidate: {
       /**
@@ -1241,6 +3032,11 @@ export interface components {
       company: components["schemas"]["Summary"] | null;
       /** Reason */
       reason: string;
+    };
+    /** DuplicateRequest */
+    DuplicateRequest: {
+      /** Name */
+      name: string;
     };
     /** EmploymentCreate */
     EmploymentCreate: {
@@ -1285,6 +3081,141 @@ export interface components {
       /** Note */
       note: string | null;
     };
+    /** EntityRef */
+    EntityRef: {
+      type: components["schemas"]["LinkType"];
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Label */
+      label: string | null;
+    };
+    /** EntityTarget */
+    EntityTarget: {
+      type: components["schemas"]["LinkType"];
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+    };
+    /**
+     * ExportLanguage
+     * @enum {string}
+     */
+    ExportLanguage: "fr" | "en";
+    /** ExternalLinkCreate */
+    ExternalLinkCreate: {
+      entity_type: components["schemas"]["LinkedEntity"];
+      /**
+       * Entity Id
+       * Format: uuid
+       */
+      entity_id: string;
+      /** @default OTHER */
+      kind: components["schemas"]["ExternalLinkKind"];
+      /** Label */
+      label: string;
+      /**
+       * Url
+       * Format: uri
+       */
+      url: string;
+    };
+    /**
+     * ExternalLinkKind
+     * @enum {string}
+     */
+    ExternalLinkKind:
+      "REPOSITORY" | "TICKETS" | "ENVIRONMENT" | "DOCUMENTATION" | "MONITORING" | "OTHER";
+    /** ExternalLinkRead */
+    ExternalLinkRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      entity_type: components["schemas"]["LinkedEntity"];
+      /**
+       * Entity Id
+       * Format: uuid
+       */
+      entity_id: string;
+      kind: components["schemas"]["ExternalLinkKind"];
+      /** Label */
+      label: string;
+      /** Url */
+      url: string;
+    };
+    /** ExternalLinkUpdate */
+    ExternalLinkUpdate: {
+      kind?: components["schemas"]["ExternalLinkKind"] | null;
+      /** Label */
+      label?: string | null;
+      /** Url */
+      url?: string | null;
+    };
+    /** Graph */
+    Graph: {
+      architecture: components["schemas"]["Summary"];
+      /** Nodes */
+      nodes: components["schemas"]["GraphNode"][];
+      /** Edges */
+      edges: components["schemas"]["GraphEdge"][];
+    };
+    /** GraphEdge */
+    GraphEdge: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Source Id
+       * Format: uuid
+       */
+      source_id: string;
+      /**
+       * Target Id
+       * Format: uuid
+       */
+      target_id: string;
+      type: components["schemas"]["RelationType"];
+      /** Label */
+      label: string | null;
+      /** Protocol */
+      protocol: string | null;
+      sync_mode: components["schemas"]["SyncMode"] | null;
+      lifecycle: components["schemas"]["Lifecycle"];
+    };
+    /** GraphNode */
+    GraphNode: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Parent Id */
+      parent_id: string | null;
+      /** Name */
+      name: string;
+      kind: components["schemas"]["DomainKind"];
+      lifecycle: components["schemas"]["Lifecycle"];
+      criticality: components["schemas"]["Criticality"] | null;
+      /** Depth */
+      depth: number;
+      /** Member */
+      member: boolean;
+      owner: components["schemas"]["Summary"] | null;
+    };
+    /**
+     * GraphView
+     * @description CURRENT: what runs today; TARGET: what will run; BOTH: everything, changes marked.
+     * @enum {string}
+     */
+    GraphView: "CURRENT" | "TARGET" | "BOTH";
     /** HTTPValidationError */
     HTTPValidationError: {
       /** Detail */
@@ -1365,11 +3296,119 @@ export interface components {
       /** Already Generated */
       already_generated: boolean;
     };
+    /** ImportReportRead */
+    ImportReportRead: {
+      /** Tables */
+      tables: {
+        [key: string]: number;
+      };
+      /** Matched */
+      matched: number;
+      /** Attachments */
+      attachments: number;
+      /** Missing Files */
+      missing_files: number;
+    };
     /** KindDays */
     KindDays: {
       kind: components["schemas"]["HalfDayKind"];
       /** Days */
       days: number;
+    };
+    /** KnowledgeEdge */
+    KnowledgeEdge: {
+      source_type: components["schemas"]["LinkType"];
+      /**
+       * Source Id
+       * Format: uuid
+       */
+      source_id: string;
+      target_type: components["schemas"]["LinkType"];
+      /**
+       * Target Id
+       * Format: uuid
+       */
+      target_id: string;
+      kind: components["schemas"]["KnowledgeEdgeKind"];
+    };
+    /**
+     * KnowledgeEdgeKind
+     * @enum {string}
+     */
+    KnowledgeEdgeKind: "LINK" | "ATTACHMENT";
+    /** KnowledgeGraph */
+    KnowledgeGraph: {
+      /** Nodes */
+      nodes: components["schemas"]["KnowledgeNode"][];
+      /** Edges */
+      edges: components["schemas"]["KnowledgeEdge"][];
+    };
+    /** KnowledgeNode */
+    KnowledgeNode: {
+      type: components["schemas"]["LinkType"];
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Label */
+      label: string;
+    };
+    /** LayoutSave */
+    LayoutSave: {
+      /** Positions */
+      positions: components["schemas"]["NodePosition"][];
+    };
+    /**
+     * Lifecycle
+     * @description As-is versus to-be, without time travel (Q-H8).
+     * @enum {string}
+     */
+    Lifecycle: "CURRENT" | "TARGET" | "DEPRECATED";
+    /** LinkSearchResult */
+    LinkSearchResult: {
+      type: components["schemas"]["LinkType"];
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Label */
+      label: string;
+    };
+    /**
+     * LinkType
+     * @description Entities a wikilink or an attachment may point to.
+     * @enum {string}
+     */
+    LinkType:
+      | "document"
+      | "mission"
+      | "domain"
+      | "architecture"
+      | "contact"
+      | "company"
+      | "subject"
+      | "technology";
+    /**
+     * LinkedEntity
+     * @description Entities that carry external links (ADR-0023).
+     * @enum {string}
+     */
+    LinkedEntity: "DOMAIN" | "MISSION" | "SUBJECT";
+    /** LinkedSubject */
+    LinkedSubject: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Title */
+      title: string;
+      scope: components["schemas"]["SubjectScope"];
+      /** Mission Id */
+      mission_id: string | null;
+      status: components["schemas"]["SubjectStatus"];
     };
     /**
      * Locale
@@ -1413,6 +3452,32 @@ export interface components {
       /** Password */
       password: string;
     };
+    /** MarkdownImportReportRead */
+    MarkdownImportReportRead: {
+      /** Documents */
+      documents: number;
+      /** Folders */
+      folders: number;
+      /** Attachments */
+      attachments: number;
+      /** Unresolved Links */
+      unresolved_links: number;
+      /** Skipped Files */
+      skipped_files: number;
+      /** Root Ids */
+      root_ids: string[];
+    };
+    /** MermaidExport */
+    MermaidExport: {
+      format: components["schemas"]["MermaidFormat"];
+      /** Code */
+      code: string;
+    };
+    /**
+     * MermaidFormat
+     * @enum {string}
+     */
+    MermaidFormat: "flowchart" | "mindmap";
     /** MissionContactRead */
     MissionContactRead: {
       contact: components["schemas"]["Summary"];
@@ -1553,6 +3618,25 @@ export interface components {
        */
       created_at: string;
     };
+    /** MissionOverview */
+    MissionOverview: {
+      mission: components["schemas"]["MissionSummary"];
+      time: components["schemas"]["TimeSpent"];
+      /** Recent Tasks */
+      recent_tasks: components["schemas"]["TaskRead"][];
+      /** Planned Tasks */
+      planned_tasks: components["schemas"]["TaskRead"][];
+      /** Technologies */
+      technologies: components["schemas"]["TechnologyWeight"][];
+      /** Contacts By Role */
+      contacts_by_role: components["schemas"]["RoleGroup"][];
+      /** Architectures */
+      architectures: components["schemas"]["ArchitectureSummary"][];
+      /** Documents */
+      documents: components["schemas"]["DocumentSummary"][];
+      /** Backlinks */
+      backlinks: components["schemas"]["Backlink"][];
+    };
     /**
      * MissionStatus
      * @enum {string}
@@ -1685,6 +3769,18 @@ export interface components {
       /** Locked At */
       locked_at: string | null;
     };
+    /** NodePosition */
+    NodePosition: {
+      /**
+       * Domain Id
+       * Format: uuid
+       */
+      domain_id: string;
+      /** X */
+      x: number;
+      /** Y */
+      y: number;
+    };
     /** OrgUnitCreate */
     OrgUnitCreate: {
       /** Name */
@@ -1722,6 +3818,18 @@ export interface components {
       level_label: string;
       /** Description */
       description: string;
+    };
+    /** OrgUnitRef */
+    OrgUnitRef: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Name */
+      name: string;
+      /** Level Label */
+      level_label: string;
     };
     /** OrgUnitUpdate */
     OrgUnitUpdate: {
@@ -1779,6 +3887,37 @@ export interface components {
      * @enum {string}
      */
     Period: "AM" | "PM";
+    /**
+     * PlanAction
+     * @description What applying the template does to one half-day, in order of precedence.
+     * @enum {string}
+     */
+    PlanAction:
+      | "HOLIDAY"
+      | "LOCKED"
+      | "OUTSIDE_MISSION"
+      | "CREATE"
+      | "UNCHANGED"
+      | "KEEP"
+      | "BLOCKED_BY_TASKS"
+      | "OVERWRITE";
+    /** PlannedHalfDay */
+    PlannedHalfDay: {
+      /**
+       * Date
+       * Format: date
+       */
+      date: string;
+      period: components["schemas"]["Period"];
+      action: components["schemas"]["PlanAction"];
+      kind: components["schemas"]["HalfDayKind"];
+      /** Subtype Id */
+      subtype_id: string | null;
+      /** Mission Id */
+      mission_id: string | null;
+      location: components["schemas"]["WorkLocation"] | null;
+      existing: components["schemas"]["HalfDayRead"] | null;
+    };
     /** ProfileUpdate */
     ProfileUpdate: {
       /** Display Name */
@@ -1800,12 +3939,91 @@ export interface components {
       /** Name */
       name: string;
     };
+    /** RelationCreate */
+    RelationCreate: {
+      /**
+       * Source Id
+       * Format: uuid
+       */
+      source_id: string;
+      /**
+       * Target Id
+       * Format: uuid
+       */
+      target_id: string;
+      type: components["schemas"]["RelationType"];
+      /** Label */
+      label?: string | null;
+      /** Protocol */
+      protocol?: string | null;
+      sync_mode?: components["schemas"]["SyncMode"] | null;
+      /** @default CURRENT */
+      lifecycle: components["schemas"]["Lifecycle"];
+      /**
+       * Description
+       * @default
+       */
+      description: string;
+    };
+    /** RelationRead */
+    RelationRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      source: components["schemas"]["DomainRef"];
+      target: components["schemas"]["DomainRef"];
+      type: components["schemas"]["RelationType"];
+      /** Label */
+      label: string | null;
+      /** Protocol */
+      protocol: string | null;
+      sync_mode: components["schemas"]["SyncMode"] | null;
+      lifecycle: components["schemas"]["Lifecycle"];
+      /** Description */
+      description: string;
+    };
+    /**
+     * RelationType
+     * @enum {string}
+     */
+    RelationType:
+      | "CALLS"
+      | "DEPENDS_ON"
+      | "PUBLISHES_TO"
+      | "SUBSCRIBES_TO"
+      | "READS_FROM"
+      | "WRITES_TO"
+      | "CUSTOM";
+    /** RelationUpdate */
+    RelationUpdate: {
+      /** Source Id */
+      source_id?: string | null;
+      /** Target Id */
+      target_id?: string | null;
+      type?: components["schemas"]["RelationType"] | null;
+      /** Label */
+      label?: string | null;
+      /** Protocol */
+      protocol?: string | null;
+      sync_mode?: components["schemas"]["SyncMode"] | null;
+      lifecycle?: components["schemas"]["Lifecycle"] | null;
+      /** Description */
+      description?: string | null;
+    };
     /** RoleCreate */
     RoleCreate: {
       /** Name Fr */
       name_fr: string;
       /** Name En */
       name_en: string;
+    };
+    /** RoleGroup */
+    RoleGroup: {
+      role: components["schemas"]["RoleRead"] | null;
+      /** Contacts */
+      contacts: components["schemas"]["ContactInRole"][];
     };
     /** RoleRead */
     RoleRead: {
@@ -1840,6 +4058,40 @@ export interface components {
       /** Usage */
       usage: number;
     };
+    /** SearchResult */
+    SearchResult: {
+      type: components["schemas"]["SearchType"];
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Title */
+      title: string;
+      /** Snippet */
+      snippet: string;
+      /** Date */
+      date: string | null;
+      /** Archived */
+      archived: boolean;
+      /** Rank */
+      rank: number;
+    };
+    /**
+     * SearchType
+     * @enum {string}
+     */
+    SearchType:
+      | "document"
+      | "daily_log"
+      | "task"
+      | "subject"
+      | "domain"
+      | "architecture"
+      | "mission"
+      | "contact"
+      | "company"
+      | "technology";
     /** SectorCreate */
     SectorCreate: {
       /** Name Fr */
@@ -1891,6 +4143,21 @@ export interface components {
       /** Slots */
       slots: components["schemas"]["Slot"][];
     };
+    /** Standup */
+    Standup: {
+      /**
+       * Day
+       * Format: date
+       */
+      day: string;
+      /** Previous Day */
+      previous_day: string | null;
+      /** Previous */
+      previous: components["schemas"]["TaskRead"][];
+      /** Today */
+      today: components["schemas"]["TaskRead"][];
+      log: components["schemas"]["DailyLogRead"];
+    };
     /** Stats */
     Stats: {
       /**
@@ -1915,6 +4182,107 @@ export interface components {
       by_location: components["schemas"]["LocationDays"][];
       /** Unfilled Count */
       unfilled_count: number;
+    };
+    /** SubjectCreate */
+    SubjectCreate: {
+      /** Title */
+      title: string;
+      scope: components["schemas"]["SubjectScope"];
+      /** Mission Id */
+      mission_id?: string | null;
+      /** Parent Id */
+      parent_id?: string | null;
+      /** Category Id */
+      category_id?: string | null;
+      /** @default OPEN */
+      status: components["schemas"]["SubjectStatus"];
+      /** External Url */
+      external_url?: string | null;
+      /**
+       * Description
+       * @default
+       */
+      description: string;
+    };
+    /** SubjectRead */
+    SubjectRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Parent Id */
+      parent_id: string | null;
+      scope: components["schemas"]["SubjectScope"];
+      /** Mission Id */
+      mission_id: string | null;
+      /** Category Id */
+      category_id: string | null;
+      /** Title */
+      title: string;
+      status: components["schemas"]["SubjectStatus"];
+      /** External Url */
+      external_url: string | null;
+      /** Description */
+      description: string;
+      /** Archived At */
+      archived_at: string | null;
+      /** Task Count */
+      task_count: number;
+      /** Done Minutes */
+      done_minutes: number;
+    };
+    /** SubjectRef */
+    SubjectRef: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Title */
+      title: string;
+      scope: components["schemas"]["SubjectScope"];
+      /** Mission Id */
+      mission_id: string | null;
+    };
+    /**
+     * SubjectScope
+     * @description Who the work is for; drives where its tasks may be placed (ADR-0020).
+     * @enum {string}
+     */
+    SubjectScope: "MISSION" | "INTERCONTRACT" | "TRAINING" | "PERSONAL";
+    /**
+     * SubjectStatus
+     * @enum {string}
+     */
+    SubjectStatus: "OPEN" | "IN_PROGRESS" | "DONE" | "CANCELLED";
+    /** SubjectTime */
+    SubjectTime: {
+      subject: components["schemas"]["Summary"];
+      /** Minutes */
+      minutes: number;
+      /** Task Count */
+      task_count: number;
+    };
+    /**
+     * SubjectUpdate
+     * @description Omitted fields are unchanged; `parent_id: null` moves the subject to the root.
+     */
+    SubjectUpdate: {
+      /** Title */
+      title?: string | null;
+      scope?: components["schemas"]["SubjectScope"] | null;
+      /** Mission Id */
+      mission_id?: string | null;
+      /** Parent Id */
+      parent_id?: string | null;
+      /** Category Id */
+      category_id?: string | null;
+      status?: components["schemas"]["SubjectStatus"] | null;
+      /** External Url */
+      external_url?: string | null;
+      /** Description */
+      description?: string | null;
     };
     /** SubtypeCreate */
     SubtypeCreate: {
@@ -1972,6 +4340,11 @@ export interface components {
       /** Name */
       name: string;
     };
+    /**
+     * SyncMode
+     * @enum {string}
+     */
+    SyncMode: "SYNC" | "ASYNC";
     /** TagCreate */
     TagCreate: {
       /** Name */
@@ -2045,6 +4418,113 @@ export interface components {
       /** Usage */
       usage: number;
     };
+    /** TaskCreate */
+    TaskCreate: {
+      /**
+       * Date
+       * Format: date
+       */
+      date: string;
+      period: components["schemas"]["Period"];
+      /**
+       * Subject Id
+       * Format: uuid
+       */
+      subject_id: string;
+      /** @default TASK */
+      kind: components["schemas"]["TaskKind"];
+      /** Title */
+      title: string;
+      /** Starts At */
+      starts_at?: string | null;
+      /** Duration Minutes */
+      duration_minutes: number;
+      /** @default PLANNED */
+      status: components["schemas"]["TaskStatus"];
+      /**
+       * Description
+       * @default
+       */
+      description: string;
+      /** External Ref */
+      external_ref?: string | null;
+      /** Participant Ids */
+      participant_ids?: string[];
+    };
+    /**
+     * TaskKind
+     * @enum {string}
+     */
+    TaskKind: "TASK" | "MEETING";
+    /** TaskRead */
+    TaskRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Date
+       * Format: date
+       */
+      date: string;
+      period: components["schemas"]["Period"];
+      subject: components["schemas"]["SubjectRef"];
+      kind: components["schemas"]["TaskKind"];
+      /** Title */
+      title: string;
+      /** Starts At */
+      starts_at: string | null;
+      /** Duration Minutes */
+      duration_minutes: number;
+      status: components["schemas"]["TaskStatus"];
+      /** Description */
+      description: string;
+      /** External Ref */
+      external_ref: string | null;
+      /** Participants */
+      participants: components["schemas"]["Summary"][];
+      /** Carried From Id */
+      carried_from_id: string | null;
+      /** Domains */
+      domains: components["schemas"]["Summary"][];
+    };
+    /**
+     * TaskStatus
+     * @enum {string}
+     */
+    TaskStatus: "PLANNED" | "DONE" | "CANCELLED" | "CARRIED_OVER";
+    /**
+     * TaskUpdate
+     * @description Omitted fields are unchanged. `date` / `period` move the task to another half-day.
+     */
+    TaskUpdate: {
+      /** Date */
+      date?: string | null;
+      period?: components["schemas"]["Period"] | null;
+      /** Subject Id */
+      subject_id?: string | null;
+      kind?: components["schemas"]["TaskKind"] | null;
+      /** Title */
+      title?: string | null;
+      /** Starts At */
+      starts_at?: string | null;
+      /** Duration Minutes */
+      duration_minutes?: number | null;
+      status?: components["schemas"]["TaskStatus"] | null;
+      /** Description */
+      description?: string | null;
+      /** External Ref */
+      external_ref?: string | null;
+      /** Participant Ids */
+      participant_ids?: string[] | null;
+    };
+    /** TaskWriteResult */
+    TaskWriteResult: {
+      task: components["schemas"]["TaskRead"];
+      /** Warnings */
+      warnings: components["schemas"]["AgendaWarning"][];
+    };
     /**
      * TechnologyCategory
      * @enum {string}
@@ -2109,6 +4589,12 @@ export interface components {
        */
       tags: components["schemas"]["TagRead"][];
     };
+    /** TechnologyShare */
+    TechnologyShare: {
+      technology: components["schemas"]["Summary"];
+      /** Weight */
+      weight: number;
+    };
     /** TechnologyUpdate */
     TechnologyUpdate: {
       /** Name */
@@ -2123,11 +4609,108 @@ export interface components {
       /** Tag Ids */
       tag_ids?: string[] | null;
     };
+    /** TechnologyWeight */
+    TechnologyWeight: {
+      technology: components["schemas"]["Summary"];
+      category: components["schemas"]["TechnologyCategory"];
+      /** Weight */
+      weight: number | null;
+      /** Version */
+      version: string | null;
+      /** Suggested Weight */
+      suggested_weight: number | null;
+      /** Minutes */
+      minutes: number;
+    };
+    /** TemplateApplication */
+    TemplateApplication: {
+      /**
+       * Start
+       * Format: date
+       */
+      start: string;
+      /**
+       * End
+       * Format: date
+       */
+      end: string;
+      /** @default SKIP */
+      strategy: components["schemas"]["ApplyStrategy"];
+      /** Mission Id */
+      mission_id?: string | null;
+    };
+    /** TemplateCreate */
+    TemplateCreate: {
+      /** Name Fr */
+      name_fr: string;
+      /** Name En */
+      name_en: string;
+      /**
+       * Content Md
+       * @default
+       */
+      content_md: string;
+    };
+    /** TemplateRead */
+    TemplateRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Name Fr */
+      name_fr: string;
+      /** Name En */
+      name_en: string;
+      /** Content Md */
+      content_md: string;
+    };
+    /** TemplateSlot */
+    TemplateSlot: {
+      /**
+       * Weekday
+       * @description 0 = Monday … 6 = Sunday
+       */
+      weekday: number;
+      period: components["schemas"]["Period"];
+      kind: components["schemas"]["HalfDayKind"];
+      /** Subtype Id */
+      subtype_id?: string | null;
+      /** Mission Id */
+      mission_id?: string | null;
+      location?: components["schemas"]["WorkLocation"] | null;
+    };
+    /** TemplateUpdate */
+    TemplateUpdate: {
+      /** Name Fr */
+      name_fr?: string | null;
+      /** Name En */
+      name_en?: string | null;
+      /** Content Md */
+      content_md?: string | null;
+    };
     /**
      * ThemePreference
      * @enum {string}
      */
     ThemePreference: "auto" | "light" | "dark";
+    /** TimeSpent */
+    TimeSpent: {
+      /** Half Days Done */
+      half_days_done: number;
+      /** Half Days Planned */
+      half_days_planned: number;
+      /** Days Done */
+      days_done: number;
+      /** Days Planned */
+      days_planned: number;
+      /** Days Remaining */
+      days_remaining: number | null;
+      /** Done Minutes */
+      done_minutes: number;
+      /** By Subject */
+      by_subject: components["schemas"]["SubjectTime"][];
+    };
     /** Unfilled */
     Unfilled: {
       /** Count */
@@ -2224,6 +4807,87 @@ export interface components {
       input?: unknown;
       /** Context */
       ctx?: Record<string, never>;
+    };
+    /** VersionRead */
+    VersionRead: {
+      /** Number */
+      number: number;
+      /** Title */
+      title: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /** Content Md */
+      content_md: string;
+    };
+    /** VersionSummary */
+    VersionSummary: {
+      /** Number */
+      number: number;
+      /** Title */
+      title: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+    };
+    /**
+     * WarningCode
+     * @description Non-blocking notices returned with a successful write (translated by the client).
+     * @enum {string}
+     */
+    WarningCode: "HALF_DAY_OVERBOOKED";
+    /** WeekTemplateCreate */
+    WeekTemplateCreate: {
+      /** Name */
+      name: string;
+      /**
+       * Description
+       * @default
+       */
+      description: string;
+      /** Mission Id */
+      mission_id?: string | null;
+      /** Slots */
+      slots?: components["schemas"]["TemplateSlot"][];
+    };
+    /** WeekTemplateRead */
+    WeekTemplateRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Name */
+      name: string;
+      /** Description */
+      description: string;
+      /** Mission Id */
+      mission_id: string | null;
+      /** Slots */
+      slots: components["schemas"]["TemplateSlot"][];
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string;
+    };
+    /**
+     * WeekTemplateUpdate
+     * @description Omitted fields are unchanged; `slots` replaces every slot.
+     */
+    WeekTemplateUpdate: {
+      /** Name */
+      name?: string | null;
+      /** Description */
+      description?: string | null;
+      /** Mission Id */
+      mission_id?: string | null;
+      /** Slots */
+      slots?: components["schemas"]["TemplateSlot"][] | null;
     };
     /**
      * WorkLocation
@@ -3165,6 +5829,61 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["ContactDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  export_contacts_csv_api_v1_contacts_export_csv_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "text/csv": unknown;
+        };
+      };
+    };
+  };
+  import_contacts_csv_api_v1_contacts_import_post: {
+    parameters: {
+      query?: {
+        dry_run?: boolean;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["Body_import_contacts_csv_api_v1_contacts_import_post"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CsvImportReportRead"];
         };
       };
       /** @description Validation Error */
@@ -4721,6 +7440,3042 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["SubtypeRead"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  compatibility_matrix_api_v1_agenda_compatibility_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CompatibilityRule"][];
+        };
+      };
+    };
+  };
+  list_tasks_api_v1_agenda_tasks_get: {
+    parameters: {
+      query: {
+        from: string;
+        to: string;
+        subject_id?: string | null;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TaskRead"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_task_api_v1_agenda_tasks_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TaskCreate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TaskWriteResult"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_task_api_v1_agenda_tasks__task_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        task_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_task_api_v1_agenda_tasks__task_id__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        task_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TaskUpdate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TaskWriteResult"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  carry_over_task_api_v1_agenda_tasks__task_id__carry_over_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        task_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CarryOverRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TaskWriteResult"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  read_daily_log_api_v1_agenda_daily_logs__day__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        day: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DailyLogRead"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  write_daily_log_api_v1_agenda_daily_logs__day__put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        day: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DailyLogWrite"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DailyLogRead"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  standup_api_v1_agenda_standup_get: {
+    parameters: {
+      query: {
+        date: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Standup"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  list_week_templates_api_v1_agenda_week_templates_get: {
+    parameters: {
+      query?: {
+        mission_id?: string | null;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["WeekTemplateRead"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_week_template_api_v1_agenda_week_templates_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["WeekTemplateCreate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["WeekTemplateRead"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  read_week_template_api_v1_agenda_week_templates__template_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        template_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["WeekTemplateRead"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_week_template_api_v1_agenda_week_templates__template_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        template_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_week_template_api_v1_agenda_week_templates__template_id__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        template_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["WeekTemplateUpdate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["WeekTemplateRead"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  duplicate_week_template_api_v1_agenda_week_templates__template_id__duplicate_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        template_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DuplicateRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["WeekTemplateRead"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  preview_week_template_api_v1_agenda_week_templates__template_id__preview_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        template_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TemplateApplication"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ApplicationPlan"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  apply_week_template_api_v1_agenda_week_templates__template_id__apply_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        template_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TemplateApplication"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ApplicationPlan"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  list_subjects_api_v1_subjects_get: {
+    parameters: {
+      query?: {
+        mission_id?: string | null;
+        scope?: components["schemas"]["SubjectScope"] | null;
+        q?: string | null;
+        include_archived?: boolean;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SubjectRead"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_subject_api_v1_subjects_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SubjectCreate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SubjectRead"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  read_subject_api_v1_subjects__subject_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        subject_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SubjectRead"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_subject_api_v1_subjects__subject_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        subject_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_subject_api_v1_subjects__subject_id__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        subject_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SubjectUpdate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SubjectRead"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  archive_subject_api_v1_subjects__subject_id__archive_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        subject_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SubjectRead"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  restore_subject_api_v1_subjects__subject_id__restore_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        subject_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SubjectRead"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  list_categories_api_v1_subject_categories_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CategoryWithUsage"][];
+        };
+      };
+    };
+  };
+  create_category_api_v1_subject_categories_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CategoryCreate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CategoryRead"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_category_api_v1_subject_categories__category_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        category_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_category_api_v1_subject_categories__category_id__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        category_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CategoryUpdate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CategoryRead"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  list_documents_api_v1_documents_get: {
+    parameters: {
+      query?: {
+        q?: string | null;
+        entity_type?: components["schemas"]["LinkType"] | null;
+        entity_id?: string | null;
+        include_archived?: boolean;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DocumentSummary"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_document_api_v1_documents_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DocumentCreate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DocumentDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  read_document_api_v1_documents__document_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        document_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DocumentDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  save_document_api_v1_documents__document_id__put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        document_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DocumentSave"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DocumentDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_document_api_v1_documents__document_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        document_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  save_draft_api_v1_documents__document_id__draft_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        document_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DraftSave"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DocumentDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  discard_draft_api_v1_documents__document_id__draft_delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        document_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DocumentDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  import_markdown_api_v1_documents_import_markdown_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["Body_import_markdown_api_v1_documents_import_markdown_post"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MarkdownImportReportRead"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  move_document_api_v1_documents__document_id__move_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        document_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DocumentMove"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DocumentDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  archive_document_api_v1_documents__document_id__archive_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        document_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DocumentDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  restore_document_api_v1_documents__document_id__restore_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        document_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DocumentDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  list_versions_api_v1_documents__document_id__versions_get: {
+    parameters: {
+      query?: {
+        limit?: number;
+        offset?: number;
+      };
+      header?: never;
+      path: {
+        document_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["VersionSummary"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  read_version_api_v1_documents__document_id__versions__number__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        document_id: string;
+        number: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["VersionRead"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  restore_version_api_v1_documents__document_id__versions__number__restore_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        document_id: string;
+        number: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DocumentDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  attach_document_api_v1_documents__document_id__entities__entity_type___entity_id__put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        document_id: string;
+        entity_type: components["schemas"]["LinkType"];
+        entity_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DocumentDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  detach_document_api_v1_documents__document_id__entities__entity_type___entity_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        document_id: string;
+        entity_type: components["schemas"]["LinkType"];
+        entity_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DocumentDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  list_templates_api_v1_document_templates_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TemplateRead"][];
+        };
+      };
+    };
+  };
+  create_template_api_v1_document_templates_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TemplateCreate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TemplateRead"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_template_api_v1_document_templates__template_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        template_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_template_api_v1_document_templates__template_id__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        template_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TemplateUpdate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TemplateRead"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  upload_attachment_api_v1_attachments_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["Body_upload_attachment_api_v1_attachments_post"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttachmentRead"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  download_attachment_api_v1_attachments__attachment_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        attachment_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_attachment_api_v1_attachments__attachment_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        attachment_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  search_links_api_v1_links_search_get: {
+    parameters: {
+      query?: {
+        q?: string;
+        types?: components["schemas"]["LinkType"][] | null;
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["LinkSearchResult"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  knowledge_graph_api_v1_links_graph_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["KnowledgeGraph"];
+        };
+      };
+    };
+  };
+  backlinks_api_v1_backlinks_get: {
+    parameters: {
+      query: {
+        type: components["schemas"]["LinkType"];
+        id: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Backlink"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  list_architectures_api_v1_architectures_get: {
+    parameters: {
+      query?: {
+        company_id?: string | null;
+        mission_id?: string | null;
+        q?: string | null;
+        include_archived?: boolean;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ArchitectureSummary"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_architecture_api_v1_architectures_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ArchitectureCreate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ArchitectureDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  read_architecture_api_v1_architectures__architecture_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        architecture_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ArchitectureDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_architecture_api_v1_architectures__architecture_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        architecture_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_architecture_api_v1_architectures__architecture_id__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        architecture_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ArchitectureUpdate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ArchitectureDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  archive_architecture_api_v1_architectures__architecture_id__archive_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        architecture_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ArchitectureDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  restore_architecture_api_v1_architectures__architecture_id__restore_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        architecture_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ArchitectureDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  add_member_api_v1_architectures__architecture_id__domains__domain_id__put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        architecture_id: string;
+        domain_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ArchitectureDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  remove_member_api_v1_architectures__architecture_id__domains__domain_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        architecture_id: string;
+        domain_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ArchitectureDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  link_mission_api_v1_architectures__architecture_id__missions__mission_id__put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        architecture_id: string;
+        mission_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ArchitectureDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  unlink_mission_api_v1_architectures__architecture_id__missions__mission_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        architecture_id: string;
+        mission_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ArchitectureDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  architecture_graph_api_v1_architectures__architecture_id__graph_get: {
+    parameters: {
+      query?: {
+        depth?: number | null;
+        include_relations?: boolean;
+        kinds?: components["schemas"]["DomainKind"][] | null;
+        lifecycles?: components["schemas"]["Lifecycle"][] | null;
+      };
+      header?: never;
+      path: {
+        architecture_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Graph"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  export_mermaid_api_v1_architectures__architecture_id__mermaid_get: {
+    parameters: {
+      query?: {
+        format?: components["schemas"]["MermaidFormat"];
+        direction?: components["schemas"]["Direction"];
+        depth?: number | null;
+        kinds?: components["schemas"]["DomainKind"][] | null;
+        view?: components["schemas"]["GraphView"];
+        lang?: components["schemas"]["ExportLanguage"];
+      };
+      header?: never;
+      path: {
+        architecture_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MermaidExport"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  read_layout_api_v1_architectures__architecture_id__layout_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        architecture_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["NodePosition"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  save_layout_api_v1_architectures__architecture_id__layout_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        architecture_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["LayoutSave"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["NodePosition"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  reset_layout_api_v1_architectures__architecture_id__layout_delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        architecture_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  list_domains_api_v1_domains_get: {
+    parameters: {
+      query?: {
+        company_id?: string | null;
+        q?: string | null;
+        include_archived?: boolean;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DomainSummary"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_domain_api_v1_domains_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DomainCreate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DomainDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  read_domain_api_v1_domains__domain_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        domain_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DomainDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_domain_api_v1_domains__domain_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        domain_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_domain_api_v1_domains__domain_id__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        domain_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DomainUpdate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DomainDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  archive_domain_api_v1_domains__domain_id__archive_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        domain_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DomainDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  restore_domain_api_v1_domains__domain_id__restore_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        domain_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DomainDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  domain_ancestors_api_v1_domains__domain_id__ancestors_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        domain_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DomainSummary"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  domain_descendants_api_v1_domains__domain_id__descendants_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        domain_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DomainSummary"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  set_domain_technology_api_v1_domains__domain_id__technologies__technology_id__put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        domain_id: string;
+        technology_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DomainTechnologyUpsert"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DomainDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  remove_domain_technology_api_v1_domains__domain_id__technologies__technology_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        domain_id: string;
+        technology_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DomainDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  link_subject_api_v1_domains__domain_id__subjects__subject_id__put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        domain_id: string;
+        subject_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DomainDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  unlink_subject_api_v1_domains__domain_id__subjects__subject_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        domain_id: string;
+        subject_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DomainDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  domain_tasks_api_v1_domains__domain_id__tasks_get: {
+    parameters: {
+      query?: {
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        domain_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TaskRead"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_relation_api_v1_domain_relations_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RelationCreate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RelationRead"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_relation_api_v1_domain_relations__relation_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        relation_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_relation_api_v1_domain_relations__relation_id__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        relation_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RelationUpdate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RelationRead"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  list_external_links_api_v1_external_links_get: {
+    parameters: {
+      query: {
+        entity_type: components["schemas"]["LinkedEntity"];
+        entity_id: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ExternalLinkRead"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_external_link_api_v1_external_links_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ExternalLinkCreate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ExternalLinkRead"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_external_link_api_v1_external_links__link_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        link_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_external_link_api_v1_external_links__link_id__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        link_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ExternalLinkUpdate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ExternalLinkRead"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  mission_overview_api_v1_missions__mission_id__overview_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        mission_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MissionOverview"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  career_api_v1_career_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Career"];
+        };
+      };
+    };
+  };
+  search_api_v1_search_get: {
+    parameters: {
+      query: {
+        q: string;
+        types?: components["schemas"]["SearchType"][] | null;
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SearchResult"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  export_archive_api_v1_export_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/zip": unknown;
+        };
+      };
+    };
+  };
+  import_archive_api_v1_import_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["Body_import_archive_api_v1_import_post"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ImportReportRead"];
         };
       };
       /** @description Validation Error */

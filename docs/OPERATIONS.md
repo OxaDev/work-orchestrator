@@ -70,6 +70,64 @@ make logs        # follow logs
 
 Data lives in the Docker volumes `work-orchestrator_pgdata` and `work-orchestrator_uploads`; `make down` keeps them.
 
-## Backups
+## Backups and restore (ADR-0027, ADR-0040)
 
-`make backup` / `make restore` arrive in roadmap phase P11 (ADR-0027: always restore database and uploads together).
+Database and uploads are always saved and restored **together**. The scripts run `pg_dump` and
+`tar` inside the stack's containers: the host needs only Docker Compose, and the dump always
+matches the server's PostgreSQL version.
+
+### Back up
+
+```bash
+make backup            # -> backups/<YYYYMMDD-HHMMSS>/
+```
+
+Each set holds `db.dump` (`pg_dump --format=custom`), `uploads.tar.gz`, `INFO` (date, Alembic
+revision) and `SHA256SUMS`. Sets older than `BACKUP_RETENTION_DAYS` (default 30, `0` keeps all)
+are deleted. `backups/` is git-ignored: copy it off the machine (another disk, a NAS, ...).
+
+Daily backups without cron: `make backup-service` starts the optional `backup` service (Compose
+profile `backup`), which writes the same sets into `./backups` every `BACKUP_INTERVAL_SECONDS`
+(default 86400, first set at start). Stop it with `docker compose --profile backup stop backup`.
+
+### Restore
+
+```bash
+make restore BACKUP=backups/20261106-145951
+```
+
+The script checks the checksums, asks you to type the set's name, stops the backend, restores the
+dump in a single transaction (`pg_restore --clean --if-exists`), replaces the whole uploads
+volume, restarts the backend and runs `alembic upgrade head` (a set from an older version is
+brought up to date). Every current data is replaced; sessions too, so users sign in again.
+`YES=1` skips the prompt (scripts).
+
+### On a new machine
+
+1. Install Docker (with Compose), clone the repository, copy the backup set into `backups/`.
+2. `make env`, then put the **same** `SECRET_KEY` as the old `.env` if you have it (otherwise
+   only the sessions are lost).
+3. `make deploy` (builds, starts, migrates, creates an empty admin if none).
+4. `make restore BACKUP=backups/<set>`.
+5. Sign in with an account of the restored instance; check the agenda, a document with an image
+   and the search (`Ctrl+K`).
+
+### Drill (done for P11 on the e2e stack)
+
+```bash
+make test-e2e   # leaves the e2e stack running on 127.0.0.1:18081
+export APP_PORT=18081 BASE_PATH=/work-orchestrator
+make backup  COMPOSE="docker compose -p work-orchestrator-e2e" BACKUP_DIR=/tmp/drill
+# create something in the app, then:
+make restore COMPOSE="docker compose -p work-orchestrator-e2e" BACKUP=/tmp/drill/<set> YES=1
+```
+
+Checked: data created after the backup is gone, document and file counts are back, attachments
+download, search works (generated search columns come back with the dump).
+
+### Per-user archive (not a backup)
+
+Settings > Data exports one user's data as a zip (`GET /export`) and imports it into an account
+holding no data (`POST /import`, up to 200 MB). Ids are kept, so an archive goes to **another**
+instance (or after the original rows are gone); the same instance answers `IMPORT_CONFLICT`. Use
+`make backup` / `make restore` for the whole instance.

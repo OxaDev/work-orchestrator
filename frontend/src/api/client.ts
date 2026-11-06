@@ -28,7 +28,12 @@ function isApiErrorBody(value: unknown): value is ApiErrorBody {
   return typeof value === "object" && value !== null && "code" in value;
 }
 
-const API_ROOT = apiBaseUrl(BASE_URL, window.location.origin);
+export const API_ROOT = apiBaseUrl(BASE_URL, window.location.origin);
+
+/** URL of an uploaded file, served by the API after an ownership check (ADR-0027). */
+export function attachmentUrl(id: string): string {
+  return `${API_ROOT}/api/v1/attachments/${id}`;
+}
 
 /** Emits "expired" when the session cannot be renewed: the UI goes back to the login page. */
 export const sessionEvents = new EventTarget();

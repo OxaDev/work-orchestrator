@@ -1,0 +1,127 @@
+{
+  "title": "Documents",
+  "create": "New document",
+  "createAction": "Create",
+  "createChild": "New sub-page of {{title}}",
+  "search": "Search a document",
+  "showArchived": "Show archived",
+  "tree": "Documents",
+  "nothingFound": "No document matches.",
+  "emptyList": "No document yet.",
+  "hasDraft": "unsaved draft",
+  "save": "Save",
+  "empty": "Nothing written yet.",
+  "editor": "Markdown content",
+  "preview": "Preview",
+  "insertFile": "Insert a file",
+  "archive": "Archive",
+  "restore": "Restore",
+  "delete": "Delete",
+  "deleteTitle": "Delete?",
+  "deleteMessage": "Delete \"{{title}}\" and its history? Pages with sub-pages cannot be deleted: archive them.",
+  "archivedNotice": "This document is archived.",
+  "fields": {
+    "title": "Title",
+    "parent": "Parent page",
+    "root": "None (top level)",
+    "template": "Template",
+    "blank": "Blank page"
+  },
+  "validation": {
+    "required": "Required."
+  },
+  "status": {
+    "saving": "Saving…",
+    "drafting": "Saving the draft…",
+    "saved": "All changes saved",
+    "drafted": "Draft kept at {{time}} (not saved)",
+    "unsaved": "Unsaved changes"
+  },
+  "draft": {
+    "title": "Unsaved draft",
+    "found": "A draft from {{time}} was not saved.",
+    "resume": "Resume the draft",
+    "discard": "Discard it"
+  },
+  "mode": {
+    "label": "Display",
+    "edit": "Editor",
+    "split": "Side by side",
+    "preview": "Preview"
+  },
+  "export": {
+    "button": "Export",
+    "title": "Copy as Markdown",
+    "links": "Internal links",
+    "linksText": "Plain text",
+    "linksAbsolute": "Links to this application",
+    "mermaidSvg": "Diagrams as SVG images",
+    "mermaidSvgHelp": "For tools that do not render Mermaid (Confluence…).",
+    "result": "Markdown to paste",
+    "failed": "Export failed: {{error}}",
+    "download": "Download .md",
+    "copy": "Copy",
+    "copied": "Markdown copied.",
+    "copyFailed": "Copy failed: select the text and copy it by hand."
+  },
+  "types": {
+    "document": "Document",
+    "mission": "Mission",
+    "domain": "Domain",
+    "architecture": "Architecture",
+    "contact": "Contact",
+    "company": "Company",
+    "subject": "Subject",
+    "technology": "Technology"
+  },
+  "entities": {
+    "tab": "Attached to ({{count}})",
+    "help": "The document appears on these entities' pages.",
+    "detach": "Detach from {{label}}",
+    "add": "Attach to",
+    "search": "Search a mission, company…",
+    "nothing": "Nothing found"
+  },
+  "links": {
+    "tab": "Links ({{count}})",
+    "empty": "No [[link]] in this document.",
+    "broken": "missing or inaccessible"
+  },
+  "backlinks": {
+    "tab": "Backlinks",
+    "empty": "No document links here.",
+    "title": "Documents linking here"
+  },
+  "versions": {
+    "tab": "Versions ({{count}})",
+    "label": "Version {{number}} — {{date}}",
+    "current": "current",
+    "title": "Version {{number}}",
+    "restore": "Restore this version"
+  },
+  "templates": {
+    "title": "Document templates",
+    "help": "Starting points for new documents: meeting notes, ADR, domain sheet…",
+    "create": "New template",
+    "edit": "Edit template",
+    "nameFr": "Name (French)",
+    "nameEn": "Name (English)",
+    "content": "Markdown content",
+    "empty": "No template yet.",
+    "editOf": "Edit {{name}}",
+    "deleteOf": "Delete {{name}}",
+    "deleteMessage": "Delete the template \"{{name}}\"? Documents made from it are kept."
+  },
+  "attached": {
+    "title": "Attached documents",
+    "create": "New document",
+    "empty": "No document attached."
+  },
+  "graph": {
+    "title": "Knowledge graph",
+    "help": "Your documents and what they mention. Click an item to open it.",
+    "empty": "No document yet.",
+    "legendLink": "link in the text",
+    "legendAttachment": "attached to"
+  }
+}

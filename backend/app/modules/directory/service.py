@@ -392,6 +392,13 @@ class OrgUnitService:
             raise entity_referenced("orgUnit", "orgUnit")
         if await self.session.scalar(select(Contact.id).where(Contact.org_unit_id == unit.id)):
             raise entity_referenced("orgUnit", "contact")
+        # A domain's owner unit (ADR-0037). Imported here: architecture builds on the directory.
+        from app.modules.architecture.models import Domain
+
+        if await self.session.scalar(
+            select(Domain.id).where(Domain.owner_org_unit_id == unit.id).limit(1)
+        ):
+            raise entity_referenced("orgUnit", "domain")
         await self.session.delete(unit)
         await self.session.commit()
 
@@ -556,6 +563,12 @@ class ContactService:
         ]
 
     async def create(self, data: ContactCreate) -> Contact:
+        contact = await self.add(data)
+        await self.session.commit()
+        return contact
+
+    async def add(self, data: ContactCreate) -> Contact:
+        """Creates a contact without committing (CSV import runs many in one transaction)."""
         company_id = await self._resolve_affiliation(data.company_id, data.org_unit_id)
         first, last = data.first_name.strip(), data.last_name.strip()
         contact = Contact(
@@ -575,7 +588,6 @@ class ContactService:
         self.session.add(contact)
         await self.session.flush()
         await set_tags(self.session, TaggableType.CONTACT, contact.id, data.tag_ids)
-        await self.session.commit()
         return contact
 
     async def update(self, contact_id: uuid.UUID, data: ContactUpdate) -> Contact:

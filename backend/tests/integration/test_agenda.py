@@ -1,16 +1,12 @@
 """Agenda macro (P4): half-days, RG-01/RG-02, holidays, stats, monthly locks (RG-13)."""
 
-from collections.abc import AsyncIterator, Awaitable, Callable
+from collections.abc import Awaitable, Callable
 from datetime import date, timedelta
 from typing import Any
 
 import pytest
-from httpx import ASGITransport, AsyncClient
-from sqlalchemy.ext.asyncio import AsyncSession
+from httpx import AsyncClient
 
-from app.core.config import Settings
-from app.core.db import get_session
-from app.main import create_app
 from app.modules.agenda import rules
 from app.modules.auth.models import User
 from tests.conftest import FrozenClock, login
@@ -338,22 +334,6 @@ async def test_mission_rules_with_agenda_history(user_client: AsyncClient, missi
     assert delete.status_code == 409
     assert delete.json()["params"] == {"entity": "mission", "referencedBy": "agenda"}
     assert (await user_client.get(f"/api/v1/missions/{mission_id}")).status_code == 200
-
-
-@pytest.fixture
-async def other_client(
-    settings: Settings, db_session: AsyncSession, make_user: MakeUser
-) -> AsyncIterator[AsyncClient]:
-    await make_user("other@example.com")
-    app = create_app(settings)
-
-    async def _session() -> AsyncIterator[AsyncSession]:
-        yield db_session
-
-    app.dependency_overrides[get_session] = _session
-    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://testserver") as http:
-        await login(http, "other@example.com")
-        yield http
 
 
 async def test_agenda_is_private(

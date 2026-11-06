@@ -1,0 +1,36 @@
+/* Minimal code highlighting for rehype-highlight (ADR-0036), readable in both themes. */
+.wo-markdown pre code.hljs {
+  display: block;
+  overflow-x: auto;
+}
+.wo-markdown .hljs-comment,
+.wo-markdown .hljs-quote {
+  color: var(--mantine-color-dimmed);
+  font-style: italic;
+}
+.wo-markdown .hljs-keyword,
+.wo-markdown .hljs-selector-tag,
+.wo-markdown .hljs-built_in {
+  color: var(--mantine-color-violet-text);
+}
+.wo-markdown .hljs-string,
+.wo-markdown .hljs-attr,
+.wo-markdown .hljs-regexp {
+  color: var(--mantine-color-teal-text);
+}
+.wo-markdown .hljs-number,
+.wo-markdown .hljs-literal {
+  color: var(--mantine-color-orange-text);
+}
+.wo-markdown .hljs-title,
+.wo-markdown .hljs-section,
+.wo-markdown .hljs-name {
+  color: var(--mantine-color-blue-text);
+}
+.wo-markdown .hljs-type,
+.wo-markdown .hljs-variable {
+  color: var(--mantine-color-pink-text);
+}
+.wo-markdown img {
+  max-width: 100%;
+}

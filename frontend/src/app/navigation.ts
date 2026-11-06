@@ -23,8 +23,8 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { path: "/", labelKey: "nav.home", icon: IconHome },
   { path: "/agenda", labelKey: "nav.agenda", icon: IconCalendar },
   { path: "/missions", labelKey: "nav.missions", icon: IconBriefcase },
-  { path: "/architecture", labelKey: "nav.architecture", icon: IconTopologyStar3, phase: "P8" },
-  { path: "/documents", labelKey: "nav.documents", icon: IconBooks, phase: "P7" },
+  { path: "/architecture", labelKey: "nav.architecture", icon: IconTopologyStar3 },
+  { path: "/documents", labelKey: "nav.documents", icon: IconBooks },
   { path: "/directory", labelKey: "nav.directory", icon: IconAddressBook },
   { path: "/settings", labelKey: "nav.settings", icon: IconSettings },
 ];

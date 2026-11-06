@@ -1,14 +1,16 @@
 import { Badge, Button, Group, Modal, Stack, Switch, TextInput } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
-import { IconPlus, IconSearch } from "@tabler/icons-react";
+import { IconDownload, IconPlus, IconSearch, IconUpload } from "@tabler/icons-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useSearchParams } from "react-router";
 
 import { EntityTable } from "../../components/EntityTable";
+import { downloadContactsCsv } from "../data/api";
 import { useContacts, useCreateContact } from "./api";
 import { CompanySelect, TagBadges } from "./components";
 import { ContactForm } from "./ContactForm";
+import { ContactsCsvModal } from "./ContactsCsvModal";
 import { toContactPayload } from "./payloads";
 import { useNotify } from "./useNotify";
 
@@ -25,6 +27,7 @@ export function ContactsPage() {
   const [archived, setArchived] = useState(false);
   const [page, setPage] = useState(1);
   const create = useCreateContact();
+  const [importing, setImporting] = useState(false);
   const creating = params.get("new") === "1";
   const closeCreate = () => setParams({}, { replace: true });
   const contacts = useContacts({
@@ -64,10 +67,27 @@ export function ContactsPage() {
             onChange={(e) => setArchived(e.currentTarget.checked)}
           />
         </Group>
-        <Button leftSection={<IconPlus size={16} />} onClick={() => setParams({ new: "1" })}>
-          {t("contacts.create")}
-        </Button>
+        <Group gap="xs">
+          <Button
+            variant="default"
+            leftSection={<IconDownload size={16} />}
+            onClick={() => void downloadContactsCsv().catch(notify.error)}
+          >
+            {t("data:csv.export")}
+          </Button>
+          <Button
+            variant="default"
+            leftSection={<IconUpload size={16} />}
+            onClick={() => setImporting(true)}
+          >
+            {t("data:csv.title")}
+          </Button>
+          <Button leftSection={<IconPlus size={16} />} onClick={() => setParams({ new: "1" })}>
+            {t("contacts.create")}
+          </Button>
+        </Group>
       </Group>
+      {importing && <ContactsCsvModal onClose={() => setImporting(false)} />}
       <EntityTable
         loading={contacts.isPending}
         rows={contacts.data?.items}
@@ -76,6 +96,15 @@ export function ContactsPage() {
         pageSize={PAGE_SIZE}
         onPageChange={setPage}
         emptyText={t("contacts.empty")}
+        emptyAction={
+          <Button
+            variant="light"
+            leftSection={<IconPlus size={16} />}
+            onClick={() => setParams({ new: "1" })}
+          >
+            {t("contacts.create")}
+          </Button>
+        }
         onRowClick={(c) => void navigate(`/directory/contacts/${c.id}`)}
         rowLabel={(c) => `${c.first_name} ${c.last_name}`}
         columns={[

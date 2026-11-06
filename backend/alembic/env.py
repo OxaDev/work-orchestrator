@@ -18,6 +18,23 @@ if config.config_file_name is not None and config.attributes.get("configure_logg
 target_metadata = Base.metadata
 
 
+def include_object(
+    obj: object,  # noqa: ARG001 - signature imposed by Alembic
+    name: str | None,
+    type_: str,
+    reflected: bool,  # noqa: ARG001
+    compare_to: object,  # noqa: ARG001
+) -> bool:
+    """Search columns and indexes live in the migrations only (ADR-0040): never drop them."""
+    if type_ == "column" and name == "search_vector":
+        return False
+    return not (
+        type_ == "index"
+        and name is not None
+        and (name.endswith("_search") or name.endswith("_name_trgm"))
+    )
+
+
 def _database_url() -> str:
     url = config.attributes.get("database_url") or get_settings().database_url
     return url if isinstance(url, str) else url.render_as_string(hide_password=False)
@@ -36,7 +53,12 @@ def run_migrations_offline() -> None:
 
 
 def _run_sync_migrations(connection: Connection) -> None:
-    context.configure(connection=connection, target_metadata=target_metadata, compare_type=True)
+    context.configure(
+        connection=connection,
+        target_metadata=target_metadata,
+        compare_type=True,
+        include_object=include_object,
+    )
     with context.begin_transaction():
         context.run_migrations()
 

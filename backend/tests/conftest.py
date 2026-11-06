@@ -142,6 +142,11 @@ def clock(monkeypatch: pytest.MonkeyPatch) -> FrozenClock:
         "app.modules.auth.service",
         "app.modules.missions.service",
         "app.modules.agenda.service",
+        "app.modules.subjects.service",
+        "app.modules.documents.service",
+        "app.modules.documents.files",
+        "app.modules.architecture.service",
+        "app.modules.dashboard.service",
     ):
         monkeypatch.setattr(f"{module}.utcnow", frozen)
     return frozen
@@ -184,3 +189,20 @@ async def admin_client(
     await make_user("admin@example.com", role=UserRole.ADMIN, display_name="Admin")
     await login(client, "admin@example.com")
     return client
+
+
+@pytest.fixture
+async def other_client(
+    settings: Settings, db_session: AsyncSession, make_user: Callable[..., Awaitable[User]]
+) -> AsyncIterator[AsyncClient]:
+    """A second signed-in user sharing the same database transaction (isolation tests)."""
+    await make_user("other@example.com")
+    app = create_app(settings)
+
+    async def _session() -> AsyncIterator[AsyncSession]:
+        yield db_session
+
+    app.dependency_overrides[get_session] = _session
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://testserver") as http:
+        await login(http, "other@example.com")
+        yield http

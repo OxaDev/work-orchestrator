@@ -1,0 +1,62 @@
+{
+  "days_one": "{{value}} jour",
+  "days_other": "{{value}} jours",
+  "kpi": {
+    "done": "Jours effectués",
+    "planned": "Jours planifiés",
+    "remaining": "Jours ouvrés restants",
+    "noEnd": "Pas de date de fin",
+    "tasks": "Temps sur les tâches"
+  },
+  "time": {
+    "bySubject": "Temps par sujet",
+    "noTask": "Aucune tâche faite pour l'instant.",
+    "others_one": "{{count}} autre sujet",
+    "others_other": "{{count}} autres sujets",
+    "tooltip_one": "{{duration}}, {{count}} tâche faite, {{share}} % du temps",
+    "tooltip_other": "{{duration}}, {{count}} tâches faites, {{share}} % du temps"
+  },
+  "technologies": {
+    "title": "Technologies",
+    "empty": "Aucune technologie pour l'instant.",
+    "name": "Technologie",
+    "weight": "Pondération",
+    "suggestion": "Suggestion",
+    "weightOf": "Pondération de {{name}}",
+    "minutes": "{{duration}} sur les sujets liés",
+    "suggested": "suggéré {{weight}}",
+    "apply": "Appliquer",
+    "applyOf": "Appliquer la pondération suggérée à {{name}}"
+  },
+  "tasks": {
+    "recent": "Dernières tâches",
+    "planned": "Prévues",
+    "none": "Aucune."
+  },
+  "contacts": {
+    "title": "Contacts par rôle",
+    "empty": "Aucun contact.",
+    "noRole": "Sans rôle"
+  },
+  "architectures": {
+    "title": "Architectures",
+    "empty": "Aucune architecture liée.",
+    "graph": "graphe"
+  },
+  "documents": {
+    "title": "Documents",
+    "empty": "Aucun document."
+  },
+  "career": {
+    "title": "Carrière",
+    "back": "Missions",
+    "empty": "Aucune mission pour l'instant.",
+    "ongoing": "en cours"
+  },
+  "home": {
+    "activeMissions": "Missions en cours",
+    "until": "jusqu'au {{date}}",
+    "today": "Agenda du jour",
+    "recentDocuments": "Documents modifiés récemment"
+  }
+}

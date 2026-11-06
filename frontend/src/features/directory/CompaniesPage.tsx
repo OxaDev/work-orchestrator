@@ -81,6 +81,15 @@ export function CompaniesPage() {
         pageSize={PAGE_SIZE}
         onPageChange={setPage}
         emptyText={t("companies.empty")}
+        emptyAction={
+          <Button
+            variant="light"
+            leftSection={<IconPlus size={16} />}
+            onClick={() => setCreating(true)}
+          >
+            {t("companies.create")}
+          </Button>
+        }
         onRowClick={(company) => void navigate(`/directory/companies/${company.id}`)}
         rowLabel={(company) => company.name}
         columns={[

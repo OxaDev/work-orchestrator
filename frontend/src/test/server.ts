@@ -3,8 +3,14 @@ import { setupServer } from "msw/node";
 
 import type { UserRead } from "../api/client";
 import { agendaHandlers, resetAgenda } from "./agendaBackend";
+import { dashboardHandlers, resetDashboard } from "./dashboardBackend";
+import { dataHandlers, resetData } from "./dataBackend";
+import { architectureHandlers, resetArchitecture } from "./architectureBackend";
 import { directoryHandlers, resetDirectory } from "./directoryBackend";
+import { documentsHandlers, resetDocuments } from "./documentsBackend";
+import { microHandlers, resetMicro } from "./microBackend";
 import { missionsHandlers, resetMissions } from "./missionsBackend";
+import { resetTemplates, templatesHandlers } from "./templatesBackend";
 
 export const PASSWORD = "Correct-Horse-42";
 
@@ -47,6 +53,12 @@ export function resetBackend(sessionUser: UserRead | null = regularUser): void {
   resetDirectory();
   resetMissions();
   resetAgenda();
+  resetMicro();
+  resetTemplates();
+  resetDocuments();
+  resetArchitecture();
+  resetDashboard();
+  resetData();
 }
 
 const error = (status: number, code: string, params: Record<string, unknown> = {}) =>
@@ -54,7 +66,7 @@ const error = (status: number, code: string, params: Record<string, unknown> = {
 
 export const handlers = [
   http.get("*/api/v1/health", () =>
-    HttpResponse.json({ status: "ok", database: "ok", version: "0.1.0" }),
+    HttpResponse.json({ status: "ok", database: "ok", version: "1.0.0" }),
   ),
   http.get("*/api/v1/auth/me", () =>
     backend.session ? HttpResponse.json(backend.session) : error(401, "AUTH_REQUIRED"),
@@ -74,9 +86,16 @@ export const handlers = [
     backend.session = null;
     return new HttpResponse(null, { status: 204 });
   }),
+  // Before the directory: `/contacts/export.csv` would match `/contacts/:id`.
+  ...dataHandlers,
   ...directoryHandlers,
+  ...dashboardHandlers,
   ...missionsHandlers,
   ...agendaHandlers,
+  ...microHandlers,
+  ...templatesHandlers,
+  ...documentsHandlers,
+  ...architectureHandlers,
   http.patch("*/api/v1/me", async ({ request }) => {
     const changes = (await request.json()) as Record<string, unknown>;
     backend.lastPatch = changes;

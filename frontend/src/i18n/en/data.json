@@ -1,0 +1,82 @@
+{
+  "close": "Close",
+  "tables": {
+    "missions": "Missions",
+    "half_days": "Half-days",
+    "tasks": "Tasks",
+    "subjects": "Subjects",
+    "documents": "Documents",
+    "domains": "Domains",
+    "contacts": "Contacts"
+  },
+  "archive": {
+    "exportTitle": "Export my data",
+    "exportHelp": "A zip holding everything you own (agenda, tasks, missions, documents, architecture), the shared directory and your files, with a readable Markdown copy of each document.",
+    "export": "Download the archive",
+    "importTitle": "Import an archive",
+    "importHelp": "Restores an export into this account. The account must hold no data yet (public holidays aside); the same archive cannot be imported twice into one instance.",
+    "file": "Archive (.zip)",
+    "choose": "Choose a file",
+    "import": "Import",
+    "confirmTitle": "Import this archive?",
+    "confirmMessage": "The content of {{name}} will be added to your account.",
+    "imported": "Archive imported",
+    "files": "Files",
+    "missingFiles_one": "{{count}} file was missing from the archive.",
+    "missingFiles_other": "{{count}} files were missing from the archive."
+  },
+  "backups": {
+    "title": "Backups",
+    "help": "The administrator backs up and restores the whole instance (database and files) from the server; see docs/OPERATIONS.md."
+  },
+  "markdown": {
+    "title": "Import Markdown",
+    "help": "A zipped folder of .md notes, such as an Obsidian vault. Folders become parent pages, [[wikilinks]] between notes are kept and embedded images become attachments.",
+    "file": "Folder (.zip)",
+    "import": "Import",
+    "done": "Import complete",
+    "documents_one": "{{count}} document",
+    "documents_other": "{{count}} documents",
+    "folders_one": "{{count}} folder page",
+    "folders_other": "{{count}} folder pages",
+    "attachments_one": "{{count}} file",
+    "attachments_other": "{{count}} files",
+    "unresolved_one": "{{count}} link to a missing note left as written",
+    "unresolved_other": "{{count}} links to missing notes left as written",
+    "skipped_one": "{{count}} file refused (type or size)",
+    "skipped_other": "{{count}} files refused (type or size)"
+  },
+  "csv": {
+    "title": "Import CSV",
+    "export": "Export CSV",
+    "help": "Columns: first_name, last_name, job_title, email_work, email_personal, phone_work, phone_mobile, linkedin_url, company, notes. Separator ; or ,. Missing companies are created; known contacts are skipped.",
+    "file": "File (.csv)",
+    "preview": "{{created}} to create, {{skipped}} already known, {{companies}} new companies.",
+    "errors_one": "{{count}} line refused",
+    "errors_other": "{{count}} lines refused",
+    "line": "Line {{line}}",
+    "import_one": "Import {{count}} contact",
+    "import_other": "Import {{count}} contacts",
+    "done_one": "{{count}} contact imported.",
+    "done_other": "{{count}} contacts imported.",
+    "columns": {
+      "first_name": "First name",
+      "last_name": "Last name",
+      "job_title": "Job title",
+      "email_work": "Work e-mail",
+      "email_personal": "Personal e-mail",
+      "phone_work": "Work phone",
+      "phone_mobile": "Mobile",
+      "linkedin_url": "LinkedIn",
+      "company": "Company",
+      "notes": "Notes"
+    },
+    "codes": {
+      "REQUIRED": "Required",
+      "TOO_LONG": "Too long",
+      "INVALID_EMAIL": "Invalid e-mail",
+      "INVALID_URL": "Invalid URL",
+      "INVALID_VALUE": "Invalid value"
+    }
+  }
+}

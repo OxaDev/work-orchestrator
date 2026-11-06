@@ -24,12 +24,24 @@ server {
     location ${BASE_PATH}/api/ {
         # Strip BASE_PATH: backend routes start at /api (uvicorn --root-path handles URLs).
         proxy_pass http://backend:8000/api/;
-        proxy_http_version 1.1;
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $wo_forwarded_proto;
-        proxy_set_header X-Forwarded-Host $wo_forwarded_host;
+        include /etc/nginx/snippets/api-proxy.conf;
         client_max_body_size 25m;
+    }
+
+    # Imports take bigger bodies than other uploads; the backend enforces the exact limits
+    # (archive 200 MB, Markdown 50 MB, ADR-0040).
+    location = ${BASE_PATH}/api/v1/import {
+        include /etc/nginx/snippets/api-proxy.conf;
+        proxy_pass http://backend:8000/api/v1/import;
+        client_max_body_size 210m;
+        proxy_read_timeout 300s;
+    }
+
+    location = ${BASE_PATH}/api/v1/documents/import-markdown {
+        include /etc/nginx/snippets/api-proxy.conf;
+        proxy_pass http://backend:8000/api/v1/documents/import-markdown;
+        client_max_body_size 55m;
+        proxy_read_timeout 300s;
     }
 
     location ${BASE_PATH}/assets/ {

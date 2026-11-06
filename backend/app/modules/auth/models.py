@@ -48,7 +48,7 @@ class User(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     last_login_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     # "My ESN" (ADR-0017): copied onto each new mission.
     employer_company_id: Mapped[uuid.UUID | None] = mapped_column(
-        ForeignKey("companies.id", ondelete="SET NULL")
+        ForeignKey("companies.id", ondelete="SET NULL"), index=True
     )
     # French public holidays region (ADR-0018): None = metropolitan France, "57" = Alsace-Moselle,
     # overseas departments by INSEE code ("971"...). Codes from the `holidays` library.

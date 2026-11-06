@@ -331,6 +331,11 @@ class MissionService:
     async def delete(self, mission_id: uuid.UUID) -> None:
         """Hard delete while nothing references the mission; archive otherwise (RG-12)."""
         mission = await self.get(mission_id)
+        # Polymorphic links have no foreign key (ADR-0037); rolled back with the delete if refused.
+        from app.modules.architecture.links import delete_external_links
+        from app.modules.architecture.models import LinkedEntity
+
+        await delete_external_links(self.session, LinkedEntity.MISSION, mission.id)
         await self.session.delete(mission)
         try:
             await self.session.commit()

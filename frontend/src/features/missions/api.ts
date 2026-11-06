@@ -56,6 +56,7 @@ export function useMissions(query: MissionQuery = {}) {
 export function useMission(id: string | undefined) {
   return useQuery({
     queryKey: keys.mission(id ?? ""),
+    meta: { inlineError: true },
     queryFn: () =>
       unwrap(api.GET("/api/v1/missions/{mission_id}", { params: { path: { mission_id: id! } } })),
     enabled: Boolean(id),

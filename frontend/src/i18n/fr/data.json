@@ -1,0 +1,82 @@
+{
+  "close": "Fermer",
+  "tables": {
+    "missions": "Missions",
+    "half_days": "Demi-journées",
+    "tasks": "Tâches",
+    "subjects": "Sujets",
+    "documents": "Documents",
+    "domains": "Domaines",
+    "contacts": "Contacts"
+  },
+  "archive": {
+    "exportTitle": "Exporter mes données",
+    "exportHelp": "Un zip avec tout ce qui vous appartient (agenda, tâches, missions, documents, architecture), l'annuaire partagé et vos fichiers, plus une copie Markdown lisible de chaque document.",
+    "export": "Télécharger l'archive",
+    "importTitle": "Importer une archive",
+    "importHelp": "Restaure un export dans ce compte. Le compte ne doit encore contenir aucune donnée (hors jours fériés) ; une même archive ne peut pas être importée deux fois dans une instance.",
+    "file": "Archive (.zip)",
+    "choose": "Choisir un fichier",
+    "import": "Importer",
+    "confirmTitle": "Importer cette archive ?",
+    "confirmMessage": "Le contenu de {{name}} sera ajouté à votre compte.",
+    "imported": "Archive importée",
+    "files": "Fichiers",
+    "missingFiles_one": "{{count}} fichier manquait dans l'archive.",
+    "missingFiles_other": "{{count}} fichiers manquaient dans l'archive."
+  },
+  "backups": {
+    "title": "Sauvegardes",
+    "help": "L'administrateur sauvegarde et restaure l'instance entière (base et fichiers) depuis le serveur ; voir docs/OPERATIONS.md."
+  },
+  "markdown": {
+    "title": "Importer du Markdown",
+    "help": "Un dossier zippé de notes .md, par exemple un coffre Obsidian. Les dossiers deviennent des pages parentes, les [[liens]] entre notes sont conservés et les images intégrées deviennent des pièces jointes.",
+    "file": "Dossier (.zip)",
+    "import": "Importer",
+    "done": "Import terminé",
+    "documents_one": "{{count}} document",
+    "documents_other": "{{count}} documents",
+    "folders_one": "{{count}} page de dossier",
+    "folders_other": "{{count}} pages de dossier",
+    "attachments_one": "{{count}} fichier",
+    "attachments_other": "{{count}} fichiers",
+    "unresolved_one": "{{count}} lien vers une note absente laissé tel quel",
+    "unresolved_other": "{{count}} liens vers des notes absentes laissés tels quels",
+    "skipped_one": "{{count}} fichier refusé (type ou taille)",
+    "skipped_other": "{{count}} fichiers refusés (type ou taille)"
+  },
+  "csv": {
+    "title": "Importer un CSV",
+    "export": "Exporter en CSV",
+    "help": "Colonnes : first_name, last_name, job_title, email_work, email_personal, phone_work, phone_mobile, linkedin_url, company, notes. Séparateur ; ou ,. Les entreprises absentes sont créées ; les contacts déjà connus sont ignorés.",
+    "file": "Fichier (.csv)",
+    "preview": "{{created}} à créer, {{skipped}} déjà connus, {{companies}} nouvelles entreprises.",
+    "errors_one": "{{count}} ligne refusée",
+    "errors_other": "{{count}} lignes refusées",
+    "line": "Ligne {{line}}",
+    "import_one": "Importer {{count}} contact",
+    "import_other": "Importer {{count}} contacts",
+    "done_one": "{{count}} contact importé.",
+    "done_other": "{{count}} contacts importés.",
+    "columns": {
+      "first_name": "Prénom",
+      "last_name": "Nom",
+      "job_title": "Poste",
+      "email_work": "E-mail pro",
+      "email_personal": "E-mail perso",
+      "phone_work": "Téléphone pro",
+      "phone_mobile": "Mobile",
+      "linkedin_url": "LinkedIn",
+      "company": "Entreprise",
+      "notes": "Notes"
+    },
+    "codes": {
+      "REQUIRED": "Obligatoire",
+      "TOO_LONG": "Trop long",
+      "INVALID_EMAIL": "E-mail invalide",
+      "INVALID_URL": "URL invalide",
+      "INVALID_VALUE": "Valeur invalide"
+    }
+  }
+}

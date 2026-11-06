@@ -11,7 +11,8 @@
     "documents": "Documents",
     "directory": "Directory",
     "settings": "Settings",
-    "toggleMenu": "Toggle navigation"
+    "toggleMenu": "Toggle navigation",
+    "main": "Main menu"
   },
   "header": {
     "language": "Language",
@@ -49,14 +50,15 @@
     "forgotHint": "Forgot your password? An administrator can reset it, or run `make reset-password` on the server."
   },
   "userMenu": {
-    "open": "Open user menu",
+    "open": "user menu",
     "logout": "Sign out"
   },
   "settings": {
     "tabs": {
       "profile": "Profile",
       "password": "Password",
-      "users": "Users"
+      "users": "Users",
+      "data": "Data"
     },
     "profile": {
       "displayName": "Display name",
@@ -118,5 +120,26 @@
     "resetPassword": "Reset password",
     "resetPasswordOf": "Reset the password of {{email}}",
     "passwordReset": "Password reset. The user's sessions were signed out."
+  },
+  "markdown": {
+    "diagram": "Diagram",
+    "mermaidError": "This Mermaid diagram cannot be drawn"
+  },
+  "pagination": {
+    "previous": "Previous page",
+    "next": "Next page",
+    "first": "First page",
+    "last": "Last page",
+    "page": "Page {{page}}"
+  },
+  "queryError": {
+    "title": "Loading failed",
+    "retry": "Retry"
+  },
+  "routeError": {
+    "title": "This page could not be shown",
+    "body": "Something went wrong while displaying it. Reload the page; if it happens again, go back to the home page.",
+    "reload": "Reload",
+    "home": "Home"
   }
 }
