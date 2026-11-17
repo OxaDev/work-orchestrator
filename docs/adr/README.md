@@ -68,8 +68,8 @@ stateDiagram-v2
 | [0020](0020-task-half-day-compatibility.md) | Task / half-day compatibility matrix | Accepted | 2026-11-05 | domain |
 | [0021](0021-monthly-lock.md) | Monthly lock (timesheet-like) | Accepted | 2026-11-05 | domain |
 | [0022](0022-trees-and-typed-relations.md) | Trees with a single parent + typed relations for graphs | Accepted | 2026-11-05 | data |
-| [0023](0023-domain-and-architecture-ownership.md) | Domains belong to a client; architectures ↔ missions many-to-many | Accepted | 2026-11-05 | domain |
-| [0024](0024-markdown-documentation.md) | Markdown as source of truth, wikilinks and backlinks | Accepted | 2026-11-05 | documents |
+| [0023](0023-domain-and-architecture-ownership.md) | Domains belong to a client; architectures ↔ missions many-to-many | Superseded by 0042 (mission link only) | 2026-11-05 | domain |
+| [0024](0024-markdown-documentation.md) | Markdown as source of truth, wikilinks and backlinks | Superseded by 0043 ("no WYSIWYG" line only) | 2026-11-05 | documents |
 | [0025](0025-graph-rendering-and-mermaid-export.md) | React Flow + ELK for graphs, server-side Mermaid export | Accepted | 2026-11-05 | architecture-app |
 | [0026](0026-postgres-full-text-search.md) | Full-text search with PostgreSQL | Accepted | 2026-11-05 | search |
 | [0027](0027-local-file-storage.md) | Attachments stored on a local volume | Accepted | 2026-11-05 | data |
@@ -81,11 +81,13 @@ stateDiagram-v2
 | [0033](0033-agenda-macro-implementation.md) | Agenda macro: slot API, public holidays, completeness and rendering | Accepted | 2026-11-05 | domain, backend, frontend |
 | [0034](0034-agenda-micro-subjects-tasks-daily-log-and-standup.md) | Agenda micro: subjects, tasks, daily log and standup | Accepted | 2026-11-06 | domain, backend, frontend |
 | [0035](0035-week-templates-model-application-plan-and-write-path.md) | Week templates: model, application plan and write path | Accepted | 2026-11-06 | domain, backend, frontend |
-| [0036](0036-documents-editor-rendering-links-files-and-templates.md) | Documents: editor, rendering, links, files and templates | Accepted | 2026-11-06 | documents, backend, frontend, security |
+| [0036](0036-documents-editor-rendering-links-files-and-templates.md) | Documents: editor, rendering, links, files and templates | Superseded by 0043 (editor choice only) | 2026-11-06 | documents, backend, frontend, security |
 | [0037](0037-architectures-and-domains-membership-graph-api-rules-and-deletion.md) | Architectures and domains: membership, graph API, rules and deletion | Accepted | 2026-11-06 | domain, backend, frontend |
 | [0038](0038-graph-view-mermaid-export-and-knowledge-graph.md) | Graph view, Mermaid export and knowledge graph | Accepted | 2026-11-06 | architecture-app, backend, frontend |
 | [0039](0039-mission-dashboard-technology-weight-suggestion-and-cross-links.md) | Mission dashboard, technology weight suggestion and cross-links | Accepted | 2026-11-06 | domain, backend, frontend |
 | [0040](0040-search-archive-export-and-import-backups.md) | Search, archive export and import, backups | Accepted | 2026-11-06 | search, data, deployment |
 | [0041](0041-hardening-security-headers-isolation-performance-budgets-accessibility-error-states.md) | Hardening: security headers, isolation, performance budgets, accessibility, error states | Accepted | 2026-11-06 | security, frontend, backend, process |
+| [0042](0042-projects-between-missions-documents-and-architectures.md) | Projects between missions, documents and architectures | Accepted | 2026-11-17 | domain, data, backend, frontend |
+| [0043](0043-live-markdown-editor-tiptap.md) | Live Markdown editor (TipTap) superseding the CodeMirror-only editor | Accepted | 2026-11-17 | documents, frontend |
 
-Next free number: **0042**.
+Next free number: **0044**.

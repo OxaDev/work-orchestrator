@@ -86,7 +86,12 @@ function useInvalidate() {
 // --- architectures ---------------------------------------------------------------------------
 
 export function useArchitectures(
-  query: { company_id?: string; mission_id?: string; include_archived?: boolean } = {},
+  query: {
+    company_id?: string;
+    mission_id?: string;
+    project_id?: string;
+    include_archived?: boolean;
+  } = {},
 ) {
   return useQuery({
     queryKey: keys.architectures(query),
@@ -170,28 +175,33 @@ export function useMember(architectureId: string) {
   });
 }
 
-export function useMissionLink() {
+/** Links an architecture to a project of the same client (ADR-0042). */
+export function useProjectLink() {
   const invalidate = useInvalidate();
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({
       architectureId,
-      missionId,
+      projectId,
       linked,
     }: {
       architectureId: string;
-      missionId: string;
+      projectId: string;
       linked: boolean;
     }) => {
       const params = {
-        params: { path: { architecture_id: architectureId, mission_id: missionId } },
+        params: { path: { architecture_id: architectureId, project_id: projectId } },
       };
       return linked
-        ? unwrap(api.PUT("/api/v1/architectures/{architecture_id}/missions/{mission_id}", params))
+        ? unwrap(api.PUT("/api/v1/architectures/{architecture_id}/projects/{project_id}", params))
         : unwrap(
-            api.DELETE("/api/v1/architectures/{architecture_id}/missions/{mission_id}", params),
+            api.DELETE("/api/v1/architectures/{architecture_id}/projects/{project_id}", params),
           );
     },
-    onSuccess: invalidate,
+    onSuccess: async () => {
+      await invalidate();
+      await queryClient.invalidateQueries({ queryKey: ["projects"] });
+    },
   });
 }
 

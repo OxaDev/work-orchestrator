@@ -27,9 +27,9 @@ import { useErrorMessage } from "../../i18n/useErrorMessage";
 import { ApplyTemplateButton } from "../agenda/ApplyTemplateButton";
 import { monthRange, todayIso } from "../agenda/calendar";
 import { useNotify } from "../directory/useNotify";
-import { MissionArchitectures } from "../architecture/MissionArchitectures";
 import { MissionOverview } from "../dashboard/MissionOverview";
 import { EntityDocuments } from "../documents/EntityDocuments";
+import { MissionProjects } from "../projects/MissionProjects";
 import { SubjectsPanel } from "../subjects/SubjectsPanel";
 import {
   type MissionDetail,
@@ -284,11 +284,11 @@ function missionMonth(mission: MissionDetail): { start: string; end: string } {
 
 const TABS = [
   "overview",
+  "projects",
   "info",
   "contacts",
   "technologies",
   "subjects",
-  "architectures",
   "documents",
   "history",
 ] as const;
@@ -394,6 +394,7 @@ export function MissionPage() {
       >
         <Tabs.List>
           <Tabs.Tab value="overview">{t("tabs.overview")}</Tabs.Tab>
+          <Tabs.Tab value="projects">{t("tabs.projects")}</Tabs.Tab>
           <Tabs.Tab value="info">{t("tabs.info")}</Tabs.Tab>
           <Tabs.Tab value="contacts">
             {t("tabs.contacts")} ({data.contacts.length})
@@ -402,7 +403,6 @@ export function MissionPage() {
             {t("tabs.technologies")} ({data.technologies.length})
           </Tabs.Tab>
           <Tabs.Tab value="subjects">{t("tabs.subjects")}</Tabs.Tab>
-          <Tabs.Tab value="architectures">{t("tabs.architectures")}</Tabs.Tab>
           <Tabs.Tab value="documents">{t("tabs.documents")}</Tabs.Tab>
           <Tabs.Tab value="history">{t("tabs.history")}</Tabs.Tab>
         </Tabs.List>
@@ -428,8 +428,8 @@ export function MissionPage() {
         <Tabs.Panel value="subjects" pt="md">
           <SubjectsPanel scope="MISSION" missionId={data.id} />
         </Tabs.Panel>
-        <Tabs.Panel value="architectures" pt="md">
-          <MissionArchitectures mission={data} />
+        <Tabs.Panel value="projects" pt="md">
+          <MissionProjects mission={data} />
         </Tabs.Panel>
         <Tabs.Panel value="documents" pt="md">
           <EntityDocuments type="mission" id={data.id} />

@@ -22,7 +22,7 @@
     "referent": "Referent contact",
     "description": "Description (Markdown)",
     "client": "Client",
-    "missions": "Missions"
+    "projects": "Projects"
   },
   "kinds": {
     "BUSINESS_DOMAIN": "Business domain",
@@ -154,13 +154,6 @@
     "urlInvalid": "Enter a full address starting with http:// or https://.",
     "add": "Add"
   },
-  "mission": {
-    "title": "Architectures of the mission",
-    "empty": "No architecture linked.",
-    "unlinkOf": "Unlink {{name}}",
-    "link": "Link an architecture",
-    "linkPlaceholder": "An architecture of {{client}}"
-  },
   "graph": {
     "open": "Graph view",
     "title": "Graph",
@@ -210,5 +203,17 @@
     "copy": "Copy the code",
     "copied": "Mermaid code copied.",
     "failed": "The export failed."
+  },
+  "project": {
+    "title": "Project architectures",
+    "empty": "No linked architecture.",
+    "unlinkOf": "Unlink {{name}}",
+    "link": "Link an architecture",
+    "linkPlaceholder": "An architecture of {{client}}"
+  },
+  "scope": {
+    "label": "Scope",
+    "project": "Current project",
+    "all": "All"
   }
 }

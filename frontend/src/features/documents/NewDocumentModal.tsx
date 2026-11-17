@@ -4,25 +4,28 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 
 import type { LinkType } from "../../components/markdown";
-import { buildTree, flattenTree } from "../../components/tree";
+import { buildTree, byTitle, flattenTree } from "../../components/tree";
 import { useNotify } from "../directory/useNotify";
 import { useCreateDocument, useDocuments, useDocumentTemplates } from "./api";
 
-/** Creates a document, optionally under a page, from a template, attached to an entity. */
+/** Creates a document, optionally under a page, from a template, attached to an entity, in a
+ * project (top-level pages only: sub-pages take their parent's, ADR-0042). */
 export function NewDocumentModal({
   attachTo,
   parentId = null,
+  projectId = null,
   onClose,
 }: {
   attachTo?: { type: LinkType; id: string };
   parentId?: string | null;
+  projectId?: string | null;
   onClose: () => void;
 }) {
   const { t, i18n } = useTranslation("documents");
   const notify = useNotify();
   const navigate = useNavigate();
   const create = useCreateDocument();
-  const documents = useDocuments();
+  const documents = useDocuments(projectId ? { project_id: projectId } : {});
   const templates = useDocumentTemplates();
   const form = useForm({
     initialValues: {
@@ -32,9 +35,7 @@ export function NewDocumentModal({
     },
     validate: { title: (v) => (v.trim() ? null : t("validation.required")) },
   });
-  const parents = flattenTree(
-    buildTree(documents.data ?? [], (a, b) => a.title.localeCompare(b.title)),
-  ).map((node) => ({
+  const parents = flattenTree(buildTree(documents.data ?? [], byTitle)).map((node) => ({
     value: node.item.id,
     label: `${"  ".repeat(node.depth)}${node.item.title}`,
   }));
@@ -47,6 +48,7 @@ export function NewDocumentModal({
             {
               title: v.title.trim(),
               parent_id: v.parent_id,
+              project_id: projectId,
               template_id: v.template_id,
               content_md: "",
               attach_to: attachTo ?? null,

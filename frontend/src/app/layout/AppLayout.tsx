@@ -18,6 +18,8 @@ import { QuickTaskEntry } from "../../features/agenda/QuickTaskEntry";
 import { SearchSpotlight } from "../../features/search/SearchSpotlight";
 import { UserMenu } from "../../features/auth/UserMenu";
 import { useCurrentUser, useUpdateProfile } from "../../features/auth/useAuth";
+import { ContextSwitcher } from "../../features/projects/ContextSwitcher";
+import { WorkContextProvider } from "../../features/projects/WorkContext";
 import { isLocale, setLocale, SUPPORTED_LOCALES } from "../../i18n";
 import { isActive, NAV_ITEMS } from "../navigation";
 
@@ -68,50 +70,53 @@ export function AppLayout() {
   const { pathname } = useLocation();
 
   return (
-    <AppShell
-      header={{ height: 56 }}
-      navbar={{ width: 240, breakpoint: "sm", collapsed: { mobile: !opened } }}
-      padding="md"
-    >
-      <AppShell.Header>
-        <Group h="100%" px="md" justify="space-between">
-          <Group gap="sm">
-            <Burger
-              opened={opened}
-              onClick={toggle}
-              hiddenFrom="sm"
-              size="sm"
-              aria-label={t("nav.toggleMenu")}
+    <WorkContextProvider>
+      <AppShell
+        header={{ height: 56 }}
+        navbar={{ width: 240, breakpoint: "sm", collapsed: { mobile: !opened } }}
+        padding="md"
+      >
+        <AppShell.Header>
+          <Group h="100%" px="md" justify="space-between">
+            <Group gap="sm">
+              <Burger
+                opened={opened}
+                onClick={toggle}
+                hiddenFrom="sm"
+                size="sm"
+                aria-label={t("nav.toggleMenu")}
+              />
+              <Title order={4}>{t("app.name")}</Title>
+            </Group>
+            <Group gap="sm">
+              <SearchSpotlight />
+              <QuickTaskEntry />
+              <LanguageSwitch />
+              <ColorSchemeToggle />
+              <UserMenu />
+            </Group>
+          </Group>
+        </AppShell.Header>
+
+        <AppShell.Navbar p="xs" component="nav" aria-label={t("nav.main")}>
+          <ContextSwitcher onNavigate={close} />
+          {NAV_ITEMS.map((item) => (
+            <NavLink
+              key={item.path}
+              component={Link}
+              to={item.path}
+              label={t(item.labelKey)}
+              leftSection={<item.icon size={18} stroke={1.6} />}
+              active={isActive(item.path, pathname)}
+              onClick={close}
             />
-            <Title order={4}>{t("app.name")}</Title>
-          </Group>
-          <Group gap="sm">
-            <SearchSpotlight />
-            <QuickTaskEntry />
-            <LanguageSwitch />
-            <ColorSchemeToggle />
-            <UserMenu />
-          </Group>
-        </Group>
-      </AppShell.Header>
+          ))}
+        </AppShell.Navbar>
 
-      <AppShell.Navbar p="xs" component="nav" aria-label={t("nav.main")}>
-        {NAV_ITEMS.map((item) => (
-          <NavLink
-            key={item.path}
-            component={Link}
-            to={item.path}
-            label={t(item.labelKey)}
-            leftSection={<item.icon size={18} stroke={1.6} />}
-            active={isActive(item.path, pathname)}
-            onClick={close}
-          />
-        ))}
-      </AppShell.Navbar>
-
-      <AppShell.Main>
-        <Outlet />
-      </AppShell.Main>
-    </AppShell>
+        <AppShell.Main>
+          <Outlet />
+        </AppShell.Main>
+      </AppShell>
+    </WorkContextProvider>
   );
 }

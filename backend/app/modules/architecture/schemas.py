@@ -163,6 +163,12 @@ class RelationUpdate(BaseModel):
 # --- architectures ---------------------------------------------------------------------------
 
 
+class ProjectRef(BaseModel):
+    id: uuid.UUID
+    name: str
+    mission: Summary
+
+
 class ArchitectureSummary(BaseModel):
     id: uuid.UUID
     company: Summary
@@ -170,6 +176,8 @@ class ArchitectureSummary(BaseModel):
     lifecycle: Lifecycle
     archived_at: datetime | None
     member_count: int
+    # ADR-0042: the projects using it, and their missions (derived, deduplicated).
+    projects: list[ProjectRef]
     missions: list[Summary]
 
 
@@ -184,8 +192,8 @@ class ArchitectureCreate(BaseModel):
     name: str = Name
     description: str = Markdown
     lifecycle: Lifecycle = Lifecycle.CURRENT
-    # Links the new architecture to a mission of the same client.
-    mission_id: uuid.UUID | None = None
+    # Links the new architecture to a project of the same client (ADR-0042).
+    project_id: uuid.UUID | None = None
 
 
 class ArchitectureUpdate(BaseModel):

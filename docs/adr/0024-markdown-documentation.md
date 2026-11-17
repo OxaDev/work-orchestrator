@@ -1,6 +1,6 @@
 # ADR-0024: Markdown as source of truth, wikilinks and backlinks
 
-- **Status**: Accepted
+- **Status**: Superseded by [ADR-0043](0043-live-markdown-editor-tiptap.md) for the line "WYSIWYG editing is out of V1" only (the rest stays in force)
 - **Date**: 2026-11-05
 - **Deciders**: Project owner (default answers)
 - **Source**: initial brief ("all documentation in Markdown", copy-paste to client tools); Q-I1 to Q-I8
@@ -46,3 +46,7 @@ Block JSON (option 2) breaks the core promise of clean Markdown export. A file v
 ## Compliance
 
 Unit tests on the wikilink parser and the export transformer (snapshots).
+
+## Notes
+
+- 2026-11-17: live WYSIWYG editing (TipTap) added on top of the Markdown source, see ADR-0043.

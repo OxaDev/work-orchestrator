@@ -92,11 +92,14 @@ class Architecture(UUIDPrimaryKeyMixin, TimestampMixin, ArchivableMixin, OwnedMi
     )
 
 
-class MissionArchitecture(Base):
-    __tablename__ = "mission_architectures"
+class ProjectArchitecture(Base):
+    """An architecture used by a project of the same client (ADR-0042: replaces the mission link
+    of ADR-0023; the architecture still belongs to the client company)."""
 
-    mission_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("missions.id", ondelete="CASCADE"), primary_key=True
+    __tablename__ = "project_architectures"
+
+    project_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("projects.id", ondelete="CASCADE"), primary_key=True
     )
     architecture_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("architectures.id", ondelete="CASCADE"), primary_key=True, index=True

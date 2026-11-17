@@ -30,6 +30,9 @@ async def world(user_client: AsyncClient) -> dict[str, Any]:
             "start_date": "2026-01-05",
         },
     )
+    project = await post(
+        user_client, "/api/v1/projects", {"mission_id": mission["id"], "name": "Paiements"}
+    )
     units = f"/api/v1/companies/{bank['id']}/org-units"
     dsi = await post(user_client, units, {"name": "DSI", "level_label": "Direction"})
     pole = await post(
@@ -46,6 +49,7 @@ async def world(user_client: AsyncClient) -> dict[str, Any]:
         "bank": bank["id"],
         "insurer": insurer["id"],
         "mission": mission["id"],
+        "project": project["id"],
         "team": team["id"],
     }
 
@@ -56,13 +60,18 @@ async def domain(client: AsyncClient, name: str, company: str, **fields: Any) ->
     )
 
 
-async def test_architectures_and_missions(user_client: AsyncClient, world: dict[str, Any]) -> None:
+async def test_architectures_and_projects(user_client: AsyncClient, world: dict[str, Any]) -> None:
+    """ADR-0042: architectures reach missions through projects of the same client."""
     created = await post(
         user_client,
         ARCH,
-        {"company_id": world["bank"], "name": "SI Bank", "mission_id": world["mission"]},
+        {"company_id": world["bank"], "name": "SI Bank", "project_id": world["project"]},
     )
-    assert created["missions"] == [{"id": world["mission"], "name": "Bank — Dev"}]
+    mission = {"id": world["mission"], "name": "Bank — Dev"}
+    assert created["missions"] == [mission]
+    assert created["projects"] == [
+        {"id": world["project"], "name": "Paiements", "mission": mission}
+    ]
     assert (created["company"]["name"], created["member_count"], created["lifecycle"]) == (
         "Bank",
         0,
@@ -72,24 +81,26 @@ async def test_architectures_and_missions(user_client: AsyncClient, world: dict[
     assert duplicate.json()["code"] == "NAME_ALREADY_USED"
     # Same name at another client is fine.
     other = await post(user_client, ARCH, {"company_id": world["insurer"], "name": "SI Bank"})
-    wrong = await user_client.put(f"{ARCH}/{other['id']}/missions/{world['mission']}")
+    wrong = await user_client.put(f"{ARCH}/{other['id']}/projects/{world['project']}")
     assert wrong.status_code == 422
     assert wrong.json()["code"] == "ARCHITECTURE_COMPANY_MISMATCH"
     on_creation = await user_client.post(
-        ARCH, json={"company_id": world["insurer"], "name": "X", "mission_id": world["mission"]}
+        ARCH, json={"company_id": world["insurer"], "name": "X", "project_id": world["project"]}
     )
     assert on_creation.json()["code"] == "ARCHITECTURE_COMPANY_MISMATCH"
 
     by_mission = (await user_client.get(ARCH, params={"mission_id": world["mission"]})).json()
     assert [a["id"] for a in by_mission] == [created["id"]]
+    by_project = (await user_client.get(ARCH, params={"project_id": world["project"]})).json()
+    assert [a["id"] for a in by_project] == [created["id"]]
     by_company = (await user_client.get(ARCH, params={"company_id": world["insurer"]})).json()
     assert [a["id"] for a in by_company] == [other["id"]]
 
     url = f"{ARCH}/{created['id']}"
-    unlinked = await user_client.delete(f"{url}/missions/{world['mission']}")
-    assert unlinked.json()["missions"] == []
-    assert (await user_client.delete(f"{url}/missions/{world['mission']}")).status_code == 404
-    relinked = await user_client.put(f"{url}/missions/{world['mission']}")
+    unlinked = await user_client.delete(f"{url}/projects/{world['project']}")
+    assert (unlinked.json()["missions"], unlinked.json()["projects"]) == ([], [])
+    assert (await user_client.delete(f"{url}/projects/{world['project']}")).status_code == 404
+    relinked = await user_client.put(f"{url}/projects/{world['project']}")
     assert len(relinked.json()["missions"]) == 1
     patched = await user_client.patch(url, json={"description": "# SI", "lifecycle": "TARGET"})
     assert (patched.json()["description"], patched.json()["lifecycle"]) == ("# SI", "TARGET")

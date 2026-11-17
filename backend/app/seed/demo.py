@@ -231,6 +231,7 @@ async def seed_demo_missions(session: AsyncSession, owner: "User") -> bool:
 # --- demo architecture (P8-11, ADR-0037) -------------------------------------------------------
 
 DEMO_ARCHITECTURE = "SI Banque Horizon"
+DEMO_PROJECT = "Refonte des paiements"
 
 # (name, kind, parent name, owner org unit, technologies)
 DEMO_DOMAINS: list[tuple[str, str, str | None, str | None, list[str]]] = [
@@ -305,12 +306,13 @@ async def seed_demo_architecture(session: AsyncSession, owner: "User") -> bool:
         DomainKind,
         DomainRelation,
         DomainTechnology,
-        MissionArchitecture,
+        ProjectArchitecture,
         RelationType,
         SyncMode,
     )
     from app.modules.directory.models import OrgUnit
     from app.modules.missions.models import Mission
+    from app.modules.projects.models import Project
     from app.modules.technologies.models import Technology
 
     bank_id = await session.scalar(
@@ -376,6 +378,16 @@ async def seed_demo_architecture(session: AsyncSession, owner: "User") -> bool:
         select(Mission.id).where(Mission.owner_id == owner.id, Mission.title == DEMO_MISSION_TITLE)
     )
     if mission_id is not None:
-        session.add(MissionArchitecture(mission_id=mission_id, architecture_id=architecture.id))
+        # ADR-0042: architectures reach a mission through one of its projects.
+        project = Project(
+            owner_id=owner.id,
+            mission_id=mission_id,
+            name=DEMO_PROJECT,
+            normalized_name=normalize_text(DEMO_PROJECT),
+            description="Projet de démonstration regroupant l'architecture et la documentation.",
+        )
+        session.add(project)
+        await session.flush()
+        session.add(ProjectArchitecture(project_id=project.id, architecture_id=architecture.id))
     await session.commit()
     return True

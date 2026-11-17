@@ -22,7 +22,7 @@
     "referent": "Contact référent",
     "description": "Description (Markdown)",
     "client": "Client",
-    "missions": "Missions"
+    "projects": "Projets"
   },
   "kinds": {
     "BUSINESS_DOMAIN": "Domaine métier",
@@ -154,13 +154,6 @@
     "urlInvalid": "Saisissez une adresse complète commençant par http:// ou https://.",
     "add": "Ajouter"
   },
-  "mission": {
-    "title": "Architectures de la mission",
-    "empty": "Aucune architecture liée.",
-    "unlinkOf": "Délier {{name}}",
-    "link": "Lier une architecture",
-    "linkPlaceholder": "Une architecture de {{client}}"
-  },
   "graph": {
     "open": "Vue graphe",
     "title": "Graphe",
@@ -210,5 +203,17 @@
     "copy": "Copier le code",
     "copied": "Code Mermaid copié.",
     "failed": "L'export a échoué."
+  },
+  "project": {
+    "title": "Architectures du projet",
+    "empty": "Aucune architecture liée.",
+    "unlinkOf": "Délier {{name}}",
+    "link": "Lier une architecture",
+    "linkPlaceholder": "Une architecture de {{client}}"
+  },
+  "scope": {
+    "label": "Périmètre",
+    "project": "Projet courant",
+    "all": "Toutes"
   }
 }

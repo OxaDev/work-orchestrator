@@ -2980,6 +2980,359 @@
         }
       }
     },
+    "/api/v1/projects": {
+      "get": {
+        "tags": [
+          "projects"
+        ],
+        "summary": "List Projects",
+        "operationId": "list_projects_api_v1_projects_get",
+        "parameters": [
+          {
+            "name": "mission_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Mission Id"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 200
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "name": "include_archived",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Include Archived"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 100,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_ProjectSummary_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "projects"
+        ],
+        "summary": "Create Project",
+        "operationId": "create_project_api_v1_projects_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectSummary"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}": {
+      "get": {
+        "tags": [
+          "projects"
+        ],
+        "summary": "Read Project",
+        "operationId": "read_project_api_v1_projects__project_id__get",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectSummary"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "projects"
+        ],
+        "summary": "Update Project",
+        "operationId": "update_project_api_v1_projects__project_id__patch",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectSummary"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "projects"
+        ],
+        "summary": "Delete Project",
+        "operationId": "delete_project_api_v1_projects__project_id__delete",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/archive": {
+      "post": {
+        "tags": [
+          "projects"
+        ],
+        "summary": "Archive Project",
+        "operationId": "archive_project_api_v1_projects__project_id__archive_post",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectSummary"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/restore": {
+      "post": {
+        "tags": [
+          "projects"
+        ],
+        "summary": "Restore Project",
+        "operationId": "restore_project_api_v1_projects__project_id__restore_post",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectSummary"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/contact-roles": {
       "get": {
         "tags": [
@@ -5251,7 +5604,7 @@
           "documents"
         ],
         "summary": "List Documents",
-        "description": "Flat list (parent_id links, the client builds the tree); optionally those attached to an\nentity.",
+        "description": "Flat list (parent_id links, the client builds the tree); optionally those attached to an\nentity, those of a project or of a mission's projects, or those of no project (`unfiled`,\nADR-0042).",
         "operationId": "list_documents_api_v1_documents_get",
         "parameters": [
           {
@@ -5312,6 +5665,50 @@
               "type": "boolean",
               "default": false,
               "title": "Include Archived"
+            }
+          },
+          {
+            "name": "project_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "mission_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Mission Id"
+            }
+          },
+          {
+            "name": "unfiled",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Unfiled"
             }
           }
         ],
@@ -5612,7 +6009,7 @@
           "documents"
         ],
         "summary": "Import Markdown",
-        "description": "A zipped folder of Markdown notes (Obsidian vault): up to 50 MB and 2,000 files.",
+        "description": "A zipped folder of Markdown notes (Obsidian vault): up to 50 MB and 2,000 files. Pages go\ninto the parent's project, or `project_id` at the top level (ADR-0042).",
         "operationId": "import_markdown_api_v1_documents_import_markdown_post",
         "requestBody": {
           "content": {
@@ -6547,6 +6944,23 @@
             }
           },
           {
+            "name": "project_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Project Id"
+            }
+          },
+          {
             "name": "q",
             "in": "query",
             "required": false,
@@ -6960,14 +7374,14 @@
         }
       }
     },
-    "/api/v1/architectures/{architecture_id}/missions/{mission_id}": {
+    "/api/v1/architectures/{architecture_id}/projects/{project_id}": {
       "put": {
         "tags": [
           "architectures"
         ],
-        "summary": "Link Mission",
-        "description": "Links a mission of the same client (Q-H1).",
-        "operationId": "link_mission_api_v1_architectures__architecture_id__missions__mission_id__put",
+        "summary": "Link Project",
+        "description": "Links a project of the same client (Q-H1, ADR-0042).",
+        "operationId": "link_project_api_v1_architectures__architecture_id__projects__project_id__put",
         "parameters": [
           {
             "name": "architecture_id",
@@ -6980,13 +7394,13 @@
             }
           },
           {
-            "name": "mission_id",
+            "name": "project_id",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string",
               "format": "uuid",
-              "title": "Mission Id"
+              "title": "Project Id"
             }
           }
         ],
@@ -7017,8 +7431,8 @@
         "tags": [
           "architectures"
         ],
-        "summary": "Unlink Mission",
-        "operationId": "unlink_mission_api_v1_architectures__architecture_id__missions__mission_id__delete",
+        "summary": "Unlink Project",
+        "operationId": "unlink_project_api_v1_architectures__architecture_id__projects__project_id__delete",
         "parameters": [
           {
             "name": "architecture_id",
@@ -7031,13 +7445,13 @@
             }
           },
           {
-            "name": "mission_id",
+            "name": "project_id",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string",
               "format": "uuid",
-              "title": "Mission Id"
+              "title": "Project Id"
             }
           }
         ],
@@ -8755,7 +9169,7 @@
             "$ref": "#/components/schemas/Lifecycle",
             "default": "CURRENT"
           },
-          "mission_id": {
+          "project_id": {
             "anyOf": [
               {
                 "type": "string",
@@ -8765,7 +9179,7 @@
                 "type": "null"
               }
             ],
-            "title": "Mission Id"
+            "title": "Project Id"
           }
         },
         "type": "object",
@@ -8808,6 +9222,13 @@
             "type": "integer",
             "title": "Member Count"
           },
+          "projects": {
+            "items": {
+              "$ref": "#/components/schemas/ProjectRef"
+            },
+            "type": "array",
+            "title": "Projects"
+          },
           "missions": {
             "items": {
               "$ref": "#/components/schemas/Summary"
@@ -8840,6 +9261,7 @@
           "lifecycle",
           "archived_at",
           "member_count",
+          "projects",
           "missions",
           "description",
           "members",
@@ -8880,6 +9302,13 @@
             "type": "integer",
             "title": "Member Count"
           },
+          "projects": {
+            "items": {
+              "$ref": "#/components/schemas/ProjectRef"
+            },
+            "type": "array",
+            "title": "Projects"
+          },
           "missions": {
             "items": {
               "$ref": "#/components/schemas/Summary"
@@ -8896,6 +9325,7 @@
           "lifecycle",
           "archived_at",
           "member_count",
+          "projects",
           "missions"
         ],
         "title": "ArchitectureSummary"
@@ -9052,6 +9482,18 @@
               }
             ],
             "title": "Parent Id"
+          },
+          "project_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Id"
           }
         },
         "type": "object",
@@ -10413,6 +10855,18 @@
             ],
             "title": "Parent Id"
           },
+          "project_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Id"
+          },
           "content_md": {
             "type": "string",
             "maxLength": 500000,
@@ -10466,6 +10920,18 @@
               }
             ],
             "title": "Parent Id"
+          },
+          "project_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Id"
           },
           "title": {
             "type": "string",
@@ -10546,6 +11012,7 @@
         "required": [
           "id",
           "parent_id",
+          "project_id",
           "title",
           "slug",
           "updated_at",
@@ -10573,13 +11040,26 @@
               }
             ],
             "title": "Parent Id"
+          },
+          "project_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Id"
           }
         },
         "type": "object",
         "required": [
           "parent_id"
         ],
-        "title": "DocumentMove"
+        "title": "DocumentMove",
+        "description": "Moves a page and its sub-pages. Under a parent, they take the parent's project; at the top\nlevel, `project_id` (when sent) files them in that project, or unfiles them when null."
       },
       "DocumentSave": {
         "properties": {
@@ -10622,6 +11102,18 @@
             ],
             "title": "Parent Id"
           },
+          "project_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Id"
+          },
           "title": {
             "type": "string",
             "title": "Title"
@@ -10656,6 +11148,7 @@
         "required": [
           "id",
           "parent_id",
+          "project_id",
           "title",
           "slug",
           "updated_at",
@@ -13741,6 +14234,27 @@
         ],
         "title": "Page[MissionSummary]"
       },
+      "Page_ProjectSummary_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ProjectSummary"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total"
+        ],
+        "title": "Page[ProjectSummary]"
+      },
       "Page_TechnologyRead_": {
         "properties": {
           "items": {
@@ -13965,6 +14479,142 @@
         },
         "type": "object",
         "title": "ProfileUpdate"
+      },
+      "ProjectCreate": {
+        "properties": {
+          "mission_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Mission Id"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 100000,
+            "title": "Description",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "mission_id",
+          "name"
+        ],
+        "title": "ProjectCreate"
+      },
+      "ProjectRef": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "mission": {
+            "$ref": "#/components/schemas/Summary"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "mission"
+        ],
+        "title": "ProjectRef"
+      },
+      "ProjectSummary": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "mission": {
+            "$ref": "#/components/schemas/Summary"
+          },
+          "client": {
+            "$ref": "#/components/schemas/Summary"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "archived_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Archived At"
+          },
+          "document_count": {
+            "type": "integer",
+            "title": "Document Count"
+          },
+          "architecture_count": {
+            "type": "integer",
+            "title": "Architecture Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "mission",
+          "client",
+          "name",
+          "description",
+          "archived_at",
+          "document_count",
+          "architecture_count"
+        ],
+        "title": "ProjectSummary"
+      },
+      "ProjectUpdate": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          }
+        },
+        "type": "object",
+        "title": "ProjectUpdate"
       },
       "PublicHoliday": {
         "properties": {

@@ -377,9 +377,12 @@ Objectif : un squelette back + front + Docker + Makefile, testé, sans fonctionn
 | P13-10 | Diff visuel entre versions de documents | Q-I6 |
 | P13-11 | Historisation de l'architecture (vue à une date) | Q-H8 |
 | P13-12 | Assistant IA (résumé hebdo, génération du standup, questions sur la doc) — local ou API | Q-L4 |
-| P13-13 | Éditeur WYSIWYG façon Notion | Q-I2 |
+| P13-13 | [x] Éditeur WYSIWYG façon Notion — fait : édition live TipTap, menu « / », mode source Markdown (ADR-0043) | Q-I2, ADR-0043 |
 | P13-14 | PWA mobile pour la saisie quotidienne | Q-A5 |
 | P13-15 | Rappels (fin de mission proche, jours non saisis) | O |
+| P13-16 | [x] **Projets** dans une mission : documents et architectures par projet, contexte de travail mission › projet, migration vers un projet « Général » — fait (ADR-0042, migration 0013, RG-15, RG-16) | conversation 2026-11-17, ADR-0042 |
+| P13-17 | [x] Arbre des documents : tri alphabétique à chaque niveau, glisser-déposer pour imbriquer ou sortir une page, création de sous-documents — fait (ADR-0042, ADR-0043) | conversation 2026-11-17 |
+| P13-18 | [ ] Projets dans la recherche globale et en type de wikilink `[[project:…]]` | ADR-0042 |
 
 ---
 

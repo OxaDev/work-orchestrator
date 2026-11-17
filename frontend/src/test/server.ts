@@ -10,6 +10,7 @@ import { directoryHandlers, resetDirectory } from "./directoryBackend";
 import { documentsHandlers, resetDocuments } from "./documentsBackend";
 import { microHandlers, resetMicro } from "./microBackend";
 import { missionsHandlers, resetMissions } from "./missionsBackend";
+import { projectsHandlers, resetProjects } from "./projectsBackend";
 import { resetTemplates, templatesHandlers } from "./templatesBackend";
 
 export const PASSWORD = "Correct-Horse-42";
@@ -52,6 +53,7 @@ export function resetBackend(sessionUser: UserRead | null = regularUser): void {
   backend.lastPatch = null;
   resetDirectory();
   resetMissions();
+  resetProjects();
   resetAgenda();
   resetMicro();
   resetTemplates();
@@ -91,6 +93,7 @@ export const handlers = [
   ...directoryHandlers,
   ...dashboardHandlers,
   ...missionsHandlers,
+  ...projectsHandlers,
   ...agendaHandlers,
   ...microHandlers,
   ...templatesHandlers,

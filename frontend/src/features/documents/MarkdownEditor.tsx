@@ -1,13 +1,84 @@
 import { autocompletion, type CompletionContext } from "@codemirror/autocomplete";
 import { markdown } from "@codemirror/lang-markdown";
-import { EditorState, Prec } from "@codemirror/state";
+import { HighlightStyle, syntaxHighlighting } from "@codemirror/language";
+import { Compartment, EditorState, Prec } from "@codemirror/state";
 import { EditorView, keymap } from "@codemirror/view";
+import { tags } from "@lezer/highlight";
+import { useComputedColorScheme } from "@mantine/core";
 import { basicSetup } from "codemirror";
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { wikilink, wikiQuery } from "../../components/markdown";
 import { searchLinks } from "./api";
+
+/**
+ * Markdown colours from Mantine variables, which follow the colour scheme (ADR-0043): syntax marks
+ * (`#`, `**`, `-`, `>`, link URLs) stay readable on the dark background.
+ */
+const markdownHighlight = HighlightStyle.define([
+  { tag: tags.heading1, fontWeight: "700", fontSize: "1.25em", color: "var(--mantine-color-text)" },
+  { tag: tags.heading2, fontWeight: "700", fontSize: "1.15em", color: "var(--mantine-color-text)" },
+  { tag: [tags.heading3, tags.heading4, tags.heading5, tags.heading6], fontWeight: "700" },
+  { tag: tags.strong, fontWeight: "700" },
+  { tag: tags.emphasis, fontStyle: "italic" },
+  { tag: tags.strikethrough, textDecoration: "line-through" },
+  {
+    tag: [tags.processingInstruction, tags.meta, tags.contentSeparator],
+    color: "var(--mantine-color-orange-text)",
+  },
+  { tag: [tags.link, tags.labelName], color: "var(--mantine-color-blue-text)" },
+  { tag: tags.url, color: "var(--mantine-color-cyan-text)", textDecoration: "underline" },
+  { tag: tags.monospace, color: "var(--mantine-color-teal-text)" },
+  { tag: tags.quote, color: "var(--mantine-color-dimmed)", fontStyle: "italic" },
+  { tag: [tags.list, tags.atom], color: "var(--mantine-color-violet-text)" },
+  { tag: tags.comment, color: "var(--mantine-color-dimmed)" },
+  { tag: [tags.keyword, tags.typeName], color: "var(--mantine-color-violet-text)" },
+  { tag: [tags.string, tags.special(tags.string)], color: "var(--mantine-color-teal-text)" },
+  { tag: [tags.number, tags.bool], color: "var(--mantine-color-orange-text)" },
+]);
+
+/** Frame colours; `dark` also switches CodeMirror's own cursor and selection colours. */
+const frameTheme = (dark: boolean) =>
+  EditorView.theme(
+    {
+      "&": {
+        minHeight: "60vh",
+        border: "1px solid var(--mantine-color-default-border)",
+        borderRadius: "4px",
+        color: "var(--mantine-color-text)",
+        backgroundColor: "var(--mantine-color-body)",
+      },
+      ".cm-scroller": {
+        fontFamily: "var(--mantine-font-family-monospace)",
+        fontSize: "13px",
+      },
+      ".cm-content": { caretColor: "var(--mantine-color-text)" },
+      ".cm-cursor, .cm-dropCursor": { borderLeftColor: "var(--mantine-color-text)" },
+      ".cm-gutters": {
+        backgroundColor: "var(--mantine-color-default)",
+        color: "var(--mantine-color-dimmed)",
+        borderRight: "1px solid var(--mantine-color-default-border)",
+      },
+      // CodeMirror's default highlight is too light for text contrast in dark mode.
+      ".cm-activeLine, .cm-activeLineGutter": {
+        backgroundColor: "var(--mantine-color-default-hover)",
+      },
+      "&.cm-focused .cm-selectionBackground, .cm-selectionBackground, ::selection": {
+        backgroundColor: "var(--mantine-primary-color-light)",
+      },
+      ".cm-tooltip": {
+        backgroundColor: "var(--mantine-color-body)",
+        color: "var(--mantine-color-text)",
+        border: "1px solid var(--mantine-color-default-border)",
+      },
+      ".cm-tooltip-autocomplete ul li[aria-selected]": {
+        backgroundColor: "var(--mantine-primary-color-light)",
+        color: "var(--mantine-color-text)",
+      },
+    },
+    { dark },
+  );
 
 export interface MarkdownEditorProps {
   value: string;
@@ -27,6 +98,8 @@ export function MarkdownEditor({ value, onChange, onSave, onFiles, label }: Mark
   const { t } = useTranslation("documents");
   const host = useRef<HTMLDivElement>(null);
   const view = useRef<EditorView | null>(null);
+  const dark = useComputedColorScheme("light") === "dark";
+  const scheme = useRef(new Compartment());
   // Callbacks change on every render; the editor reads the latest ones through this ref.
   const callbacks = useRef({ onChange, onSave, onFiles, t });
   useLayoutEffect(() => {
@@ -104,21 +177,8 @@ export function MarkdownEditor({ value, onChange, onSave, onFiles, label }: Mark
               return true;
             },
           }),
-          EditorView.theme({
-            "&": {
-              minHeight: "60vh",
-              border: "1px solid var(--mantine-color-default-border)",
-              borderRadius: "4px",
-            },
-            ".cm-scroller": {
-              fontFamily: "var(--mantine-font-family-monospace)",
-              fontSize: "13px",
-            },
-            // CodeMirror's default highlight is too light for text contrast in dark mode.
-            ".cm-activeLine, .cm-activeLineGutter": {
-              backgroundColor: "var(--mantine-color-default-hover)",
-            },
-          }),
+          syntaxHighlighting(markdownHighlight),
+          scheme.current.of(frameTheme(dark)),
         ],
       }),
     });
@@ -130,6 +190,10 @@ export function MarkdownEditor({ value, onChange, onSave, onFiles, label }: Mark
     // The editor is created once; later `value` changes are applied by the effect below.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    view.current?.dispatch({ effects: scheme.current.reconfigure(frameTheme(dark)) });
+  }, [dark]);
 
   useEffect(() => {
     const editor = view.current;

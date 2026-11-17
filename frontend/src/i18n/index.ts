@@ -10,6 +10,7 @@ import enDirectory from "./en/directory.json";
 import enDocuments from "./en/documents.json";
 import enErrors from "./en/errors.json";
 import enMissions from "./en/missions.json";
+import enProjects from "./en/projects.json";
 import enSearch from "./en/search.json";
 import enSubjects from "./en/subjects.json";
 import frAgenda from "./fr/agenda.json";
@@ -21,6 +22,7 @@ import frDirectory from "./fr/directory.json";
 import frDocuments from "./fr/documents.json";
 import frErrors from "./fr/errors.json";
 import frMissions from "./fr/missions.json";
+import frProjects from "./fr/projects.json";
 import frSearch from "./fr/search.json";
 import frSubjects from "./fr/subjects.json";
 
@@ -36,6 +38,7 @@ export const resources = {
     errors: enErrors,
     directory: enDirectory,
     missions: enMissions,
+    projects: enProjects,
     agenda: enAgenda,
     subjects: enSubjects,
     documents: enDocuments,
@@ -49,6 +52,7 @@ export const resources = {
     errors: frErrors,
     directory: frDirectory,
     missions: frMissions,
+    projects: frProjects,
     agenda: frAgenda,
     subjects: frSubjects,
     documents: frDocuments,
@@ -93,6 +97,7 @@ void i18n.use(initReactI18next).init({
     "errors",
     "directory",
     "missions",
+    "projects",
     "agenda",
     "subjects",
     "documents",

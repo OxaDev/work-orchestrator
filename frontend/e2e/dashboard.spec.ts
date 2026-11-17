@@ -32,12 +32,17 @@ test("an agenda day and the architecture documentation are two clicks apart (P10
     description: "",
     review: "",
   });
+  const project = await post(page, "./api/v1/projects", {
+    mission_id: mission.id,
+    name: `Projet ${suffix}`,
+    description: "",
+  });
   const architecture = await post(page, "./api/v1/architectures", {
     company_id: client.id,
     name: `SI ${suffix}`,
     description: "",
     lifecycle: "CURRENT",
-    mission_id: mission.id,
+    project_id: project.id,
   });
   const domain = await post(page, "./api/v1/domains", {
     company_id: client.id,

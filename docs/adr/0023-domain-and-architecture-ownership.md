@@ -1,6 +1,6 @@
 # ADR-0023: Domains belong to a client; architectures ↔ missions many-to-many
 
-- **Status**: Accepted
+- **Status**: Superseded by [ADR-0042](0042-projects-between-missions-documents-and-architectures.md) for the mission ↔ architecture link only (the rest stays in force)
 - **Date**: 2026-11-05
 - **Deciders**: Project owner (default answers)
 - **Source**: Q-H1, Q-H2, Q-H3, Q-H6, Q-H8, Q-H9, Q-G5
@@ -45,3 +45,7 @@ Option 2 forces copying when a mission is renewed; option 3 mixes clients.
 ## Compliance
 
 Service tests rejecting cross-company links (`DOMAIN_COMPANY_MISMATCH`).
+
+## Notes
+
+- 2026-11-17: `MissionArchitecture` is replaced by `ProjectArchitecture` (ADR-0042). Architectures still belong to the client company and are reused across missions; they now reach a mission through its projects.

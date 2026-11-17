@@ -10,6 +10,7 @@ from app.modules.auth import models as _auth_models  # noqa: F401
 from app.modules.directory import models as _directory_models  # noqa: F401
 from app.modules.documents import models as _documents_models  # noqa: F401
 from app.modules.missions import models as _missions_models  # noqa: F401
+from app.modules.projects import models as _projects_models  # noqa: F401
 from app.modules.subjects import models as _subjects_models  # noqa: F401
 from app.modules.tags import models as _tags_models  # noqa: F401
 from app.modules.technologies import models as _technologies_models  # noqa: F401

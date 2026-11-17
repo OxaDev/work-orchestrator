@@ -31,6 +31,7 @@ import { HomePage } from "../features/home/HomePage";
 import { MissionPage } from "../features/missions/MissionPage";
 import { MissionsPage } from "../features/missions/MissionsPage";
 import { RolesPage } from "../features/missions/RolesPage";
+import { ProjectPage } from "../features/projects/ProjectPage";
 import { ComingSoonPage } from "../features/placeholder/ComingSoonPage";
 import { NotFoundPage } from "../features/placeholder/NotFoundPage";
 import { DataSettings } from "../features/settings/DataSettings";
@@ -81,6 +82,7 @@ export const routes: RouteObject[] = [
           { path: "missions", element: <MissionsPage /> },
           { path: "missions/career", element: <CareerPage /> },
           { path: "missions/:missionId", element: <MissionPage /> },
+          { path: "missions/:missionId/projects/:projectId/:tab?", element: <ProjectPage /> },
           {
             path: "directory",
             element: <DirectoryLayout />,

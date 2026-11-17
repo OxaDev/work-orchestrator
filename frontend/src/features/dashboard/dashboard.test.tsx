@@ -53,6 +53,7 @@ describe("mission dashboard (P10-3, ADR-0039)", () => {
         lifecycle: "CURRENT",
         archived_at: null,
         member_count: 1,
+        projects: [],
         missions: [],
       },
     ];

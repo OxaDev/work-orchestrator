@@ -6,6 +6,7 @@ import { arch, archIds } from "../../test/architectureBackend";
 import { ids } from "../../test/directoryBackend";
 import { microIds } from "../../test/microBackend";
 import { missionIds } from "../../test/missionsBackend";
+import { projectIds } from "../../test/projectsBackend";
 import { renderApp } from "../../test/render";
 
 type User = ReturnType<typeof userEvent.setup>;
@@ -22,7 +23,9 @@ describe("architecture home (P8-8)", () => {
     const { router } = renderApp("/architecture");
     const row = (await screen.findByRole("link", { name: "SI Horizon" })).closest("tr")!;
     expect(within(row).getByText("Banque Horizon")).toBeInTheDocument();
-    expect(within(row).getByText("Horizon — Paiements")).toBeInTheDocument();
+    expect(
+      within(row).getByText("Horizon — Paiements › Refonte des paiements"),
+    ).toBeInTheDocument();
     expect(within(row).getByText("Actuel")).toBeInTheDocument();
 
     await user.click(screen.getByRole("tab", { name: "Domaines" }));
@@ -50,7 +53,7 @@ describe("architecture home (P8-8)", () => {
       company_id: ids.bankCompany,
       name: "SI cible",
       lifecycle: "TARGET",
-      mission_id: null,
+      project_id: null,
     });
   });
 });
@@ -230,15 +233,17 @@ describe("domain sheet (P8-9, P8-10)", () => {
   });
 });
 
-describe("mission architectures (Q-H1)", () => {
-  it("links, unlinks and creates the mission's architectures", async () => {
+describe("project architectures (Q-H1, ADR-0042)", () => {
+  it("links, unlinks and creates the project's architectures", async () => {
     const user = userEvent.setup();
-    const { router } = renderApp(`/missions/${missionIds.current}?tab=architectures`);
+    const { router } = renderApp(
+      `/missions/${missionIds.current}/projects/${projectIds.current}/architectures`,
+    );
     expect(await screen.findByRole("link", { name: "SI Horizon" })).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Délier SI Horizon" }));
-    await waitFor(() => expect(arch.lastUrl).toBe(`unlink:${missionIds.current}`));
+    await waitFor(() => expect(arch.lastUrl).toBe(`unlink:${projectIds.current}`));
     await pick(user, "Lier une architecture", "SI Horizon");
-    await waitFor(() => expect(arch.lastUrl).toBe(`link:${missionIds.current}`));
+    await waitFor(() => expect(arch.lastUrl).toBe(`link:${projectIds.current}`));
 
     await user.click(screen.getByRole("button", { name: "Nouvelle architecture" }));
     const dialog = await screen.findByRole("dialog", { name: "Nouvelle architecture" });
@@ -251,7 +256,7 @@ describe("mission architectures (Q-H1)", () => {
     expect(arch.lastBody).toMatchObject({
       company_id: ids.bankCompany,
       name: "SI Paiements",
-      mission_id: missionIds.current,
+      project_id: projectIds.current,
     });
   });
 });

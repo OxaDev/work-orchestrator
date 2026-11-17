@@ -7,7 +7,13 @@ import { useErrorMessage } from "../../i18n/useErrorMessage";
 import { useImportMarkdown } from "../data/api";
 
 /** Imports a zipped folder of Markdown notes, Obsidian vaults included (P11-6, ADR-0040). */
-export function MarkdownImportModal({ onClose }: { onClose: () => void }) {
+export function MarkdownImportModal({
+  projectId,
+  onClose,
+}: {
+  projectId?: string | null;
+  onClose: () => void;
+}) {
   const { t } = useTranslation("data");
   const errorMessage = useErrorMessage();
   const [file, setFile] = useState<File | null>(null);
@@ -56,7 +62,9 @@ export function MarkdownImportModal({ onClose }: { onClose: () => void }) {
             <Button
               disabled={!file}
               loading={importMarkdown.isPending}
-              onClick={() => file && importMarkdown.mutate({ file })}
+              onClick={() =>
+                file && importMarkdown.mutate({ file, projectId: projectId ?? undefined })
+              }
             >
               {t("markdown.import")}
             </Button>

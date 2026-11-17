@@ -18,7 +18,7 @@
   "restore": "Restore",
   "delete": "Delete",
   "deleteTitle": "Delete?",
-  "deleteMessage": "Delete \"{{title}}\" and its history? Pages with sub-pages cannot be deleted: archive them.",
+  "deleteMessage": "Delete \"{{title}}\", its sub-pages and their history?",
   "archivedNotice": "This document is archived.",
   "fields": {
     "title": "Title",
@@ -45,8 +45,8 @@
   },
   "mode": {
     "label": "Display",
-    "edit": "Editor",
-    "split": "Side by side",
+    "live": "Edit",
+    "source": "Markdown",
     "preview": "Preview"
   },
   "export": {
@@ -123,5 +123,43 @@
     "empty": "No document yet.",
     "legendLink": "link in the text",
     "legendAttachment": "attached to"
+  },
+  "createSubdocument": "New sub-document",
+  "live": {
+    "placeholder": "Write, or type \"/\" for commands and \"[[\" for a link…",
+    "slashMenu": "Commands",
+    "linkMenu": "Link to…",
+    "noResult": "No result",
+    "codeLanguage": "Language",
+    "slash": {
+      "paragraph": "Paragraph",
+      "heading1": "Heading 1",
+      "heading2": "Heading 2",
+      "heading3": "Heading 3",
+      "bulletList": "Bulleted list",
+      "orderedList": "Numbered list",
+      "taskList": "Task list",
+      "quote": "Quote",
+      "codeBlock": "Code block",
+      "mermaid": "Mermaid diagram",
+      "table": "Table",
+      "divider": "Divider",
+      "linkDocument": "Link to a document",
+      "linkEntity": "Link to a mission, domain, contact…",
+      "file": "File or image"
+    }
+  },
+  "scope": {
+    "label": "Scope",
+    "project": "Current project",
+    "mission": "Current mission",
+    "unfiled": "No project",
+    "all": "All"
+  },
+  "dnd": {
+    "dropRoot": "Drop here to move the page to the top level",
+    "emptyGroup": "No pages.",
+    "otherProject": "Other project (archived)",
+    "createIn": "New document in {{name}}"
   }
 }

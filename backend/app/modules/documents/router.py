@@ -48,12 +48,21 @@ async def list_documents(
     entity_type: LinkType | None = None,
     entity_id: uuid.UUID | None = None,
     include_archived: IncludeArchived = False,
+    project_id: uuid.UUID | None = None,
+    mission_id: uuid.UUID | None = None,
+    unfiled: bool = False,
 ) -> list[DocumentSummary]:
     """Flat list (parent_id links, the client builds the tree); optionally those attached to an
-    entity."""
+    entity, those of a project or of a mission's projects, or those of no project (`unfiled`,
+    ADR-0042)."""
     entity = (entity_type, entity_id) if entity_type and entity_id else None
     rows = await DocumentService(session, user).search(
-        search=q, entity=entity, include_archived=include_archived
+        search=q,
+        entity=entity,
+        include_archived=include_archived,
+        project_id=project_id,
+        mission_id=mission_id,
+        unfiled=unfiled,
     )
     return [summary(row) for row in rows]
 
@@ -107,9 +116,11 @@ async def import_markdown(
     settings: AppSettings,
     file: Annotated[UploadFile, File()],
     parent_id: Annotated[uuid.UUID | None, Form()] = None,
+    project_id: Annotated[uuid.UUID | None, Form()] = None,
 ) -> MarkdownImportReportRead:
-    """A zipped folder of Markdown notes (Obsidian vault): up to 50 MB and 2,000 files."""
-    report = await MarkdownImporter(session, user, settings).run(file, parent_id)
+    """A zipped folder of Markdown notes (Obsidian vault): up to 50 MB and 2,000 files. Pages go
+    into the parent's project, or `project_id` at the top level (ADR-0042)."""
+    report = await MarkdownImporter(session, user, settings).run(file, parent_id, project_id)
     return MarkdownImportReportRead(**report.__dict__)
 
 
@@ -118,7 +129,7 @@ async def move_document(
     document_id: uuid.UUID, body: DocumentMove, user: CurrentUser, session: DbSession
 ) -> DocumentDetail:
     service = DocumentService(session, user)
-    return await service.detail(await service.move(document_id, body.parent_id))
+    return await service.detail(await service.move(document_id, body))
 
 
 @router.post("/{document_id}/archive", response_model=DocumentDetail)

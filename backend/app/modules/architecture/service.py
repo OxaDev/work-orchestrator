@@ -21,7 +21,7 @@ from app.modules.architecture.models import (
     DomainRelation,
     DomainTechnology,
     LinkedEntity,
-    MissionArchitecture,
+    ProjectArchitecture,
     RelationType,
     SubjectDomain,
 )
@@ -40,6 +40,7 @@ from app.modules.architecture.schemas import (
     LinkedSubject,
     NodePosition,
     OrgUnitRef,
+    ProjectRef,
     RelationCreate,
     RelationRead,
     RelationUpdate,
@@ -50,6 +51,7 @@ from app.modules.directory.schemas import Summary
 from app.modules.directory.service import summaries
 from app.modules.documents.models import DocumentAttachment
 from app.modules.missions.models import Mission
+from app.modules.projects.models import Project
 from app.modules.subjects.models import Subject
 from app.modules.technologies.models import Technology
 from app.shared.ownership import get_owned, owned
@@ -498,6 +500,7 @@ class ArchitectureService:
         mission_id: uuid.UUID | None,
         search: str | None,
         include_archived: bool,
+        project_id: uuid.UUID | None = None,
     ) -> list[Architecture]:
         query = owned(select(Architecture), Architecture, self.user.id)
         if company_id is not None:
@@ -505,8 +508,16 @@ class ArchitectureService:
         if mission_id is not None:
             query = query.where(
                 Architecture.id.in_(
-                    select(MissionArchitecture.architecture_id).where(
-                        MissionArchitecture.mission_id == mission_id
+                    select(ProjectArchitecture.architecture_id)
+                    .join(Project, Project.id == ProjectArchitecture.project_id)
+                    .where(Project.mission_id == mission_id)
+                )
+            )
+        if project_id is not None:
+            query = query.where(
+                Architecture.id.in_(
+                    select(ProjectArchitecture.architecture_id).where(
+                        ProjectArchitecture.project_id == project_id
                     )
                 )
             )
@@ -526,14 +537,19 @@ class ArchitectureService:
                 .group_by(ArchitectureDomain.architecture_id)
             )
         }
+        projects: dict[uuid.UUID, list[ProjectRef]] = defaultdict(list)
         missions: dict[uuid.UUID, list[Summary]] = defaultdict(list)
-        for arch_id, mission in await self.session.execute(
-            select(MissionArchitecture.architecture_id, Mission)
-            .join(Mission, Mission.id == MissionArchitecture.mission_id)
-            .where(MissionArchitecture.architecture_id.in_(ids))
-            .order_by(Mission.start_date)
+        for arch_id, project, mission in await self.session.execute(
+            select(ProjectArchitecture.architecture_id, Project, Mission)
+            .join(Project, Project.id == ProjectArchitecture.project_id)
+            .join(Mission, Mission.id == Project.mission_id)
+            .where(ProjectArchitecture.architecture_id.in_(ids))
+            .order_by(Mission.start_date, Project.normalized_name)
         ):
-            missions[arch_id].append(Summary(id=mission.id, name=mission.title))
+            ref = Summary(id=mission.id, name=mission.title)
+            projects[arch_id].append(ProjectRef(id=project.id, name=project.name, mission=ref))
+            if ref not in missions[arch_id]:
+                missions[arch_id].append(ref)
         companies = await summaries(self.session, Company, {a.company_id for a in rows})
         return [
             ArchitectureSummary(
@@ -543,6 +559,7 @@ class ArchitectureService:
                 lifecycle=a.lifecycle,
                 archived_at=a.archived_at,
                 member_count=counts.get(a.id, 0),
+                projects=projects[a.id],
                 missions=missions[a.id],
             )
             for a in rows
@@ -577,11 +594,13 @@ class ArchitectureService:
             raise name_already_used("architecture")
         return normalized
 
-    async def _mission_for(self, architecture: Architecture, mission_id: uuid.UUID) -> Mission:
-        mission = await get_owned(self.session, Mission, mission_id, self.user.id, "mission")
-        if mission.client_id != architecture.company_id:
+    async def _project_for(self, architecture: Architecture, project_id: uuid.UUID) -> Project:
+        """A project of the architecture's client only (Q-H1, ADR-0042)."""
+        project = await get_owned(self.session, Project, project_id, self.user.id, "project")
+        mission = await self.session.get(Mission, project.mission_id)
+        if mission is None or mission.client_id != architecture.company_id:
             raise _unprocessable(ErrorCode.ARCHITECTURE_COMPANY_MISMATCH)
-        return mission
+        return project
 
     async def create(self, data: ArchitectureCreate) -> Architecture:
         if await self.session.get(Company, data.company_id) is None:
@@ -594,13 +613,13 @@ class ArchitectureService:
             description=data.description,
             lifecycle=data.lifecycle,
         )
-        if data.mission_id is not None:
-            await self._mission_for(architecture, data.mission_id)
+        if data.project_id is not None:
+            await self._project_for(architecture, data.project_id)
         self.session.add(architecture)
         await self.session.flush()
-        if data.mission_id is not None:
+        if data.project_id is not None:
             self.session.add(
-                MissionArchitecture(mission_id=data.mission_id, architecture_id=architecture.id)
+                ProjectArchitecture(project_id=data.project_id, architecture_id=architecture.id)
             )
         await self.session.commit()
         return architecture
@@ -651,19 +670,19 @@ class ArchitectureService:
         await self.session.delete(link)
         await self.session.commit()
 
-    async def link_mission(
-        self, architecture_id: uuid.UUID, mission_id: uuid.UUID, linked: bool
+    async def link_project(
+        self, architecture_id: uuid.UUID, project_id: uuid.UUID, linked: bool
     ) -> None:
         architecture = await self.get(architecture_id)
-        mission = await self._mission_for(architecture, mission_id)
-        link = await self.session.get(MissionArchitecture, (mission.id, architecture.id))
+        project = await self._project_for(architecture, project_id)
+        link = await self.session.get(ProjectArchitecture, (project.id, architecture.id))
         if linked and link is None:
             self.session.add(
-                MissionArchitecture(mission_id=mission.id, architecture_id=architecture.id)
+                ProjectArchitecture(project_id=project.id, architecture_id=architecture.id)
             )
         elif not linked:
             if link is None:
-                raise not_found("missionArchitecture")
+                raise not_found("projectArchitecture")
             await self.session.delete(link)
         await self.session.commit()
 

@@ -9,6 +9,7 @@ import type {
   LinkSearchResult,
 } from "../features/documents/api";
 import { missionIds } from "./missionsBackend";
+import { projects } from "./projectsBackend";
 
 let sequence = 0;
 const nextId = () => `00000000-0000-7000-d000-${String(++sequence).padStart(12, "0")}`;
@@ -34,6 +35,7 @@ export function addDocument(fields: Partial<DocumentDetail> & Pick<DocumentDetai
   const document: StoredDocument = {
     id: nextId(),
     parent_id: null,
+    project_id: null,
     slug: fields.title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
     updated_at: NOW,
     archived_at: null,
@@ -104,8 +106,17 @@ export const documentsHandlers = [
     const q = url.searchParams.get("q")?.toLowerCase();
     const entity = url.searchParams.get("entity_id");
     const archived = url.searchParams.get("include_archived") === "true";
+    const projectId = url.searchParams.get("project_id");
+    const missionId = url.searchParams.get("mission_id");
+    const unfiled = url.searchParams.get("unfiled") === "true";
+    const missionProjects = projects.items
+      .filter((p) => p.mission_id === missionId)
+      .map((p) => p.id);
     return HttpResponse.json(
       docs.items
+        .filter((d) => !projectId || d.project_id === projectId)
+        .filter((d) => !missionId || (d.project_id && missionProjects.includes(d.project_id)))
+        .filter((d) => !unfiled || !d.project_id)
         .filter((d) => !q || d.title.toLowerCase().includes(q))
         .filter((d) => !entity || d.entities.some((e) => e.id === entity))
         .filter((d) => archived || !d.archived_at)
@@ -116,6 +127,7 @@ export const documentsHandlers = [
     const body = (await request.json()) as {
       title: string;
       parent_id: string | null;
+      project_id?: string | null;
       template_id: string | null;
       content_md: string;
       attach_to: { type: EntityRef["type"]; id: string } | null;
@@ -125,6 +137,10 @@ export const documentsHandlers = [
     const created = addDocument({
       title: body.title,
       parent_id: body.parent_id,
+      // A sub-page takes its parent's project (ADR-0042).
+      project_id: body.parent_id
+        ? (find(body.parent_id)?.project_id ?? null)
+        : (body.project_id ?? null),
       content_md: body.content_md || template?.content_md || "",
       entities: body.attach_to ? [{ ...body.attach_to, label: "Horizon — Paiements" }] : [],
     });
@@ -156,10 +172,26 @@ export const documentsHandlers = [
     return HttpResponse.json(detail(document));
   }),
   http.post("*/api/v1/documents/:id/move", async ({ params, request }) => {
-    const body = (await request.json()) as { parent_id: string | null };
+    const body = (await request.json()) as { parent_id: string | null; project_id?: string | null };
     docs.lastBody = body;
     const document = find(params.id)!;
     document.parent_id = body.parent_id;
+    const project = body.parent_id
+      ? (find(body.parent_id)?.project_id ?? null)
+      : "project_id" in body
+        ? (body.project_id ?? null)
+        : document.project_id;
+    const subtree = new Set([document.id]);
+    for (let grew = true; grew;) {
+      grew = false;
+      for (const d of docs.items) {
+        if (d.parent_id && subtree.has(d.parent_id) && !subtree.has(d.id)) {
+          subtree.add(d.id);
+          grew = true;
+        }
+      }
+    }
+    for (const d of docs.items) if (subtree.has(d.id)) d.project_id = project;
     return HttpResponse.json(detail(document));
   }),
   http.post("*/api/v1/documents/:id/:action", ({ params }) => {

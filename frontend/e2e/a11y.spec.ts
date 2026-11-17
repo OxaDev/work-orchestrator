@@ -43,7 +43,13 @@ test("main pages pass an axe audit in both colour schemes (P12-3)", async ({ pag
     description: "",
     review: "",
   });
+  const project = await post(page, "./api/v1/projects", {
+    mission_id: mission.id,
+    name: `A11y projet ${suffix}`,
+    description: "",
+  });
   const architecture = await post(page, "./api/v1/architectures", {
+    project_id: project.id,
     company_id: client.id,
     name: `A11y SI ${suffix}`,
     description: "",
@@ -58,6 +64,7 @@ test("main pages pass an axe audit in both colour schemes (P12-3)", async ({ pag
     architecture_id: architecture.id,
   });
   const document = await post(page, "./api/v1/documents", {
+    project_id: project.id,
     title: `A11y doc ${suffix}`,
     content_md: "# Titre\n\nUn paragraphe et une liste :\n\n- un\n- deux\n",
   });
@@ -71,6 +78,12 @@ test("main pages pass an axe audit in both colour schemes (P12-3)", async ({ pag
     ["standup", "./agenda/standup", /Standup/],
     ["missions", "./missions", /Missions/],
     ["mission", `./missions/${mission.id}`, `A11y mission ${suffix}`],
+    ["project", `./missions/${mission.id}/projects/${project.id}`, `A11y doc ${suffix}`],
+    [
+      "project architectures",
+      `./missions/${mission.id}/projects/${project.id}/architectures`,
+      `A11y SI ${suffix}`,
+    ],
     ["documents", "./documents", /Documents/],
     ["document", `./documents/${document.id}`, "Un paragraphe et une liste"],
     ["architecture", `./architecture/architectures/${architecture.id}`, `A11y SI ${suffix}`],

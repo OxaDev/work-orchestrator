@@ -15,7 +15,7 @@ from app.modules.architecture.graph import subtree_depths
 from app.modules.architecture.models import (
     ArchitectureDomain,
     DomainTechnology,
-    MissionArchitecture,
+    ProjectArchitecture,
     SubjectDomain,
 )
 from app.modules.architecture.service import ArchitectureService
@@ -36,6 +36,7 @@ from app.modules.documents.service import DocumentService, summary
 from app.modules.documents.wikilinks import LinkType
 from app.modules.missions.models import Mission, MissionTechnology
 from app.modules.missions.service import MissionService
+from app.modules.projects.models import Project
 from app.modules.subjects.models import Subject
 from app.modules.technologies.models import Technology
 from app.shared.ownership import owned
@@ -174,10 +175,11 @@ class DashboardService:
             await self.session.scalars(
                 select(ArchitectureDomain.domain_id)
                 .join(
-                    MissionArchitecture,
-                    MissionArchitecture.architecture_id == ArchitectureDomain.architecture_id,
+                    ProjectArchitecture,
+                    ProjectArchitecture.architecture_id == ArchitectureDomain.architecture_id,
                 )
-                .where(MissionArchitecture.mission_id == mission.id)
+                .join(Project, Project.id == ProjectArchitecture.project_id)
+                .where(Project.mission_id == mission.id)
             )
         )
         domains = await subtree_depths(self.session, members, None)

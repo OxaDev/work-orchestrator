@@ -33,9 +33,13 @@ class Document(UUIDPrimaryKeyMixin, TimestampMixin, ArchivableMixin, OwnedMixin,
         CheckConstraint("parent_id IS NULL OR parent_id <> id", name="not_own_parent"),
     )
 
-    # RESTRICT: a page with sub-pages is archived, not deleted (ADR-0022).
+    # RESTRICT: DocumentService.delete removes a subtree leaves first (RG-17).
     parent_id: Mapped[uuid.UUID | None] = mapped_column(
         ForeignKey("documents.id", ondelete="RESTRICT"), index=True
+    )
+    # ADR-0042: set on every page of a tree (sub-pages carry their root's project); None = unfiled.
+    project_id: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey("projects.id", ondelete="RESTRICT"), index=True
     )
     title: Mapped[str] = mapped_column(String(200))
     slug: Mapped[str] = mapped_column(String(220))

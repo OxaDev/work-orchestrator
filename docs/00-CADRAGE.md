@@ -58,6 +58,7 @@ Export CRA (compte rendu d'activité), statistiques, import ICS, décisions d'ar
 | Secteur d'activité | `Sector` | Banque, assurance, retail… Hiérarchique **[H-10]** |
 | Entreprise | `Company` | Personne morale : client ou ESN employeuse |
 | Mission | `Mission` | Engagement de l'utilisateur chez un client, sur une période, avec un intitulé de poste |
+| Projet | `Project` | Chantier d'une mission : regroupe ses documents et les architectures sur lesquelles il porte (ADR-0042) |
 | Contact | `Contact` | Personne de l'annuaire global, rattachée éventuellement à une entreprise |
 | Rôle du contact en mission | `MissionContact` | Lien contact ↔ mission avec un rôle (manager, PO, tech lead…) |
 | Unité organisationnelle | `OrgUnit` | Direction, pôle ou équipe d'une entreprise (arbre) |
@@ -68,12 +69,12 @@ Export CRA (compte rendu d'activité), statistiques, import ICS, décisions d'ar
 | Journal quotidien | `DailyLog` | Note du jour : « hier j'ai fait… / aujourd'hui je compte faire… » |
 | Sujet | `Subject` | Thème de travail hiérarchique (sujet, sous-sujet…), rattaché à une mission ou à l'inter-contrat |
 | Tâche | `Task` | Travail daté (début, durée) sur un sujet, dans une demi-journée |
-| Architecture technique | `Architecture` | Cartographie d'un système, rattachée à une ou plusieurs missions |
+| Architecture technique | `Architecture` | Cartographie d'un système du client, liée à un ou plusieurs projets (ADR-0042) |
 | Domaine | `Domain` | Brique fonctionnelle ou technique. Arbre (sous-domaines) et graphe (relations) |
 | Relation de domaines | `DomainRelation` | Lien orienté et typé entre deux domaines (appelle, dépend de, publie vers…) |
 | Technologie | `Technology` | Langage, framework, base de données, outil… |
 | Pondération techno | `MissionTechnology` | Degré d'implication d'une techno dans une mission (1 à 5) **[H-30]** |
-| Document | `Document` | Page Markdown, versionnée, rattachable à une mission, une architecture, un domaine ou un sujet |
+| Document | `Document` | Page Markdown, versionnée, classée dans un projet (ou hors projet), rattachable à une mission, une architecture, un domaine ou un sujet |
 | Lien documentaire | `DocumentLink` | Lien `[[wikilink]]` d'un document vers une entité, à la base des rétroliens et du graphe |
 | Tag | `Tag` | Étiquette libre transverse |
 
@@ -93,7 +94,9 @@ erDiagram
     CONTACT ||--o{ MISSION_CONTACT : plays
     MISSION ||--o{ MISSION_TECHNOLOGY : uses
     TECHNOLOGY ||--o{ MISSION_TECHNOLOGY : weighted_in
-    MISSION }o--o{ ARCHITECTURE : documents
+    MISSION ||--o{ PROJECT : "split into"
+    PROJECT }o--o{ ARCHITECTURE : "works on"
+    PROJECT ||--o{ DOCUMENT : files
     ARCHITECTURE }o--o{ DOMAIN : contains
     DOMAIN ||--o{ DOMAIN : sub_domain_of
     DOMAIN ||--o{ DOMAIN_RELATION : source
@@ -120,6 +123,9 @@ erDiagram
 **Mission**
 `title` (nom interne), `job_title` (intitulé de poste), `client_id`, `employer_company_id` (votre ESN, pré-rempli depuis le paramètre utilisateur et figé sur la mission pour garder l'historique en cas de changement d'employeur) **[décidé]**, `start_date`, `planned_end_date`, `actual_end_date`, `status` (PROSPECT, ACTIVE, ON_HOLD, ENDED), `location`, `remote_policy`, `description` (Markdown), `color` (pour l'agenda), `daily_rate` (optionnel, chiffré à part) **[H-12]**.
 
+**Project** (ADR-0042)
+`mission_id`, `name` (unique dans la mission), `description` (Markdown), `archived_at` ; lié à des architectures du client de la mission ; contient des arbres de documents.
+
 **HalfDay**
 `owner_id`, `date`, `period` (AM, PM), `kind`, `mission_id` (obligatoire si `kind = MISSION`, interdit sinon), `location` (CLIENT_ON_SITE, REMOTE_ESN_OFFICE, REMOTE_HOME, REMOTE_OTHER, TRAVEL_MISSION, TRAVEL_ESN — ADR-0019), `note`.
 Unicité : (`owner_id`, `date`, `period`).
@@ -140,7 +146,7 @@ Unicité : (`owner_id`, `date`, `period`).
 `company_id` (client), `parent_id` (sous-domaine), `name` (unique entre frères), `kind` (BUSINESS_DOMAIN, APPLICATION, SERVICE, DATABASE, MESSAGING, EXTERNAL_SYSTEM, INFRASTRUCTURE, OTHER — ADR-0023), `description` (Markdown), `criticality` (LOW, MEDIUM, HIGH, CRITICAL), `lifecycle` (CURRENT, TARGET, DEPRECATED), `owner_org_unit_id`, `referent_contact_id` (ADR-0037).
 
 **Architecture**
-`company_id` (client), `name`, `description` (Markdown), `lifecycle` ; liée à des missions du même client ; contient des domaines d'entrée et, implicitement, leurs sous-domaines (ADR-0037).
+`company_id` (client), `name`, `description` (Markdown), `lifecycle` ; liée à des projets de missions du même client (ADR-0042) ; contient des domaines d'entrée et, implicitement, leurs sous-domaines (ADR-0037).
 
 **DomainRelation**
 `source_id`, `target_id` (même client), `type` (CALLS, DEPENDS_ON, PUBLISHES_TO, SUBSCRIBES_TO, READS_FROM, WRITES_TO, CUSTOM — libellé obligatoire), `label`, `protocol` (REST, gRPC, Kafka…), `sync_mode` (SYNC, ASYNC), `lifecycle`.
@@ -163,6 +169,9 @@ Unicité : (`owner_id`, `date`, `period`).
 | RG-12 | Supprimer une mission référencée par des demi-journées est refusé : on archive la mission. |
 | RG-13 | Un mois validé (verrouillé) refuse toute modification de demi-journée ou de tâche ; le valider exige que tous les jours ouvrés soient saisis ; le déverrouiller exige un motif, historisé (ADR-0021). |
 | RG-14 | Mot de passe : 12 caractères minimum, au moins une majuscule, une minuscule, un chiffre et un symbole quelconque, sans jamais imposer un caractère à touche morte comme `^` (ADR-0008). |
+| RG-15 | Toutes les pages d'un arbre de documents appartiennent au projet de leur page racine : créer ou déplacer une page sous une autre lui donne le projet de cette dernière, et déplacer une page entraîne ses sous-pages (ADR-0042). |
+| RG-16 | Supprimer un projet qui contient des documents est refusé (on l'archive) ; supprimer une mission qui a des projets est refusé (ADR-0042). |
+| RG-17 | Supprimer une page de documentation supprime aussi ses sous-pages, avec leurs versions ; l'interface demande confirmation en le signalant. |
 
 ## 6. Fonctionnalités
 

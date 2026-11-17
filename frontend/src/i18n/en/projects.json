@@ -1,0 +1,41 @@
+{
+  "title": "Projects",
+  "create": "New project",
+  "edit": "Edit",
+  "save": "Save",
+  "help": "A project groups the documentation and architectures of one workstream of the mission.",
+  "empty": "No project for this mission.",
+  "showArchived": "Show archived",
+  "archive": "Archive",
+  "restore": "Restore",
+  "delete": "Delete",
+  "archivedNotice": "This project is archived.",
+  "deleteTitle": "Delete the project?",
+  "deleteMessage": "\"{{name}}\" will be deleted. Its architectures stay with the client. A project holding documents cannot be deleted: archive it.",
+  "noDescription": "No description.",
+  "counts": "{{documents}} document(s) · {{architectures}} architecture(s)",
+  "fields": {
+    "name": "Name",
+    "description": "Description (Markdown)",
+    "documents": "Documents",
+    "architectures": "Architectures"
+  },
+  "tabs": {
+    "documents": "Documents ({{count}})",
+    "architectures": "Architectures ({{count}})",
+    "about": "About"
+  },
+  "validation": {
+    "required": "Required"
+  },
+  "context": {
+    "title": "Work context",
+    "mission": "Current mission",
+    "project": "Current project",
+    "allMissions": "All missions",
+    "allProjects": "All projects",
+    "pickMission": "Pick a mission first",
+    "open": "Open the project",
+    "createFirst": "Create a first project"
+  }
+}

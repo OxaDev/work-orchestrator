@@ -1,6 +1,6 @@
 # ADR-0036: Documents — editor, rendering, links, files and templates
 
-- **Status**: Accepted
+- **Status**: Superseded by [ADR-0043](0043-live-markdown-editor-tiptap.md) for the editor choice only (the rest stays in force)
 - **Date**: 2026-11-06
 - **Deciders**: Project owner
 - **Source**: roadmap phase P7 (tickets P7-1 to P7-13); Q-I1 to Q-I7
@@ -55,3 +55,7 @@ active SVG and sandboxing every served file closes the script vector with no dep
 ## Compliance
 
 `tests/unit/test_wikilinks.py`; `tests/integration/test_documents.py` (versions, drafts, tree, links, backlinks, isolation); `tests/integration/test_attachments.py` (size, types, SVG, headers, second user gets 404); frontend `documents.test.tsx` (export transformer, rendering); e2e `documents.spec.ts`.
+
+## Notes
+
+- 2026-11-17: live WYSIWYG editing (TipTap) added on top of the Markdown source, see ADR-0043.

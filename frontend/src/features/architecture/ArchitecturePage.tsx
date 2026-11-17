@@ -84,12 +84,17 @@ function ArchitectureView({ architecture }: { architecture: ArchitectureDetail }
           </Group>
           <Group gap={6}>
             <Text size="sm" c="dimmed">
-              {t("fields.missions")} :
+              {t("fields.projects")} :
             </Text>
-            {architecture.missions.length ? (
-              architecture.missions.map((m) => (
-                <Anchor key={m.id} component={Link} to={`/missions/${m.id}`} size="sm">
-                  {m.name}
+            {architecture.projects.length ? (
+              architecture.projects.map((p) => (
+                <Anchor
+                  key={p.id}
+                  component={Link}
+                  to={`/missions/${p.mission.id}/projects/${p.id}/architectures`}
+                  size="sm"
+                >
+                  {p.mission.name} › {p.name}
                 </Anchor>
               ))
             ) : (

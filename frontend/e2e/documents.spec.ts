@@ -37,6 +37,9 @@ test("a page with a Mermaid diagram and internal links copies cleanly (P7 DoD)",
   await create.getByRole("textbox", { name: "Titre" }).fill(`Architecture ${suffix}`);
   await create.getByRole("button", { name: "Créer" }).click();
 
+  // Raw Markdown is typed in the "Markdown" mode; the live editor is the default (ADR-0043).
+  const modes = page.getByRole("radiogroup", { name: "Affichage" });
+  await modes.getByText("Markdown", { exact: true }).click();
   // Typing "[[" opens the completion on every linkable entity (P7-9).
   const editor = page.getByRole("textbox", { name: "Contenu Markdown" });
   await editor.click();
@@ -44,6 +47,7 @@ test("a page with a Mermaid diagram and internal links copies cleanly (P7 DoD)",
   await page.getByRole("option", { name: new RegExp(`Doc mission ${suffix}`) }).click();
   await page.keyboard.insertText("\n\n```mermaid\nflowchart LR\n  Front --> API\n```\n");
 
+  await modes.getByText("Aperçu", { exact: true }).click();
   const preview = page.getByRole("region", { name: "Aperçu" });
   await expect(preview.getByRole("link", { name: `Doc mission ${suffix}` })).toHaveAttribute(
     "href",

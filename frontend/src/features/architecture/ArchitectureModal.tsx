@@ -13,16 +13,16 @@ import {
   useUpdateArchitecture,
 } from "./api";
 
-/** Creates (for a client, optionally linked to a mission) or edits an architecture (P8-1). */
+/** Creates (for a client, optionally linked to a project, ADR-0042) or edits an architecture. */
 export function ArchitectureModal({
   architecture,
   companyId = null,
-  missionId,
+  projectId,
   onClose,
 }: {
   architecture?: ArchitectureDetail;
   companyId?: string | null;
-  missionId?: string;
+  projectId?: string;
   onClose: () => void;
 }) {
   const { t } = useTranslation("architecture");
@@ -70,7 +70,7 @@ export function ArchitectureModal({
                 name: v.name.trim(),
                 lifecycle: v.lifecycle,
                 description: v.description,
-                mission_id: missionId ?? null,
+                project_id: projectId ?? null,
               },
               {
                 onSuccess: (created) => void navigate(`/architecture/architectures/${created.id}`),

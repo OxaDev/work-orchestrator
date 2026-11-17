@@ -67,12 +67,17 @@ async def list_architectures(
     session: DbSession,
     company_id: uuid.UUID | None = None,
     mission_id: uuid.UUID | None = None,
+    project_id: uuid.UUID | None = None,
     q: Search = None,
     include_archived: IncludeArchived = False,
 ) -> list[ArchitectureSummary]:
     service = ArchitectureService(session, user)
     rows = await service.search(
-        company_id=company_id, mission_id=mission_id, search=q, include_archived=include_archived
+        company_id=company_id,
+        mission_id=mission_id,
+        project_id=project_id,
+        search=q,
+        include_archived=include_archived,
     )
     return await service.summaries(rows)
 
@@ -151,25 +156,25 @@ async def remove_member(
 
 
 @architectures_router.put(
-    "/{architecture_id}/missions/{mission_id}", response_model=ArchitectureDetail
+    "/{architecture_id}/projects/{project_id}", response_model=ArchitectureDetail
 )
-async def link_mission(
-    architecture_id: uuid.UUID, mission_id: uuid.UUID, user: CurrentUser, session: DbSession
+async def link_project(
+    architecture_id: uuid.UUID, project_id: uuid.UUID, user: CurrentUser, session: DbSession
 ) -> ArchitectureDetail:
-    """Links a mission of the same client (Q-H1)."""
+    """Links a project of the same client (Q-H1, ADR-0042)."""
     service = ArchitectureService(session, user)
-    await service.link_mission(architecture_id, mission_id, True)
+    await service.link_project(architecture_id, project_id, True)
     return await service.detail(await service.get(architecture_id))
 
 
 @architectures_router.delete(
-    "/{architecture_id}/missions/{mission_id}", response_model=ArchitectureDetail
+    "/{architecture_id}/projects/{project_id}", response_model=ArchitectureDetail
 )
-async def unlink_mission(
-    architecture_id: uuid.UUID, mission_id: uuid.UUID, user: CurrentUser, session: DbSession
+async def unlink_project(
+    architecture_id: uuid.UUID, project_id: uuid.UUID, user: CurrentUser, session: DbSession
 ) -> ArchitectureDetail:
     service = ArchitectureService(session, user)
-    await service.link_mission(architecture_id, mission_id, False)
+    await service.link_project(architecture_id, project_id, False)
     return await service.detail(await service.get(architecture_id))
 
 

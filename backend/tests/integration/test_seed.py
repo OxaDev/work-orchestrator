@@ -87,7 +87,7 @@ async def test_demo_architecture(db_session: AsyncSession, make_user: Any) -> No
         Architecture,
         Domain,
         DomainRelation,
-        MissionArchitecture,
+        ProjectArchitecture,
     )
     from app.seed.demo import DEMO_DOMAINS, DEMO_RELATIONS, seed_demo_architecture
 
@@ -103,7 +103,7 @@ async def test_demo_architecture(db_session: AsyncSession, make_user: Any) -> No
     assert await _count(db_session, Architecture) == 1
     assert await _count(db_session, Domain) == 25
     assert await _count(db_session, DomainRelation) == 30
-    assert await _count(db_session, MissionArchitecture) == 1
+    assert await _count(db_session, ProjectArchitecture) == 1
     levels = {name: parent for name, _, parent, _, _ in DEMO_DOMAINS}
 
     def depth(name: str) -> int:

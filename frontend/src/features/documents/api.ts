@@ -32,9 +32,15 @@ export function useDocuments(
     entity_type?: LinkType;
     entity_id?: string;
     include_archived?: boolean;
+    /** ADR-0042: one project, the projects of a mission, or no project. */
+    project_id?: string;
+    mission_id?: string;
+    unfiled?: boolean;
   } = {},
+  enabled = true,
 ) {
   return useQuery({
+    enabled,
     queryKey: documentKeys.list(query),
     queryFn: () => unwrap(api.GET("/api/v1/documents", { params: { query } })),
   });
@@ -97,6 +103,33 @@ export function useMoveDocument(id: string) {
         api.POST("/api/v1/documents/{document_id}/move", {
           ...path(id),
           body: { parent_id: parentId },
+        }),
+      ),
+    onSuccess: invalidate,
+  });
+}
+
+/** Drag and drop in the tree (ADR-0042): under a page, or at the top level of a project
+ * (`projectId` undefined keeps the current one, null unfiles). */
+export function useRelocateDocument() {
+  const invalidate = useInvalidateDocuments();
+  return useMutation({
+    mutationFn: ({
+      id,
+      parentId,
+      projectId,
+    }: {
+      id: string;
+      parentId: string | null;
+      projectId?: string | null;
+    }) =>
+      unwrap(
+        api.POST("/api/v1/documents/{document_id}/move", {
+          ...path(id),
+          body:
+            projectId === undefined
+              ? { parent_id: parentId }
+              : { parent_id: parentId, project_id: projectId },
         }),
       ),
     onSuccess: invalidate,
@@ -199,6 +232,14 @@ export function useBacklinks(type: LinkType, id: string) {
 /** Entities matching a text, for the `[[` completion and entity pickers (P7-9). */
 export function searchLinks(q: string, types?: LinkType[]): Promise<LinkSearchResult[]> {
   return unwrap(api.GET("/api/v1/links/search", { params: { query: { q, types, limit: 20 } } }));
+}
+
+/** Title of a document, to turn a pasted document URL into a wikilink (ADR-0043). */
+export async function getDocumentTitle(id: string): Promise<string> {
+  const document = await unwrap(
+    api.GET("/api/v1/documents/{document_id}", { params: { path: { document_id: id } } }),
+  );
+  return document.title;
 }
 
 /** Uploads a file (ADR-0027); returns its id for an `attachment:<id>` reference. */

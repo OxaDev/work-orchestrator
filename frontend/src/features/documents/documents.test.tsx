@@ -52,6 +52,12 @@ vi.mock("./MarkdownEditor", () => ({
   ),
 }));
 
+// The live editor (ProseMirror) has its own tests: pages use the same stand-in in both modes.
+vi.mock("./LiveEditor", async () => {
+  const { MarkdownEditor } = await import("./MarkdownEditor");
+  return { default: MarkdownEditor, LiveEditor: MarkdownEditor };
+});
+
 const A = "0190a8c4-0000-7000-8000-00000000000a";
 const B = "0190a8c4-0000-7000-8000-00000000000b";
 
@@ -166,21 +172,28 @@ describe("documents (P7-7 to P7-12)", () => {
       parent_id: docIds.root,
       template_id: docIds.template,
     });
-    expect(await screen.findByRole("heading", { name: "Réunion" })).toBeInTheDocument();
+    // The new page opens in the live editor, with the template's content.
+    await waitFor(() =>
+      expect(
+        (screen.getByRole("textbox", { name: "Contenu Markdown" }) as HTMLTextAreaElement).value,
+      ).toContain("Réunion"),
+    );
   });
 
-  it("edits with live preview, autosaves a draft, saves a version", async () => {
+  it("edits live, previews, autosaves a draft, saves a version", async () => {
     const user = userEvent.setup();
     renderApp(`/documents/${docIds.root}`);
     const editor = await screen.findByRole("textbox", { name: "Contenu Markdown" });
-    const preview = screen.getByRole("region", { name: "Aperçu" });
-    expect(within(preview).getByRole("heading", { name: "Horizon" })).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: "Édition" })).toBeChecked();
 
     fireEvent.change(editor, {
       target: {
         value: `# Horizon\n\nLié à [[mission:${missionIds.current}|la mission]].\n\n\`\`\`mermaid\nflowchart LR\n  A --> B\n\`\`\`\n\n\`\`\`python\nprint("ok")\n\`\`\``,
       },
     });
+    await user.click(screen.getByRole("radio", { name: "Aperçu" }));
+    const preview = screen.getByRole("region", { name: "Aperçu" });
+    expect(within(preview).getByRole("heading", { name: "Horizon" })).toBeInTheDocument();
     expect(within(preview).getByRole("link", { name: "la mission" })).toHaveAttribute(
       "href",
       `/missions/${missionIds.current}`,
@@ -195,6 +208,11 @@ describe("documents (P7-7 to P7-12)", () => {
     await waitFor(() => expect(docs.lastUrl).toBe("draft"), { timeout: 3500 });
     expect(docs.lastBody).toEqual({ content_md: expect.stringContaining("la mission") });
 
+    // The Markdown source mode edits the same content.
+    await user.click(screen.getByRole("radio", { name: "Markdown" }));
+    expect(
+      (screen.getByRole("textbox", { name: "Contenu Markdown" }) as HTMLTextAreaElement).value,
+    ).toContain("la mission");
     await user.click(screen.getByRole("button", { name: "ctrl-s" }));
     await waitFor(() =>
       expect(docs.lastBody).toEqual({
@@ -212,9 +230,23 @@ describe("documents (P7-7 to P7-12)", () => {
     renderApp(`/documents/${docIds.root}`);
     const editor = await screen.findByRole("textbox", { name: "Contenu Markdown" });
     fireEvent.change(editor, { target: { value: "```mermaid\noops\n```" } });
+    fireEvent.click(screen.getByRole("radio", { name: "Aperçu" }));
     expect(
       await screen.findByText("Ce diagramme Mermaid ne peut pas être dessiné"),
     ).toBeInTheDocument();
+  });
+
+  it("creates a sub-document from a document page", async () => {
+    const user = userEvent.setup();
+    const { router } = renderApp(`/documents/${docIds.root}`);
+    await user.click(await screen.findByRole("button", { name: "Nouveau sous-document" }));
+    const dialog = await screen.findByRole("dialog", { name: "Nouveau document" });
+    await user.type(within(dialog).getByRole("textbox", { name: "Titre" }), "Sous-page");
+    await user.click(within(dialog).getByRole("button", { name: "Créer" }));
+    await waitFor(() =>
+      expect(router.state.location.pathname).not.toBe(`/documents/${docIds.root}`),
+    );
+    expect(docs.lastBody).toMatchObject({ title: "Sous-page", parent_id: docIds.root });
   });
 
   it("offers to resume an unsaved draft", async () => {
@@ -240,6 +272,7 @@ describe("documents (P7-7 to P7-12)", () => {
         `# Horizon![capture.png](attachment:${docs.uploads[0]!.id})`,
       ),
     );
+    await user.click(screen.getByRole("radio", { name: "Aperçu" }));
     const image = within(screen.getByRole("region", { name: "Aperçu" })).getByRole("img", {
       name: "capture.png",
     });

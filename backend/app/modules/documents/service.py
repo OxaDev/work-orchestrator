@@ -21,6 +21,7 @@ from app.modules.documents.schemas import (
     Backlink,
     DocumentCreate,
     DocumentDetail,
+    DocumentMove,
     DocumentSave,
     DocumentSummary,
     EntityRef,
@@ -32,8 +33,9 @@ from app.modules.documents.schemas import (
     TemplateUpdate,
 )
 from app.modules.documents.wikilinks import LinkType, extract
+from app.modules.projects.models import Project
 from app.shared.ownership import get_owned, owned
-from app.shared.schemas import entity_referenced, name_already_used, not_found
+from app.shared.schemas import name_already_used, not_found
 from app.shared.text import normalize_text
 from app.shared.tree import descendant_ids, ensure_valid_parent
 
@@ -49,6 +51,7 @@ def summary(document: Document) -> DocumentSummary:
     return DocumentSummary(
         id=document.id,
         parent_id=document.parent_id,
+        project_id=document.project_id,
         title=document.title,
         slug=document.slug,
         updated_at=document.updated_at,
@@ -73,8 +76,19 @@ class DocumentService:
         search: str | None,
         entity: tuple[LinkType, uuid.UUID] | None,
         include_archived: bool,
+        project_id: uuid.UUID | None = None,
+        mission_id: uuid.UUID | None = None,
+        unfiled: bool = False,
     ) -> list[Document]:
         query = owned(select(Document), Document, self.user.id)
+        if project_id is not None:
+            query = query.where(Document.project_id == project_id)
+        elif mission_id is not None:
+            query = query.where(
+                Document.project_id.in_(select(Project.id).where(Project.mission_id == mission_id))
+            )
+        elif unfiled:
+            query = query.where(Document.project_id.is_(None))
         if search and (needle := search.strip().lower()):
             query = query.where(func.lower(Document.title).like(f"%{needle}%"))
         if entity is not None:
@@ -243,9 +257,16 @@ class DocumentService:
             for link in extract(document.content_md)
         )
 
+    async def _project(self, project_id: uuid.UUID | None) -> uuid.UUID | None:
+        if project_id is not None:
+            await get_owned(self.session, Project, project_id, self.user.id, "project")
+        return project_id
+
     async def create(self, data: DocumentCreate) -> Document:
         if data.parent_id is not None:
-            await self.get(data.parent_id)
+            project_id = (await self.get(data.parent_id)).project_id
+        else:
+            project_id = await self._project(data.project_id)
         content = data.content_md
         if not content and data.template_id is not None:
             content = (await TemplateService(self.session).get(data.template_id)).content_md
@@ -255,6 +276,7 @@ class DocumentService:
         document = Document(
             owner_id=self.user.id,
             parent_id=data.parent_id,
+            project_id=project_id,
             title=data.title.strip(),
             slug=await self._slug(data.title),
             content_md=content,
@@ -295,12 +317,26 @@ class DocumentService:
         await self.session.commit()
         return document
 
-    async def move(self, document_id: uuid.UUID, parent_id: uuid.UUID | None) -> Document:
+    async def move(self, document_id: uuid.UUID, data: DocumentMove) -> Document:
+        """Under a parent, the subtree takes the parent's project; at the top level, it takes
+        `project_id` when sent, else keeps its own (ADR-0042)."""
         document = await self.get(document_id)
-        if parent_id is not None:
-            await self.get(parent_id)
-            await ensure_valid_parent(self.session, Document, document.id, parent_id)
-        document.parent_id = parent_id
+        project_id = document.project_id
+        if data.parent_id is not None:
+            parent = await self.get(data.parent_id)
+            await ensure_valid_parent(self.session, Document, document.id, parent.id)
+            project_id = parent.project_id
+        elif "project_id" in data.model_fields_set:
+            project_id = await self._project(data.project_id)
+        document.parent_id = data.parent_id
+        if project_id != document.project_id:
+            subtree = {document.id} | await descendant_ids(self.session, Document, document.id)
+            await self.session.execute(
+                update(Document)
+                .where(Document.id.in_(subtree))
+                .values(project_id=project_id)
+                .execution_options(synchronize_session="fetch")
+            )
         await self.session.commit()
         return document
 
@@ -318,12 +354,22 @@ class DocumentService:
         return document
 
     async def delete(self, document_id: uuid.UUID) -> None:
+        """Deleting a page deletes its sub-pages, with their versions and links (RG-17)."""
         document = await self.get(document_id)
-        if await self.session.scalar(
-            select(Document.id).where(Document.parent_id == document.id).limit(1)
-        ):
-            raise entity_referenced("document", "document")
-        await self.session.delete(document)
+        remaining = {document.id} | await descendant_ids(self.session, Document, document.id)
+        rows = await self.session.execute(
+            select(Document.id, Document.parent_id).where(Document.id.in_(remaining))
+        )
+        parents = {row.id: row.parent_id for row in rows}
+        # parent_id is ON DELETE RESTRICT: delete the leaves first, level by level.
+        while remaining:
+            leaves = remaining - {parents[node] for node in remaining}
+            await self.session.execute(
+                delete(Document)
+                .where(Document.id.in_(leaves))
+                .execution_options(synchronize_session="fetch")
+            )
+            remaining -= leaves
         await self.session.commit()
 
     async def versions(

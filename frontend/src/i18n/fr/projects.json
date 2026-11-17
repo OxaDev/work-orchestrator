@@ -1,0 +1,41 @@
+{
+  "title": "Projets",
+  "create": "Nouveau projet",
+  "edit": "Modifier",
+  "save": "Enregistrer",
+  "help": "Un projet regroupe la documentation et les architectures d'un chantier de la mission.",
+  "empty": "Aucun projet pour cette mission.",
+  "showArchived": "Afficher les archivés",
+  "archive": "Archiver",
+  "restore": "Restaurer",
+  "delete": "Supprimer",
+  "archivedNotice": "Ce projet est archivé.",
+  "deleteTitle": "Supprimer le projet ?",
+  "deleteMessage": "« {{name}} » sera supprimé. Ses architectures restent rattachées au client. Un projet qui contient des documents ne peut pas être supprimé : archivez-le.",
+  "noDescription": "Aucune description.",
+  "counts": "{{documents}} document(s) · {{architectures}} architecture(s)",
+  "fields": {
+    "name": "Nom",
+    "description": "Description (Markdown)",
+    "documents": "Documents",
+    "architectures": "Architectures"
+  },
+  "tabs": {
+    "documents": "Documents ({{count}})",
+    "architectures": "Architectures ({{count}})",
+    "about": "À propos"
+  },
+  "validation": {
+    "required": "Champ obligatoire"
+  },
+  "context": {
+    "title": "Contexte de travail",
+    "mission": "Mission courante",
+    "project": "Projet courant",
+    "allMissions": "Toutes les missions",
+    "allProjects": "Tous les projets",
+    "pickMission": "Choisissez d'abord une mission",
+    "open": "Ouvrir le projet",
+    "createFirst": "Créer un premier projet"
+  }
+}

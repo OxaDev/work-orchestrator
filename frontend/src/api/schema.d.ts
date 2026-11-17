@@ -744,6 +744,77 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/v1/projects": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List Projects */
+    get: operations["list_projects_api_v1_projects_get"];
+    put?: never;
+    /** Create Project */
+    post: operations["create_project_api_v1_projects_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/projects/{project_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Read Project */
+    get: operations["read_project_api_v1_projects__project_id__get"];
+    put?: never;
+    post?: never;
+    /** Delete Project */
+    delete: operations["delete_project_api_v1_projects__project_id__delete"];
+    options?: never;
+    head?: never;
+    /** Update Project */
+    patch: operations["update_project_api_v1_projects__project_id__patch"];
+    trace?: never;
+  };
+  "/api/v1/projects/{project_id}/archive": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Archive Project */
+    post: operations["archive_project_api_v1_projects__project_id__archive_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/projects/{project_id}/restore": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Restore Project */
+    post: operations["restore_project_api_v1_projects__project_id__restore_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/v1/contact-roles": {
     parameters: {
       query?: never;
@@ -1379,7 +1450,8 @@ export interface paths {
     /**
      * List Documents
      * @description Flat list (parent_id links, the client builds the tree); optionally those attached to an
-     *     entity.
+     *     entity, those of a project or of a mission's projects, or those of no project (`unfiled`,
+     *     ADR-0042).
      */
     get: operations["list_documents_api_v1_documents_get"];
     put?: never;
@@ -1445,7 +1517,8 @@ export interface paths {
     put?: never;
     /**
      * Import Markdown
-     * @description A zipped folder of Markdown notes (Obsidian vault): up to 50 MB and 2,000 files.
+     * @description A zipped folder of Markdown notes (Obsidian vault): up to 50 MB and 2,000 files. Pages go
+     *     into the parent's project, or `project_id` at the top level (ADR-0042).
      */
     post: operations["import_markdown_api_v1_documents_import_markdown_post"];
     delete?: never;
@@ -1806,7 +1879,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/api/v1/architectures/{architecture_id}/missions/{mission_id}": {
+  "/api/v1/architectures/{architecture_id}/projects/{project_id}": {
     parameters: {
       query?: never;
       header?: never;
@@ -1815,13 +1888,13 @@ export interface paths {
     };
     get?: never;
     /**
-     * Link Mission
-     * @description Links a mission of the same client (Q-H1).
+     * Link Project
+     * @description Links a project of the same client (Q-H1, ADR-0042).
      */
-    put: operations["link_mission_api_v1_architectures__architecture_id__missions__mission_id__put"];
+    put: operations["link_project_api_v1_architectures__architecture_id__projects__project_id__put"];
     post?: never;
-    /** Unlink Mission */
-    delete: operations["unlink_mission_api_v1_architectures__architecture_id__missions__mission_id__delete"];
+    /** Unlink Project */
+    delete: operations["unlink_project_api_v1_architectures__architecture_id__projects__project_id__delete"];
     options?: never;
     head?: never;
     patch?: never;
@@ -2296,8 +2369,8 @@ export interface components {
       description: string;
       /** @default CURRENT */
       lifecycle: components["schemas"]["Lifecycle"];
-      /** Mission Id */
-      mission_id?: string | null;
+      /** Project Id */
+      project_id?: string | null;
     };
     /** ArchitectureDetail */
     ArchitectureDetail: {
@@ -2314,6 +2387,8 @@ export interface components {
       archived_at: string | null;
       /** Member Count */
       member_count: number;
+      /** Projects */
+      projects: components["schemas"]["ProjectRef"][];
       /** Missions */
       missions: components["schemas"]["Summary"][];
       /** Description */
@@ -2341,6 +2416,8 @@ export interface components {
       archived_at: string | null;
       /** Member Count */
       member_count: number;
+      /** Projects */
+      projects: components["schemas"]["ProjectRef"][];
       /** Missions */
       missions: components["schemas"]["Summary"][];
     };
@@ -2395,6 +2472,8 @@ export interface components {
       file: string;
       /** Parent Id */
       parent_id?: string | null;
+      /** Project Id */
+      project_id?: string | null;
     };
     /** Body_upload_attachment_api_v1_attachments_post */
     Body_upload_attachment_api_v1_attachments_post: {
@@ -2776,6 +2855,8 @@ export interface components {
       title: string;
       /** Parent Id */
       parent_id?: string | null;
+      /** Project Id */
+      project_id?: string | null;
       /**
        * Content Md
        * @default
@@ -2794,6 +2875,8 @@ export interface components {
       id: string;
       /** Parent Id */
       parent_id: string | null;
+      /** Project Id */
+      project_id: string | null;
       /** Title */
       title: string;
       /** Slug */
@@ -2820,10 +2903,16 @@ export interface components {
       /** Links */
       links: components["schemas"]["EntityRef"][];
     };
-    /** DocumentMove */
+    /**
+     * DocumentMove
+     * @description Moves a page and its sub-pages. Under a parent, they take the parent's project; at the top
+     *     level, `project_id` (when sent) files them in that project, or unfiles them when null.
+     */
     DocumentMove: {
       /** Parent Id */
       parent_id: string | null;
+      /** Project Id */
+      project_id?: string | null;
     };
     /**
      * DocumentSave
@@ -2847,6 +2936,8 @@ export interface components {
       id: string;
       /** Parent Id */
       parent_id: string | null;
+      /** Project Id */
+      project_id: string | null;
       /** Title */
       title: string;
       /** Slug */
@@ -3863,6 +3954,13 @@ export interface components {
       /** Total */
       total: number;
     };
+    /** Page[ProjectSummary] */
+    Page_ProjectSummary_: {
+      /** Items */
+      items: components["schemas"]["ProjectSummary"][];
+      /** Total */
+      total: number;
+    };
     /** Page[TechnologyRead] */
     Page_TechnologyRead_: {
       /** Items */
@@ -3928,6 +4026,59 @@ export interface components {
       employer_company_id?: string | null;
       /** Holiday Subdivision */
       holiday_subdivision?: ("57" | "971" | "972" | "973" | "974" | "976") | null;
+    };
+    /** ProjectCreate */
+    ProjectCreate: {
+      /**
+       * Mission Id
+       * Format: uuid
+       */
+      mission_id: string;
+      /** Name */
+      name: string;
+      /**
+       * Description
+       * @default
+       */
+      description: string;
+    };
+    /** ProjectRef */
+    ProjectRef: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Name */
+      name: string;
+      mission: components["schemas"]["Summary"];
+    };
+    /** ProjectSummary */
+    ProjectSummary: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      mission: components["schemas"]["Summary"];
+      client: components["schemas"]["Summary"];
+      /** Name */
+      name: string;
+      /** Description */
+      description: string;
+      /** Archived At */
+      archived_at: string | null;
+      /** Document Count */
+      document_count: number;
+      /** Architecture Count */
+      architecture_count: number;
+    };
+    /** ProjectUpdate */
+    ProjectUpdate: {
+      /** Name */
+      name?: string | null;
+      /** Description */
+      description?: string | null;
     };
     /** PublicHoliday */
     PublicHoliday: {
@@ -6805,6 +6956,231 @@ export interface operations {
       };
     };
   };
+  list_projects_api_v1_projects_get: {
+    parameters: {
+      query?: {
+        mission_id?: string | null;
+        q?: string | null;
+        include_archived?: boolean;
+        limit?: number;
+        offset?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Page_ProjectSummary_"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_project_api_v1_projects_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ProjectCreate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProjectSummary"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  read_project_api_v1_projects__project_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        project_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProjectSummary"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_project_api_v1_projects__project_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        project_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_project_api_v1_projects__project_id__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        project_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ProjectUpdate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProjectSummary"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  archive_project_api_v1_projects__project_id__archive_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        project_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProjectSummary"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  restore_project_api_v1_projects__project_id__restore_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        project_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProjectSummary"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   list_roles_api_v1_contact_roles_get: {
     parameters: {
       query?: never;
@@ -8347,6 +8723,9 @@ export interface operations {
         entity_type?: components["schemas"]["LinkType"] | null;
         entity_id?: string | null;
         include_archived?: boolean;
+        project_id?: string | null;
+        mission_id?: string | null;
+        unfiled?: boolean;
       };
       header?: never;
       path?: never;
@@ -9160,6 +9539,7 @@ export interface operations {
       query?: {
         company_id?: string | null;
         mission_id?: string | null;
+        project_id?: string | null;
         q?: string | null;
         include_archived?: boolean;
       };
@@ -9443,13 +9823,13 @@ export interface operations {
       };
     };
   };
-  link_mission_api_v1_architectures__architecture_id__missions__mission_id__put: {
+  link_project_api_v1_architectures__architecture_id__projects__project_id__put: {
     parameters: {
       query?: never;
       header?: never;
       path: {
         architecture_id: string;
-        mission_id: string;
+        project_id: string;
       };
       cookie?: never;
     };
@@ -9475,13 +9855,13 @@ export interface operations {
       };
     };
   };
-  unlink_mission_api_v1_architectures__architecture_id__missions__mission_id__delete: {
+  unlink_project_api_v1_architectures__architecture_id__projects__project_id__delete: {
     parameters: {
       query?: never;
       header?: never;
       path: {
         architecture_id: string;
-        mission_id: string;
+        project_id: string;
       };
       cookie?: never;
     };

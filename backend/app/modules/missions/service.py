@@ -331,6 +331,12 @@ class MissionService:
     async def delete(self, mission_id: uuid.UUID) -> None:
         """Hard delete while nothing references the mission; archive otherwise (RG-12)."""
         mission = await self.get(mission_id)
+        from app.modules.projects.models import Project
+
+        if await self.session.scalar(
+            select(Project.id).where(Project.mission_id == mission.id).limit(1)
+        ):
+            raise entity_referenced("mission", "project")  # ADR-0042: projects RESTRICT
         # Polymorphic links have no foreign key (ADR-0037); rolled back with the delete if refused.
         from app.modules.architecture.links import delete_external_links
         from app.modules.architecture.models import LinkedEntity

@@ -67,8 +67,8 @@
     "history": "Historique",
     "subjects": "Sujets",
     "documents": "Documents",
-    "architectures": "Architectures",
-    "overview": "Vue d'ensemble"
+    "overview": "Vue d'ensemble",
+    "projects": "Projets"
   },
   "contacts": {
     "empty": "Aucun contact lié pour le moment.",

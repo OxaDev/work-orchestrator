@@ -91,10 +91,11 @@ async def data(user_client: AsyncClient, today: str) -> dict[str, Any]:
         technologies[name] = (
             await post(user_client, "/api/v1/technologies", {"name": name, "category": category})
         )["id"]
+    project = await post(user_client, "/api/v1/projects", {"mission_id": m, "name": "Socle"})
     arch = await post(
         user_client,
         "/api/v1/architectures",
-        {"company_id": bank["id"], "name": "SI", "mission_id": m},
+        {"company_id": bank["id"], "name": "SI", "project_id": project["id"]},
     )
     domains = {}
     for name, techs in [("API", ["Java", "Kafka"]), ("Bus", ["Kafka"]), ("Socle", ["Python"])]:

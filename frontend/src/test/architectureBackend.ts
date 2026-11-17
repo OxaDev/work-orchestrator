@@ -10,7 +10,8 @@ import type {
   Relation,
 } from "../features/architecture/api";
 import { directory, ids } from "./directoryBackend";
-import { missionIds, missions } from "./missionsBackend";
+import { missionIds } from "./missionsBackend";
+import { projectIds, projectRead, projects as projectsStore } from "./projectsBackend";
 
 let sequence = 0;
 const nextId = () => `00000000-0000-7000-e000-${String(++sequence).padStart(12, "0")}`;
@@ -32,7 +33,8 @@ interface StoredArchitecture {
   lifecycle: ArchitectureDetail["lifecycle"];
   archived_at: string | null;
   members: string[];
-  missions: string[];
+  /** ADR-0042: linked projects; missions are derived from them. */
+  projects: string[];
 }
 
 export const arch = {
@@ -113,7 +115,7 @@ export function resetArchitecture(): void {
     lifecycle: "CURRENT",
     archived_at: null,
     members: [payments.id],
-    missions: [missionIds.current],
+    projects: [projectIds.current],
   };
   arch.architectures = [si];
   Object.assign(archIds, {
@@ -207,10 +209,18 @@ function architectureRead(a: StoredArchitecture): ArchitectureDetail {
     lifecycle: a.lifecycle,
     archived_at: a.archived_at,
     member_count: a.members.length,
-    missions: a.missions.map((id) => ({
-      id,
-      name: missions.items.find((m) => m.id === id)?.title ?? "?",
-    })),
+    projects: a.projects.flatMap((id) => {
+      const project = projectsStore.items.find((p) => p.id === id);
+      return project ? [{ id, name: project.name, mission: projectRead(project).mission }] : [];
+    }),
+    missions: [
+      ...new Map(
+        a.projects
+          .map((id) => projectsStore.items.find((p) => p.id === id))
+          .filter((p) => p !== undefined)
+          .map((p) => [p.mission_id, projectRead(p).mission] as const),
+      ).values(),
+    ],
     description: a.description,
     members: a.members.map((id) => summary(domainById(id)!)),
     updated_at: NOW,
@@ -247,10 +257,12 @@ export const architectureHandlers = [
     const url = new URL(request.url);
     const companyId = url.searchParams.get("company_id");
     const missionId = url.searchParams.get("mission_id");
+    const projectId = url.searchParams.get("project_id");
     return HttpResponse.json(
       arch.architectures
         .filter((a) => !companyId || a.company_id === companyId)
-        .filter((a) => !missionId || a.missions.includes(missionId))
+        .filter((a) => !projectId || a.projects.includes(projectId))
+        .filter((a) => !missionId || architectureRead(a).missions.some((m) => m.id === missionId))
         .map(architectureRead),
     );
   }),
@@ -260,7 +272,7 @@ export const architectureHandlers = [
       name: string;
       description: string;
       lifecycle: StoredArchitecture["lifecycle"];
-      mission_id: string | null;
+      project_id: string | null;
     };
     arch.lastBody = body;
     const created: StoredArchitecture = {
@@ -271,7 +283,7 @@ export const architectureHandlers = [
       lifecycle: body.lifecycle,
       archived_at: null,
       members: [],
-      missions: body.mission_id ? [body.mission_id] : [],
+      projects: body.project_id ? [body.project_id] : [],
     };
     arch.architectures.push(created);
     return HttpResponse.json(architectureRead(created), { status: 201 });
@@ -333,16 +345,16 @@ export const architectureHandlers = [
     found.members = found.members.filter((m) => m !== params.domainId);
     return HttpResponse.json(architectureRead(found));
   }),
-  http.put("*/api/v1/architectures/:id/missions/:missionId", ({ params }) => {
+  http.put("*/api/v1/architectures/:id/projects/:projectId", ({ params }) => {
     const found = findArchitecture(params.id)!;
-    arch.lastUrl = `link:${String(params.missionId)}`;
-    found.missions.push(String(params.missionId));
+    arch.lastUrl = `link:${String(params.projectId)}`;
+    found.projects.push(String(params.projectId));
     return HttpResponse.json(architectureRead(found));
   }),
-  http.delete("*/api/v1/architectures/:id/missions/:missionId", ({ params }) => {
+  http.delete("*/api/v1/architectures/:id/projects/:projectId", ({ params }) => {
     const found = findArchitecture(params.id)!;
-    arch.lastUrl = `unlink:${String(params.missionId)}`;
-    found.missions = found.missions.filter((m) => m !== params.missionId);
+    arch.lastUrl = `unlink:${String(params.projectId)}`;
+    found.projects = found.projects.filter((p) => p !== params.projectId);
     return HttpResponse.json(architectureRead(found));
   }),
 

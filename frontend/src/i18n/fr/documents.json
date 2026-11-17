@@ -18,7 +18,7 @@
   "restore": "Restaurer",
   "delete": "Supprimer",
   "deleteTitle": "Supprimer ?",
-  "deleteMessage": "Supprimer « {{title}} » et son historique ? Une page qui a des sous-pages ne peut pas être supprimée : archivez-la.",
+  "deleteMessage": "Supprimer « {{title}} », ses sous-pages et leur historique ?",
   "archivedNotice": "Ce document est archivé.",
   "fields": {
     "title": "Titre",
@@ -45,8 +45,8 @@
   },
   "mode": {
     "label": "Affichage",
-    "edit": "Éditeur",
-    "split": "Côte à côte",
+    "live": "Édition",
+    "source": "Markdown",
     "preview": "Aperçu"
   },
   "export": {
@@ -123,5 +123,43 @@
     "empty": "Aucun document pour l'instant.",
     "legendLink": "lien dans le texte",
     "legendAttachment": "rattaché à"
+  },
+  "createSubdocument": "Nouveau sous-document",
+  "live": {
+    "placeholder": "Écrivez, ou tapez « / » pour les commandes et « [[ » pour un lien…",
+    "slashMenu": "Commandes",
+    "linkMenu": "Lier à…",
+    "noResult": "Aucun résultat",
+    "codeLanguage": "Langage",
+    "slash": {
+      "paragraph": "Paragraphe",
+      "heading1": "Titre 1",
+      "heading2": "Titre 2",
+      "heading3": "Titre 3",
+      "bulletList": "Liste à puces",
+      "orderedList": "Liste numérotée",
+      "taskList": "Liste de tâches",
+      "quote": "Citation",
+      "codeBlock": "Bloc de code",
+      "mermaid": "Diagramme Mermaid",
+      "table": "Tableau",
+      "divider": "Séparateur",
+      "linkDocument": "Lien vers un document",
+      "linkEntity": "Lien vers une mission, un domaine, un contact…",
+      "file": "Fichier ou image"
+    }
+  },
+  "scope": {
+    "label": "Périmètre",
+    "project": "Projet courant",
+    "mission": "Mission courante",
+    "unfiled": "Hors projet",
+    "all": "Tous"
+  },
+  "dnd": {
+    "dropRoot": "Déposer ici pour placer la page au premier niveau",
+    "emptyGroup": "Aucune page.",
+    "otherProject": "Autre projet (archivé)",
+    "createIn": "Nouveau document dans {{name}}"
   }
 }

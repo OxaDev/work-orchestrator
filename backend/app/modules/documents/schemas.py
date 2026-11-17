@@ -20,6 +20,8 @@ class EntityRef(BaseModel):
 class DocumentSummary(BaseModel):
     id: uuid.UUID
     parent_id: uuid.UUID | None
+    # ADR-0042: the project of the page's tree; None = unfiled.
+    project_id: uuid.UUID | None
     title: str
     slug: str
     updated_at: datetime
@@ -39,6 +41,8 @@ class DocumentDetail(DocumentSummary):
 class DocumentCreate(BaseModel):
     title: str = Title
     parent_id: uuid.UUID | None = None
+    # Ignored when parent_id is set: a sub-page takes its parent's project (ADR-0042).
+    project_id: uuid.UUID | None = None
     content_md: str = Markdown
     # Starts from a template's content when content_md is empty.
     template_id: uuid.UUID | None = None
@@ -54,7 +58,11 @@ class DocumentSave(BaseModel):
 
 
 class DocumentMove(BaseModel):
+    """Moves a page and its sub-pages. Under a parent, they take the parent's project; at the top
+    level, `project_id` (when sent) files them in that project, or unfiles them when null."""
+
     parent_id: uuid.UUID | None
+    project_id: uuid.UUID | None = None
 
 
 class DraftSave(BaseModel):

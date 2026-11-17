@@ -94,8 +94,6 @@ async def test_templates_and_parent_tree(user_client: AsyncClient) -> None:
     moved = await user_client.post(f"{DOCS}/{grandchild['id']}/move", json={"parent_id": None})
     assert moved.json()["parent_id"] is None
 
-    refused = await user_client.delete(f"{DOCS}/{root['id']}")
-    assert refused.json()["params"] == {"entity": "document", "referencedBy": "document"}
     await user_client.post(f"{DOCS}/{root['id']}/archive")
     listed = {d["title"] for d in (await user_client.get(DOCS)).json()}
     assert listed == {"Détail"}  # the archived page and its sub-page are hidden
@@ -104,6 +102,27 @@ async def test_templates_and_parent_tree(user_client: AsyncClient) -> None:
     await user_client.post(f"{DOCS}/{root['id']}/restore")
     assert len((await user_client.get(DOCS, params={"q": "ANN"})).json()) == 1
     assert (await user_client.delete(f"{DOCS}/{child['id']}")).status_code == 204
+
+
+async def test_rg17_deleting_a_page_deletes_its_sub_pages(user_client: AsyncClient) -> None:
+    """RG-17: deleting a page deletes its whole subtree, versions included."""
+    root = await document(user_client, "Racine")
+    child = await document(user_client, "Enfant", parent_id=root["id"])
+    grandchild = await document(user_client, "Petit-enfant", parent_id=child["id"])
+    sibling = await document(user_client, "Voisine", parent_id=root["id"])
+    other = await document(user_client, "Autre")
+    saved = await user_client.put(
+        f"{DOCS}/{grandchild['id']}", json={"title": "Petit-enfant", "content_md": "v1"}
+    )
+    assert saved.status_code == 200
+
+    assert (await user_client.delete(f"{DOCS}/{child['id']}")).status_code == 204
+    assert (await user_client.get(f"{DOCS}/{grandchild['id']}")).status_code == 404
+    assert (await user_client.get(f"{DOCS}/{sibling['id']}")).status_code == 200
+
+    assert (await user_client.delete(f"{DOCS}/{root['id']}")).status_code == 204
+    remaining = {d["id"] for d in (await user_client.get(DOCS)).json()}
+    assert remaining == {other["id"]}
 
 
 async def test_wikilinks_backlinks_and_attachments(

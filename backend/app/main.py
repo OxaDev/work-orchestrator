@@ -32,6 +32,7 @@ from app.modules.documents.router import attachments_router, links_router, templ
 from app.modules.documents.router import router as documents_router
 from app.modules.missions.router import roles_router
 from app.modules.missions.router import router as missions_router
+from app.modules.projects.router import router as projects_router
 from app.modules.search.router import router as search_router
 from app.modules.subjects.router import categories_router as subject_categories_router
 from app.modules.subjects.router import router as subjects_router
@@ -69,6 +70,7 @@ def build_api_router() -> APIRouter:
         technologies_router,
         tags_router,
         missions_router,
+        projects_router,
         roles_router,
         agenda_router,
         subjects_router,

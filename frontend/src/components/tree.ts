@@ -29,6 +29,13 @@ export function buildTree<T extends FlatNode>(
   return visit(null, 0);
 }
 
+const collator = new Intl.Collator(undefined, { sensitivity: "base", numeric: true });
+
+/** Alphabetical order of pages within each level: accents and case ignored, "2" before "10". */
+export function byTitle<T extends { title: string }>(a: T, b: T): number {
+  return collator.compare(a.title, b.title);
+}
+
 /** Ids of `id` and all its descendants: these cannot become its new parent. */
 export function subtreeIds<T extends FlatNode>(items: readonly T[], id: string): Set<string> {
   const result = new Set([id]);

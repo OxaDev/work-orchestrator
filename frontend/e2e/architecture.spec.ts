@@ -39,8 +39,14 @@ test("an architecture is entered, then browsed through domain sheets (P8 DoD)", 
     review: "",
   });
 
-  // The architecture is created from the mission (Q-H1).
-  await page.goto(`./missions/${mission.id}?tab=architectures`);
+  const project = await post(page, "./api/v1/projects", {
+    mission_id: mission.id,
+    name: `Projet ${suffix}`,
+    description: "",
+  });
+
+  // The architecture is created from a project of the mission (Q-H1, ADR-0042).
+  await page.goto(`./missions/${mission.id}/projects/${project.id}/architectures`);
   await page.getByRole("button", { name: "Nouvelle architecture" }).first().click();
   const create = page.getByRole("dialog", { name: "Nouvelle architecture" });
   await create.getByRole("textbox", { name: "Nom" }).fill(`SI ${suffix}`);

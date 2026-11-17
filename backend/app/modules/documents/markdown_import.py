@@ -110,10 +110,19 @@ class MarkdownImporter:
         self.documents = DocumentService(session, user)
         self.attachments = AttachmentService(session, user, settings)
         self.written: list[Path] = []
+        self.project_id: uuid.UUID | None = None
 
-    async def run(self, upload: UploadFile, parent_id: uuid.UUID | None) -> MarkdownImportReport:
+    async def run(
+        self,
+        upload: UploadFile,
+        parent_id: uuid.UUID | None,
+        project_id: uuid.UUID | None = None,
+    ) -> MarkdownImportReport:
         if parent_id is not None:
-            await self.documents.get(parent_id)
+            project_id = (await self.documents.get(parent_id)).project_id
+        else:
+            project_id = await self.documents._project(project_id)
+        self.project_id = project_id
         file = await spool(upload, self.settings.max_markdown_import_bytes)
         try:
             archive = await asyncio.to_thread(open_zip, file)
@@ -170,6 +179,7 @@ class MarkdownImporter:
         document = Document(
             owner_id=self.user.id,
             parent_id=parent_id,
+            project_id=self.project_id,
             title=title,
             slug=await self.documents._slug(title),
             content_md=content,

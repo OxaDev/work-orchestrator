@@ -64,8 +64,22 @@ export function useImportArchive() {
 export function useImportMarkdown() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ file, parentId }: { file: File; parentId?: string }) =>
-      unwrap(api.POST("/api/v1/documents/import-markdown", form(file, { parent_id: parentId }))),
+    mutationFn: ({
+      file,
+      parentId,
+      projectId,
+    }: {
+      file: File;
+      parentId?: string;
+      /** Top-level pages go into this project (ADR-0042). */
+      projectId?: string;
+    }) =>
+      unwrap(
+        api.POST(
+          "/api/v1/documents/import-markdown",
+          form(file, { parent_id: parentId, project_id: projectId }),
+        ),
+      ),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["documents"] }),
   });
 }

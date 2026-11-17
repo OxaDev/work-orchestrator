@@ -1,8 +1,10 @@
 import {
+  ActionIcon,
   Anchor,
   Button,
   Group,
   Loader,
+  SegmentedControl,
   Stack,
   Switch,
   Text,
@@ -16,27 +18,111 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
 import { useCreateParam } from "../../app/useCreateParam";
-import { TreeList } from "../../components/TreeList";
+import { useProjects } from "../projects/api";
+import { useWorkContext } from "../projects/scope";
 import { useDocuments } from "./api";
+import { type DocumentGroup, DocumentTree } from "./DocumentTree";
 import { MarkdownImportModal } from "./MarkdownImportModal";
 import { NewDocumentModal } from "./NewDocumentModal";
 
-/** /documents — the page tree, search, creation (P7-12). */
+type Scope = "project" | "mission" | "unfiled" | "all";
+
+/** /documents — the page tree of the current project by default (ADR-0042), search, creation. */
 export function DocumentsPage() {
   const { t } = useTranslation("documents");
+  const { missionId, projectId } = useWorkContext();
   const [search, setSearch] = useState("");
   const [debounced] = useDebouncedValue(search, 250);
   const [archived, setArchived] = useState(false);
-  const [creating, setCreating] = useState<{ parentId: string | null } | null>(null);
+  const [chosen, setScope] = useState<Scope | null>(null);
+  const [creating, setCreating] = useState<{
+    parentId: string | null;
+    projectId: string | null;
+  } | null>(null);
   const [requested, clearRequest] = useCreateParam();
   const [importing, setImporting] = useState(false);
-  const documents = useDocuments({ q: debounced || undefined, include_archived: archived });
+
+  const available: Scope[] = [
+    ...(projectId ? (["project"] as const) : []),
+    ...(missionId ? (["mission"] as const) : []),
+    "unfiled",
+    "all",
+  ];
+  const scope: Scope =
+    chosen && available.includes(chosen)
+      ? chosen
+      : projectId
+        ? "project"
+        : missionId
+          ? "mission"
+          : "all";
+  const projects = useProjects(
+    scope === "mission" ? { mission_id: missionId ?? undefined } : {},
+    scope === "mission" || scope === "all" || scope === "project",
+  );
+  const filter =
+    scope === "project"
+      ? { project_id: projectId ?? undefined }
+      : scope === "mission"
+        ? { mission_id: missionId ?? undefined }
+        : scope === "unfiled"
+          ? { unfiled: true }
+          : {};
+  const documents = useDocuments({
+    q: debounced || undefined,
+    include_archived: archived,
+    ...filter,
+  });
   const items = documents.data ?? [];
+  const projectList = projects.data?.items ?? [];
+  const current = projectList.find((p) => p.id === projectId);
+  const defaultProject = scope === "project" ? projectId : null;
+
+  const groupLabel = (id: string | null, name: string) => (
+    <Group gap={6}>
+      <span>{name}</span>
+      <ActionIcon
+        size="sm"
+        variant="subtle"
+        aria-label={t("dnd.createIn", { name })}
+        onClick={() => setCreating({ parentId: null, projectId: id })}
+      >
+        <IconPlus size={14} />
+      </ActionIcon>
+    </Group>
+  );
+  const groups: DocumentGroup[] =
+    scope === "project"
+      ? [{ projectId }]
+      : scope === "unfiled"
+        ? [{ projectId: null }]
+        : [
+            ...projectList
+              .filter((p) => scope === "mission" || items.some((d) => d.project_id === p.id))
+              .map((p) => ({
+                projectId: p.id,
+                label: groupLabel(p.id, scope === "all" ? `${p.mission.name} › ${p.name}` : p.name),
+              })),
+            // Pages of projects not listed (archived) stay visible under their own heading.
+            ...[...new Set(items.map((d) => d.project_id))]
+              .filter((id): id is string => Boolean(id) && !projectList.some((p) => p.id === id))
+              .map((id) => ({ projectId: id, label: t("dnd.otherProject") })),
+            ...(scope === "all" || items.some((d) => !d.project_id)
+              ? [{ projectId: null, label: groupLabel(null, t("scope.unfiled")) }]
+              : []),
+          ];
 
   return (
     <Stack>
       <Group justify="space-between">
-        <Title order={2}>{t("title")}</Title>
+        <div>
+          <Title order={2}>{t("title")}</Title>
+          {scope === "project" && current && (
+            <Text size="sm" c="dimmed">
+              {current.mission.name} › {current.name}
+            </Text>
+          )}
+        </div>
         <Group gap="xs">
           <Anchor component={Link} to="/documents/graph" size="sm">
             {t("graph.title")}
@@ -53,13 +139,20 @@ export function DocumentsPage() {
           </Button>
           <Button
             leftSection={<IconPlus size={16} />}
-            onClick={() => setCreating({ parentId: null })}
+            onClick={() => setCreating({ parentId: null, projectId: defaultProject })}
           >
             {t("create")}
           </Button>
         </Group>
       </Group>
       <Group>
+        <SegmentedControl
+          size="xs"
+          aria-label={t("scope.label")}
+          value={scope}
+          onChange={(value) => setScope(value as Scope)}
+          data={available.map((s) => ({ value: s, label: t(`scope.${s}`) }))}
+        />
         <TextInput
           aria-label={t("search")}
           placeholder={t("search")}
@@ -78,10 +171,12 @@ export function DocumentsPage() {
       {documents.isPending ? (
         <Loader size="sm" />
       ) : (
-        <TreeList
-          aria-label={t("tree")}
-          items={items}
-          compare={(a, b) => a.title.localeCompare(b.title)}
+        <DocumentTree
+          documents={items}
+          groups={groups}
+          onCreateChild={(parent) =>
+            setCreating({ parentId: parent.id, projectId: parent.project_id })
+          }
           empty={
             <Stack align="flex-start" gap="xs">
               <Text size="sm" c="dimmed">
@@ -92,7 +187,7 @@ export function DocumentsPage() {
                   <Button
                     variant="light"
                     leftSection={<IconPlus size={16} />}
-                    onClick={() => setCreating({ parentId: null })}
+                    onClick={() => setCreating({ parentId: null, projectId: defaultProject })}
                   >
                     {t("create")}
                   </Button>
@@ -107,39 +202,15 @@ export function DocumentsPage() {
               )}
             </Stack>
           }
-          label={(doc) => (
-            <Group gap={6}>
-              <Anchor
-                component={Link}
-                to={`/documents/${doc.id}`}
-                size="sm"
-                td={doc.archived_at ? "line-through" : undefined}
-              >
-                {doc.title}
-              </Anchor>
-              {doc.has_draft && (
-                <Text size="xs" c="orange">
-                  {t("hasDraft")}
-                </Text>
-              )}
-            </Group>
-          )}
-          actions={(doc) => (
-            <Button
-              size="compact-xs"
-              variant="subtle"
-              aria-label={t("createChild", { title: doc.title })}
-              onClick={() => setCreating({ parentId: doc.id })}
-            >
-              <IconPlus size={14} />
-            </Button>
-          )}
         />
       )}
-      {importing && <MarkdownImportModal onClose={() => setImporting(false)} />}
+      {importing && (
+        <MarkdownImportModal projectId={defaultProject} onClose={() => setImporting(false)} />
+      )}
       {(creating ?? requested) && (
         <NewDocumentModal
           parentId={creating?.parentId ?? null}
+          projectId={creating ? creating.projectId : defaultProject}
           onClose={() => {
             setCreating(null);
             clearRequest();

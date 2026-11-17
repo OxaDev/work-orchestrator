@@ -24,6 +24,7 @@ PERSONAL = {
     "domain_id",
     "link_id",
     "mission_id",
+    "project_id",
     "relation_id",
     "subject_id",
     "task_id",
@@ -78,7 +79,10 @@ async def owned(
             "duration_minutes": 30,
         },
     )
-    document = await post(user_client, "/api/v1/documents", {"title": "Doc A"})
+    project = await post(user_client, "/api/v1/projects", {"mission_id": mission, "name": "P A"})
+    document = await post(
+        user_client, "/api/v1/documents", {"title": "Doc A", "project_id": project["id"]}
+    )
     upload = await user_client.post(
         "/api/v1/attachments",
         files={"file": ("a.png", PNG)},
@@ -122,6 +126,7 @@ async def owned(
     contact = await post(user_client, "/api/v1/contacts", {"first_name": "Ada", "last_name": "A"})
     return {
         "mission_id": mission,
+        "project_id": project["id"],
         "subject_id": subject["id"],
         "task_id": task["task"]["id"],
         "document_id": document["id"],

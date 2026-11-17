@@ -1,4 +1,5 @@
 import { EditorView } from "@codemirror/view";
+import { MantineProvider } from "@mantine/core";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 
@@ -17,7 +18,9 @@ function setup(value = "# Titre") {
     onSave: vi.fn(),
     onFiles: vi.fn(async (files: File[]) => files.map((f) => `![${f.name}](attachment:x)`)),
   };
-  const result = render(<MarkdownEditor value={value} label="Contenu" {...props} />);
+  const result = render(<MarkdownEditor value={value} label="Contenu" {...props} />, {
+    wrapper: ({ children }) => <MantineProvider env="test">{children}</MantineProvider>,
+  });
   const content = result.container.querySelector<HTMLElement>(".cm-content")!;
   const view = EditorView.findFromDOM(content)!;
   return { ...result, ...props, content, view };
@@ -51,5 +54,21 @@ describe("MarkdownEditor (CodeMirror 6)", () => {
     // Plain text paste is left to CodeMirror.
     fireEvent.paste(content, { clipboardData: { files: [], getData: () => "texte" } });
     expect(onFiles).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("MarkdownEditor colours (ADR-0043)", () => {
+  it("follows the dark scheme", () => {
+    const props = { onChange: vi.fn(), onSave: vi.fn(), onFiles: vi.fn(async () => []) };
+    const { container } = render(<MarkdownEditor value="# Titre" label="Contenu" {...props} />, {
+      wrapper: ({ children }) => (
+        <MantineProvider env="test" forceColorScheme="dark">
+          {children}
+        </MantineProvider>
+      ),
+    });
+    const content = container.querySelector<HTMLElement>(".cm-content")!;
+    const view = EditorView.findFromDOM(content)!;
+    expect(view.state.facet(EditorView.darkTheme)).toBe(true);
   });
 });

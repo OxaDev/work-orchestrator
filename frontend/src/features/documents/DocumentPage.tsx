@@ -20,10 +20,11 @@ import {
   IconArchiveOff,
   IconDeviceFloppy,
   IconFileExport,
+  IconFilePlus,
   IconPaperclip,
   IconTrash,
 } from "@tabler/icons-react";
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router";
 
@@ -48,9 +49,15 @@ import {
 import { DocumentSidePanel } from "./DocumentSidePanel";
 import { ExportModal } from "./ExportModal";
 import { MarkdownEditor } from "./MarkdownEditor";
+import { NewDocumentModal } from "./NewDocumentModal";
+
+// ProseMirror and its extensions load with the first document opened (ADR-0043).
+const LiveEditor = lazy(() => import("./LiveEditor"));
 
 const AUTOSAVE_MS = 2000;
-type Mode = "edit" | "split" | "preview";
+/** Live WYSIWYG (default), Markdown source, read-only preview (ADR-0043). */
+type Mode = "live" | "source" | "preview";
+const MODES: Mode[] = ["live", "source", "preview"];
 
 function Editor({ document }: { document: DocumentDetail }) {
   const { t, i18n } = useTranslation("documents");
@@ -70,7 +77,8 @@ function Editor({ document }: { document: DocumentDetail }) {
   const [pendingDraft, setPendingDraft] = useState(
     document.draft_md !== null && document.draft_md !== document.content_md,
   );
-  const [mode, setMode] = useState<Mode>("split");
+  const [mode, setMode] = useState<Mode>("live");
+  const [creatingChild, setCreatingChild] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -245,11 +253,19 @@ function Editor({ document }: { document: DocumentDetail }) {
             aria-label={t("mode.label")}
             value={mode}
             onChange={(value) => setMode(value as Mode)}
-            data={(["edit", "split", "preview"] as const).map((m) => ({
+            data={MODES.map((m) => ({
               value: m,
               label: t(`mode.${m}`),
             }))}
           />
+          <Button
+            size="xs"
+            variant="default"
+            leftSection={<IconFilePlus size={14} />}
+            onClick={() => setCreatingChild(true)}
+          >
+            {t("createSubdocument")}
+          </Button>
           <FileButton onChange={insertFile}>
             {(props) => (
               <Button
@@ -293,26 +309,31 @@ function Editor({ document }: { document: DocumentDetail }) {
       </Group>
       <Grid>
         <Grid.Col span={{ base: 12, xl: 9 }}>
-          <Grid>
-            {mode !== "preview" && (
-              <Grid.Col span={mode === "split" ? { base: 12, md: 6 } : 12}>
-                <MarkdownEditor
-                  value={content}
-                  onChange={setContent}
-                  onSave={doSave}
-                  onFiles={onFiles}
-                  label={t("editor")}
-                />
-              </Grid.Col>
-            )}
-            {mode !== "edit" && (
-              <Grid.Col span={mode === "split" ? { base: 12, md: 6 } : 12}>
-                <section aria-label={t("preview")}>
-                  <MarkdownView source={content} empty={t("empty")} />
-                </section>
-              </Grid.Col>
-            )}
-          </Grid>
+          {mode === "live" && (
+            <Suspense fallback={<Loader size="sm" />}>
+              <LiveEditor
+                value={content}
+                onChange={setContent}
+                onSave={doSave}
+                onFiles={onFiles}
+                label={t("editor")}
+              />
+            </Suspense>
+          )}
+          {mode === "source" && (
+            <MarkdownEditor
+              value={content}
+              onChange={setContent}
+              onSave={doSave}
+              onFiles={onFiles}
+              label={t("editor")}
+            />
+          )}
+          {mode === "preview" && (
+            <section aria-label={t("preview")}>
+              <MarkdownView source={content} empty={t("empty")} />
+            </section>
+          )}
         </Grid.Col>
         <Grid.Col span={{ base: 12, xl: 3 }}>
           <DocumentSidePanel
@@ -325,6 +346,9 @@ function Editor({ document }: { document: DocumentDetail }) {
           />
         </Grid.Col>
       </Grid>
+      {creatingChild && (
+        <NewDocumentModal parentId={document.id} onClose={() => setCreatingChild(false)} />
+      )}
       {exporting && (
         <ExportModal slug={document.slug} content={content} onClose={() => setExporting(false)} />
       )}
@@ -348,7 +372,7 @@ function Editor({ document }: { document: DocumentDetail }) {
   );
 }
 
-/** /documents/:documentId — Markdown editor with live preview (P7-7, P7-8, P7-12). */
+/** /documents/:documentId — live Markdown editor, source and preview modes (P7, ADR-0043). */
 export function DocumentPage() {
   const { documentId = "" } = useParams();
   const document = useDocument(documentId);
