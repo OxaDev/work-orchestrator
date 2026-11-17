@@ -17,6 +17,7 @@ import os
 import sys
 from collections.abc import Awaitable, Callable
 
+import app.models  # noqa: F401 - every model, so foreign keys resolve (users -> companies)
 from app.core.config import get_settings
 from app.core.db import dispose_engine, get_sessionmaker
 from app.core.errors import AppError
